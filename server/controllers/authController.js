@@ -33,7 +33,6 @@ export const SignIn = async(req, res)=>{
         });
         res.status(200).json({success: true, message: 'login successful', token});
     }catch(err){
-        console.error('SIGNIN ERROR:', err);
         res.status(500).json({ message: 'Internal server error' });
     }
 }
