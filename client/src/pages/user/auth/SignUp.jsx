@@ -1,4 +1,5 @@
 import './auth.css';
+import { Link } from 'react-router-dom';
 
 function SignUp() {
 	return (
@@ -16,7 +17,7 @@ function SignUp() {
 					<div className="col-lg-6 p-4 right-form">
 						<h2 className="fw-semibold mb-3">Sign up</h2>
 						<p className="text-light small mb-4">Already have an account?
-							<a href="#" className="text-primary text-decoration-none"> Login here!</a>
+							<Link to='/signin' className="text-primary text-decoration-none"> Login here!</Link>
 						</p>
 						<form noValidate>
 							{/* username */}
@@ -92,7 +93,7 @@ function SignUp() {
 							</div>
 
 							{/* Google Sign-In */}
-							<div className="text-center text-light mb-3 small">or continue with</div>
+							<div className="text-center text-light mb-3 small">Continue with</div>
 								<div className="d-grid">
 									<button type="button" className="btn btn-light d-flex align-items-center justify-content-center gap-2 px-3 py-3 rounded mx-auto google-btn">
 										<img src="/images/icons/google_icon.webp"
