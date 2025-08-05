@@ -1,0 +1,50 @@
+.signUp{
+    background-color: #000;
+}
+
+.hero-img{
+    max-width: 90%;
+}
+
+.text-flowwell{
+  text-align: left !important;
+}
+
+.right-form{
+    background-color: #05070f;
+}
+
+::placeholder {
+  color: #fff !important;
+  opacity: 1;
+}
+
+.form-control {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  border-radius: 0;
+}
+
+.form-control:focus {
+  border-bottom-color: #5f92ff;
+  box-shadow: none;
+}
+
+.google-text{
+  color: #7fa8ff;
+}
+
+.google-btn {
+  background-color: #ecf2ff;
+  width: 100%;
+}
+
+.google-btn:hover{
+  background-color: #fff !important;
+}
+
+@media (min-width: 767px) {
+  .google-btn {
+    width: 50% !important;
+  }
+}

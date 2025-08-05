@@ -1,8 +1,10 @@
-
-function App() {
-  return (
-    <div className="text-primary">App</div>
-  )
+import SignUp from "./pages/user/auth/SignUp";
+function App(){
+    return(
+        <>
+            <SignUp/>
+        </>
+    )
 }
 
-export default App
+export default App;
