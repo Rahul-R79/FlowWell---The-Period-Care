@@ -1,7 +1,7 @@
-import './auth.css';
+// import '../index.css';
 import { Link } from 'react-router-dom';
 
-function SignUpOtp() {
+function OtpVerification() {
   return (
     <div className="min-vh-100 d-flex align-items-center justify-content-center bg-black px-2 py-4">
       <div className="container">
@@ -44,7 +44,7 @@ function SignUpOtp() {
 
               {/* Back to Login */}
               <div className="text-center">
-                <Link to="/signin" className="small text-decoration-none">
+                <Link to="/signIn" className="small text-decoration-none">
                   Go back to Login Page?
                 </Link>
               </div>
@@ -57,4 +57,4 @@ function SignUpOtp() {
   );
 }
 
-export default SignUpOtp;
+export default OtpVerification;

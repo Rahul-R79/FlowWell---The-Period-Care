@@ -1,0 +1,93 @@
+import { Link } from 'react-router-dom';
+
+function ForgotPassword2() {
+	return (
+		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white px-3 py-4 signUp">
+			<div className="container">
+				<div className="row shadow-lg rounded-4 overflow-hidden bg-transparent">
+					
+					<div className="col-lg-6 d-lg-block p-0 position-relative">
+                        <h4 className="flowwellname">FlowWell</h4>
+                        <img
+                        src="/images/hero/form-hero4.webp"
+                        alt="FlowWell menstrual product"
+                        className="img-fluid h-100 w-100 object-fit-cover"
+                        />
+                    </div>
+
+					{/* Right Form Section */}
+					<div className="col-lg-6 p-5 d-flex align-items-center justify-content-center right-form">
+						<div className="w-100 my-auto">
+							<h2 className="fw-semibold mb-4">Forgot Password</h2>
+							<p className="text-light mb-4">
+								Please Enter your new Password
+							</p>
+
+							<form noValidate>
+								{/* new password */}
+								<div className="mb-5 position-relative">
+									<label htmlFor="newPassword" className="form-label small text-light">New Password</label>
+									<div className="input-group">
+										<span className="input-group-text bg-transparent border-0 text-white">
+											<i className="bi bi-lock" />
+										</span>
+										<input
+											type="password"
+											id="newPassword"
+											className="form-control text-light bg-transparent"
+											placeholder="Enter your Password"
+											required
+										/>
+										<button
+											type="button"
+											className="btn position-absolute end-0 top-50 translate-middle-y text-secondary p-0"
+											aria-label="Toggle password visibility"
+										>
+											<i className="bi bi-eye-slash" />
+										</button>
+									</div>
+								</div>
+								{/*confirm Password */}
+								<div className="mb-5 position-relative">
+									<label htmlFor="confirmPassword" className="form-label small text-light">Confirm Password</label>
+									<div className="input-group">
+										<span className="input-group-text bg-transparent border-0 text-white">
+											<i className="bi bi-lock" />
+										</span>
+										<input
+											type="password"
+											id="confirmPassword"
+											className="form-control text-light bg-transparent"
+											placeholder="Enter your Password"
+											required
+										/>
+										<button
+											type="button"
+											className="btn position-absolute end-0 top-50 translate-middle-y text-secondary p-0"
+											aria-label="Toggle password visibility"
+										>
+											<i className="bi bi-eye-slash" />
+										</button>
+									</div>
+								</div>
+								<div className="d-grid mb-4">
+									<button type="submit" className="btn btn-primary rounded-pill custom-register-btn mx-auto w-75">
+										Change Password
+									</button>
+								</div>
+                                <div className="text-center">
+                                        <Link to="/signIn" className="small text-decoration-none">
+                                        Go back to Login Page?
+                                        </Link>
+                                </div>
+							</form>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	);
+}
+
+export default ForgotPassword2;

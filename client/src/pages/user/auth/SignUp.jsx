@@ -17,7 +17,7 @@ function SignUp() {
 					<div className="col-lg-6 p-4 right-form">
 						<h2 className="fw-semibold mb-3">Sign up</h2>
 						<p className="text-light small mb-4">Already have an account?
-							<Link to='/signin' className="text-primary text-decoration-none"> Login here!</Link>
+							<Link to='/signIn' className="text-primary text-decoration-none"> Login here!</Link>
 						</p>
 						<form noValidate>
 							{/* username */}

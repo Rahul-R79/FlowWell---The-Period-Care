@@ -25,7 +25,7 @@ function SignIn() {
 							<h2 className="fw-semibold mb-3">Sign in</h2>
 							<p className="text-light small mb-4">
 								Don't have an account?
-								<Link to="/signup" className="text-primary text-decoration-none"> Register here!</Link>
+								<Link to="/signUp" className="text-primary text-decoration-none"> Register here!</Link>
 							</p>
 
 							<form noValidate>
@@ -80,9 +80,9 @@ function SignIn() {
                                     Remember Me
                                     </label>
                                     </div>
-                                    <label htmlFor="forgotpassword" className="text-primary mb-0 small">
+                                    <Link to='/forgotPassword' className="text-primary mb-0 small text-decoration-none">
                                         Forgot Password
-                                    </label>
+                                    </Link>
                                     </div>
 								{/* Login Button */}
 								<div className="d-grid mb-4">
