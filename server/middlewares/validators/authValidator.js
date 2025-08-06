@@ -3,7 +3,7 @@ import { body } from "express-validator";
 export const validateSignUp = [
     body('name')
     .notEmpty().withMessage('Name is Required').bail()
-    .matches(/^[A-Za-z]+$/).withMessage('Name must contain only letters')
+    .matches(/^[A-Za-z\s]+$/).withMessage('Name must contain only letters')
     .isLength({min: 3}).withMessage('Name must be at least 3 characters')
     .trim(),
 
@@ -14,7 +14,7 @@ export const validateSignUp = [
 
     body('password')
     .notEmpty().withMessage('Password is Required').bail()
-    .isLength({min: 6, max: 8}).withMessage('Password must be 6 to 8 characters long')
+    .isLength({min: 6}).withMessage('Password must be at least 6 characters')
     .matches(/[a-z]/).withMessage('Password must contain at least one lowercase letter')
     .matches(/[A-Z]/).withMessage('Password must contain at least one uppercase letter')
     .matches(/[0-9]/).withMessage('Password must contain at least one number')
@@ -38,7 +38,7 @@ export const validateSignIn = [
 
     body('password')
     .notEmpty().withMessage('Password is Required').bail()
-    .isLength({min: 6, max: 8}).withMessage('Password must be 6 to 8 characters long')
+    .isLength({min: 6}).withMessage('Password must be at least 6 characters')
     .matches(/[a-z]/).withMessage('Password must contain at least one lowercase letter')
     .matches(/[A-Z]/).withMessage('Password must contain at least one uppercase letter')
     .matches(/[0-9]/).withMessage('Password must contain at least one number')

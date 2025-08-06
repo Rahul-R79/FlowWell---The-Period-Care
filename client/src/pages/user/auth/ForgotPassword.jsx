@@ -50,7 +50,7 @@ function ForgotPassword() {
 									</button>
 								</div>
                                 <div className="text-center">
-                                    <Link to="/signIn" className="small text-decoration-none">
+                                    <Link to="/signin" className="small text-decoration-none">
                                     Go back to Login Page?
                                     </Link>
                                 </div>

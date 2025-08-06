@@ -7,7 +7,7 @@ export const SignUp = async(req, res)=>{
     try{
         const existingUser = await User.findOne({email});
         if(existingUser){
-            return res.status(400).json({message: 'Email already in use'});
+            return res.status(400).json({errors: [{ field: 'general', message: 'Email already exist' }]});
         }
         const hashed = await bcrypt.hash(password, 10);
         const user = await User.create({name, email, password: hashed});
@@ -22,7 +22,7 @@ export const SignIn = async(req, res)=>{
     try{
         const user = await User.findOne({email});
         if(!user || !(await bcrypt.compare(password, user.password))){
-            return res.status(401).json({error: 'Invalid Credentials'});
+            return res.status(401).json({errors: [{field: 'general', message: 'Invalid Email or Password'}]});
         }
         const token = generateToken({id: user._id});
         res.cookie('access-token', token, {

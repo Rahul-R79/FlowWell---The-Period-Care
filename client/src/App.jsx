@@ -9,11 +9,11 @@ function App(){
     return(
         <BrowserRouter>
             <Routes>
-                <Route path="/signUp" element={<SignUp/>}/>
-                <Route path="/signIn" element={<SignIn/>}/>
-                <Route path="/forgotPassword" element={<ForgotPassword/>}/>
-                <Route path="/otpVerification" element={<OtpVerification/>}/>
-                <Route path="/forgotPassword2" element={<ForgotPassword2/>}/>
+                <Route path="/signup" element={<SignUp/>}/>
+                <Route path="/signin" element={<SignIn/>}/>
+                <Route path="/forgotpassword" element={<ForgotPassword/>}/>
+                <Route path="/otpverification" element={<OtpVerification/>}/>
+                <Route path="/forgotpassword2" element={<ForgotPassword2/>}/>
             </Routes>
         </BrowserRouter>
     )

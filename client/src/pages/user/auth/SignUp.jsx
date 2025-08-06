@@ -1,7 +1,36 @@
 import './auth.css';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { signupUser } from '../../../features/auth/authSlice';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
+	const {user, loading, errorByAction} = useSelector(state => state.auth);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const [formData, setFromData] = useState({
+		name: '', 
+		email: '', 
+		password: '', 
+		confirmPassword: ''
+	});
+
+	const handleData = (e)=>{
+		setFromData({...formData, [e.target.name] : e.target.value})
+	}
+
+	const handlesignUp = (e)=>{
+		e.preventDefault();
+		dispatch(signupUser(formData));
+		navigate('/signin')
+	}
+
+	const getFieldError = (fieldName)=>{
+		return errorByAction.signupUser?.find(e => e.field === fieldName)?.message;
+	}
+
 	return (
 		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white py-4 px-3 signUp">
 			<div className="container">
@@ -17,9 +46,12 @@ function SignUp() {
 					<div className="col-lg-6 p-4 right-form">
 						<h2 className="fw-semibold mb-3">Sign up</h2>
 						<p className="text-light small mb-4">Already have an account?
-							<Link to='/signIn' className="text-primary text-decoration-none"> Login here!</Link>
+							<Link to='/signin' className="text-primary text-decoration-none"> Login here!</Link>
 						</p>
-						<form noValidate>
+						<form noValidate onSubmit={handlesignUp}>
+							<div className='mb-3'>
+								{getFieldError('general') && <small className='text-danger'>{getFieldError('general')}</small>}
+							</div>
 							{/* username */}
 							<div className="mb-3">
 								<label htmlFor="username" className="form-label small text-light">Username</label>
@@ -30,9 +62,13 @@ function SignUp() {
 									<input type="text" id="username"
 										className="form-control text-light bg-transparent"
 										placeholder="Enter your User name"
+										name='name'
+										value={formData.name}
+										onChange={handleData}
 										required
 									/>
 								</div>
+								{getFieldError('name') && <small className='text-danger'>{getFieldError('name')}</small>}
 							</div>
 							{/* Email */}
 							<div className="mb-3">
@@ -44,9 +80,13 @@ function SignUp() {
 									<input type="email" id="email"
 										className="form-control text-light bg-transparent"
 										placeholder="Enter your email address"
+										name='email'
+										value={formData.email}
+										onChange={handleData}
 										required
 									/>
 								</div>
+								{getFieldError('email') && <small className='text-danger'>{getFieldError('email')}</small>}
 							</div>
 
 							{/* Password */}
@@ -59,12 +99,16 @@ function SignUp() {
 									<input type="password" id="password"
 										className="form-control text-light bg-transparent"
 										placeholder="Enter your Password"
+										name='password'
+										value={formData.password}
+										onChange={handleData}
 										required
 									/>
 									<button type="button" className="btn position-absolute end-0 top-50 translate-middle-y text-secondary p-0">
 										<i className="bi bi-eye-slash" />
 									</button>
 								</div>
+								{getFieldError('password') && <small className='text-danger'>{getFieldError('password')}</small>}
 							</div>
 
 							{/* Confirm Password */}
@@ -77,12 +121,16 @@ function SignUp() {
 									<input type="password" id="confirmPassword"
 										className="form-control text-light bg-transparent"
 										placeholder="Confirm your Password"
+										name='confirmPassword'
+										value={formData.confirmPassword}
+										onChange={handleData}
 										required
 									/>
 									<button type="button" className="btn position-absolute end-0 top-50 translate-middle-y text-secondary p-0">
 										<i className="bi bi-eye-slash" />
 									</button>
 								</div>
+								{getFieldError('confirmPassword') && <small className='text-danger'>{getFieldError('confirmPassword')}</small>}
 							</div>
 
 							{/* Register Button */}

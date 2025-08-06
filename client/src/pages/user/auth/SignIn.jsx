@@ -1,7 +1,34 @@
 import { Link } from 'react-router-dom';
 import './auth.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { signinUser } from '../../../features/auth/authSlice';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
+	const {user, loading, errorByAction} = useSelector(state => state.auth);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const [formData, setFormData] = useState({
+		email: '', 
+		password: ''
+	});
+
+	const handleData = (e)=>{
+		setFormData({...formData, [e.target.name] : e.target.value});
+	}
+
+	const handleSignIn = (e)=>{
+		e.preventDefault();
+		dispatch(signinUser(formData));
+		navigate('/');
+	}
+
+	const getFieldError = (fieldName)=>{
+		return errorByAction.signinUser?.find(e => e.field === fieldName)?.message;
+	}
+	
 	return (
 		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white px-3 py-4 signUp">
 			<div className="container">
@@ -25,10 +52,13 @@ function SignIn() {
 							<h2 className="fw-semibold mb-3">Sign in</h2>
 							<p className="text-light small mb-4">
 								Don't have an account?
-								<Link to="/signUp" className="text-primary text-decoration-none"> Register here!</Link>
+								<Link to="/signup" className="text-primary text-decoration-none"> Register here!</Link>
 							</p>
 
-							<form noValidate>
+							<form noValidate onSubmit={handleSignIn}>
+								<div className='mb-3'>
+									{getFieldError('general') && <small className='text-danger'>{getFieldError('general')}</small>}
+								</div>
 								{/* Email */}
 								<div className="mb-3">
 									<label htmlFor="email" className="form-label small text-light">Email</label>
@@ -41,9 +71,13 @@ function SignIn() {
 											id="email"
 											className="form-control text-light bg-transparent"
 											placeholder="Enter your email address"
+											name='email'
+											value={formData.email}
+											onChange={handleData}
 											required
 										/>
 									</div>
+									{getFieldError('email') && <small className='text-danger'>{getFieldError('email')}</small>}
 								</div>
 
 								{/* Password */}
@@ -58,6 +92,9 @@ function SignIn() {
 											id="password"
 											className="form-control text-light bg-transparent"
 											placeholder="Enter your Password"
+											name='password'
+											value={formData.password}
+											onChange={handleData}
 											required
 										/>
 										<button
@@ -68,6 +105,7 @@ function SignIn() {
 											<i className="bi bi-eye-slash" />
 										</button>
 									</div>
+									{getFieldError('password') && <small className='text-danger'>{getFieldError('password')}</small>}
 								</div>
                                 <div className="mb-5 d-flex justify-content-between align-items-center">
                                 <div className="form-check mb-0">
@@ -80,7 +118,7 @@ function SignIn() {
                                     Remember Me
                                     </label>
                                     </div>
-                                    <Link to='/forgotPassword' className="text-primary mb-0 small text-decoration-none">
+                                    <Link to='/forgotpassword' className="text-primary mb-0 small text-decoration-none">
                                         Forgot Password
                                     </Link>
                                     </div>
