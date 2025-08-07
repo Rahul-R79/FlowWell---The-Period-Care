@@ -20,18 +20,19 @@ export const SignUp = async(req, res)=>{
 export const SignIn = async(req, res)=>{
     const {email, password} = req.body;
     try{
-        const user = await User.findOne({email});
+        const user = await User.findOne({email})
         if(!user || !(await bcrypt.compare(password, user.password))){
             return res.status(401).json({errors: [{field: 'general', message: 'Invalid Email or Password'}]});
         }
         const token = generateToken({id: user._id});
+        const {password: hashedPassword, ...rest} = user._doc;
         res.cookie('access-token', token, {
             httponly: true,
             secure: false,
             sameSite: 'Strict',
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
-        res.status(200).json({success: true, message: 'login successful', token});
+        res.status(200).json({success: true, message: 'login successful', rest});
     }catch(err){
         res.status(500).json({ message: 'Internal server error' });
     }

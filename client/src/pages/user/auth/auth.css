@@ -24,7 +24,9 @@
   border-bottom: 1px solid #ccc;
   border-radius: 0;
 }
-
+.eye-button{
+  z-index: 10 !important;
+}
 .form-control:focus {
   border-bottom-color: #5f92ff;
   box-shadow: none;

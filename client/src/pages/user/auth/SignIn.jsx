@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import './auth.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { signinUser } from '../../../features/auth/authSlice';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
@@ -19,10 +19,14 @@ function SignIn() {
 		setFormData({...formData, [e.target.name] : e.target.value});
 	}
 
-	const handleSignIn = (e)=>{
+	const handleSignIn = async (e)=>{
 		e.preventDefault();
-		dispatch(signinUser(formData));
-		navigate('/');
+		try{
+			await dispatch(signinUser(formData)).unwrap();
+			navigate('/');
+		}catch(err){
+			console.log('signin error', err);
+		}
 	}
 
 	const getFieldError = (fieldName)=>{
