@@ -29,8 +29,12 @@ function SignUp() {
 
 	const handleSignUp = async (e) => {
 		e.preventDefault();
-		dispatch(signupUser(formData));
-		navigate('/signin')
+		try{
+			await dispatch(signupUser(formData)).unwrap();
+			navigate('/signin')
+		}catch(err){
+			console.log('signup error', err);
+		}
 	}
 
 	const getFieldError = (fieldName) => {
