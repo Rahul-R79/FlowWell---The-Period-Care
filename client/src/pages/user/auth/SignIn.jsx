@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import './auth.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { signinUser } from '../../../features/auth/authSlice';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function SignIn() {

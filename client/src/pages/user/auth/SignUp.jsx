@@ -29,15 +29,9 @@ function SignUp() {
 
 	const handleSignUp = async (e) => {
 		e.preventDefault();
-		try{
-			await dispatch(signupUser(formData)).unwrap();
-			localStorage.setItem('otpEmail', formData.email);
-			localStorage.setItem('otpTimeStart', Date.now().toString())
-			navigate('/otpverification');
-		}catch(err){
-			console.log('signup failed', err);
-		}
-	};
+		dispatch(signupUser(formData));
+		navigate('/signin')
+	}
 
 	const getFieldError = (fieldName) => {
 		return errorByAction.signupUser?.find(e => e.field === fieldName)?.message;

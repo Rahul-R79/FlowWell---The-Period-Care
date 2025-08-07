@@ -52,7 +52,7 @@ const authSlice = createSlice({
             state.loading = true;
             state.errorByAction.signupUser = null;
         })
-        .addCase(signupUser.fulfilled, state=>{
+        .addCase(signupUser.fulfilled, (state, action)=>{
             state.loading = false;
             state.errorByAction.signupUser = null;
         })
