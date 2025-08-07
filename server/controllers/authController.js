@@ -1,6 +1,9 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
 import generateToken from '../utils/jwt.js';
+import crypto from 'crypto'
+import redisClient from '../utils/redis.js';
+import sendOTP from '../utils/sendOtpEmail.js';
 
 export const SignUp = async(req, res)=>{
     const {name, email, password} = req.body;
@@ -10,10 +13,66 @@ export const SignUp = async(req, res)=>{
             return res.status(400).json({errors: [{ field: 'general', message: 'Email already exist' }]});
         }
         const hashed = await bcrypt.hash(password, 10);
-        const user = await User.create({name, email, password: hashed});
-        return res.status(201).json({message: 'User created Successfully', user});
+        const otp = crypto.randomInt(1000, 9999).toString();
+        const hashedOtp = await bcrypt.hash(otp, 10);
+
+        const user = JSON.stringify({name, password: hashed, otp: hashedOtp})
+        
+        await redisClient.set(`otp:${email}`, user, {EX: 60});
+
+        await sendOTP(email, otp);
+
+        return res.status(200).json({message: 'OTP send to mail'});
     }catch(err){
         return res.status(500).json({message: 'SignUp failed Please try again'});
+    }
+}
+
+export const verifyOTP = async(req, res)=>{
+    const {email, otp} = req.body;
+
+    try{
+        const redisData = await redisClient.get(`otp:${email}`);
+        if(!redisData){
+            return res.status(400).json({message: 'OTP expired or invalid'});
+        }
+
+        const {name, password, otp: hashedOtp} = JSON.parse(redisData);
+
+        const match = await bcrypt.compare(otp, hashedOtp);
+        if(!match){
+            return res.status(400).json({errors: [{field: 'general', message: 'Incorrect OTP'}]});
+        }
+
+        const user = await User.create({name, email, password});
+        await redisClient.del(`otp:${email}`);
+        return res.status(201).json({ message: 'User created successfully', user});
+    }catch(err){
+        return res.status(500).json({message: 'otp verfication failed'});
+    }
+}
+
+export const resendOTP = async(req, res)=>{
+    const {email} = req.body;
+
+    try{
+        const redisData = await redisClient.get(`otp:${email}`);
+        if(!redisData){
+            return res.status(400).json({message: 'OTP expired Please signup again'});
+        }
+
+        const {name, password} = JSON.parse(redisData);
+
+        const otp = crypto.randomInt(1000, 9999).toString();
+        const hashedOTP = await bcrypt.hash(otp, 10);
+
+        const updatedUser = JSON.stringify({name, password, otp: hashedOTP});
+        await redisClient.set(`otp:${email}`, updatedUser, {EX: 60});
+
+        await sendOTP(email, otp);
+        return res.status(200).json({message: 'OTP resended successfully'});
+    }catch(err){
+        return res.status(500).json({message: 'resend faile please try again'});
     }
 }
 

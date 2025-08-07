@@ -31,7 +31,9 @@ function SignUp() {
 		e.preventDefault();
 		try{
 			await dispatch(signupUser(formData)).unwrap();
-			navigate('/signin');
+			localStorage.setItem('otpEmail', formData.email);
+			localStorage.setItem('otpTimeStart', Date.now().toString())
+			navigate('/otpverification');
 		}catch(err){
 			console.log('signup failed', err);
 		}
@@ -157,8 +159,8 @@ function SignUp() {
 
 							{/* Register Button */}
 							<div className="d-grid mb-4">
-								<button type="submit" className="btn btn-primary rounded-pill custom-register-btn mx-auto w-75">
-									Register
+								<button type="submit" className="btn btn-primary rounded-pill custom-register-btn mx-auto w-75" disabled={loading}>
+									{loading ? 'Registering...' : 'Register'}
 								</button>
 							</div>
 
