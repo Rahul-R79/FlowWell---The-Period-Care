@@ -1,7 +1,32 @@
 import { Link } from 'react-router-dom';
 import './auth.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { forgotPassword } from '../../../features/auth/authSlice';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function ForgotPassword() {
+	const {user, loading, errorByAction} = useSelector(state => state.auth);
+	const [email, setEmail] = useState('');
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const getFieldError = (fieldName)=>{
+		return errorByAction.forgotPassword?.find(e => e.field === fieldName)?.message;
+	}
+
+	const handleSubmit = async(e)=>{
+		e.preventDefault();
+		try{
+			await dispatch(forgotPassword({email})).unwrap();
+			localStorage.setItem('forgotMail', email);
+			localStorage.setItem('otpStartTime_forgot-password', Date.now());
+			navigate('/otpverification?flow=forgot-password');
+		}catch(err){
+			console.log('forgot password error', err);
+		}
+	}
+
 	return (
 		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white px-3 py-4 signUp">
 			<div className="container">
@@ -25,7 +50,7 @@ function ForgotPassword() {
 							<h2 className="fw-semibold mb-3">Change Password</h2>
 							<p className="text-light mb-4">Please confirm your mail address</p>
 
-							<form noValidate>
+							<form noValidate onSubmit={handleSubmit}>
 								{/* Email */}
 								<div className="mb-5">
 									<label htmlFor="email" className="form-label small text-light">Email</label>
@@ -36,17 +61,21 @@ function ForgotPassword() {
 										<input
 											type="email"
 											id="email"
+											name='email'
+											onChange={(e)=> setEmail(e.target.value)}
+											value={email}
 											className="form-control text-light bg-transparent"
 											placeholder="Enter your email address"
 											required
 										/>
 									</div>
+									{getFieldError('email') && <small className='text-danger'>{getFieldError('email')}</small>}
 								</div>
 
 								{/* Login Button */}
 								<div className="d-grid mb-4">
-									<button type="submit" className="btn btn-primary rounded-pill custom-register-btn mx-auto w-75">
-										Send OTP
+									<button type="submit" className="btn btn-primary rounded-pill custom-register-btn mx-auto w-75" disabled={loading}>
+										{loading ? 'Verifying...': 'Send OTP'}
 									</button>
 								</div>
                                 <div className="text-center">

@@ -32,7 +32,8 @@ function SignUp() {
 		try{
 			await dispatch(signupUser(formData)).unwrap();
 			localStorage.setItem('otpEmail', formData.email);
-			navigate('/otpverification')
+			localStorage.setItem('otpStartTime_signup', Date.now());
+			navigate('/otpverification?flow=signup')
 		}catch(err){
 			console.log('signup error', err);
 		}

@@ -44,3 +44,10 @@ export const validateSignIn = [
     .matches(/[0-9]/).withMessage('Password must contain at least one number')
     .matches(/[@#$?_-]/).withMessage('Password must contain at least one special character'),
 ]
+
+export const validateforResetPass = [
+    body('email')
+    .notEmpty().withMessage('Email is Required').bail()
+    .isEmail().withMessage('Enter a valid email')
+    .normalizeEmail(),
+]

@@ -1,19 +1,78 @@
 // import '../index.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { verifyOTP, resendOTP } from '../features/auth/authSlice';
+import { verifyForgotOTP, resendForgotOTP } from '../features/auth/authSlice';
 import { useNavigate,  Link} from 'react-router-dom';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function OtpVerification() {
 	const {user, loading, errorByAction} = useSelector(state => state.auth);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
+	const queryParams = new URLSearchParams(location.search);
+	const flow = queryParams.get('flow');
 
 	const [otp, setOtp] = useState(['', '', '', '']);
 	const [timer, setTimer] = useState(60);
+	const [resendDisabled, setresendDisabled] = useState(true);
 	const inputRef = useRef([]);
+	const intervalRef = useRef(null)
 
-	const email = localStorage.getItem('otpEmail');
+	const email =  flow === 'signup' ? localStorage.getItem('otpEmail') : localStorage.getItem('forgotMail');
+
+	const setOtpStartTime = ()=>{
+		localStorage.setItem(`otpStartTime_${flow}`, Date.now());
+	}
+
+	const startTimer = ()=>{
+		if(intervalRef.current) clearInterval(intervalRef.current);
+
+		setTimer(60);
+		setresendDisabled(true);
+		setOtpStartTime();
+
+		intervalRef.current = setInterval(() => {
+			setTimer(prev => {
+				if(prev <= 1){
+					clearInterval(intervalRef.current);
+					setresendDisabled(false);
+					return 0;
+				}
+				return prev - 1;
+			})
+		}, 1000);
+	}
+
+	useEffect(()=>{
+		const storedStartTime = localStorage.getItem(`otpStartTime_${flow}`);
+		let initialTime = 60;
+
+		if(storedStartTime){
+			const seconds = Math.floor((Date.now() - parseInt(storedStartTime))/1000);
+			initialTime = Math.max(0, 60 - seconds);
+
+			setTimer(initialTime);
+			setresendDisabled(initialTime > 0);
+
+			if(initialTime > 0){
+				intervalRef.current = setInterval(() => {
+					setTimer(prev => {
+						if(prev <= 1){
+							clearInterval(intervalRef.current);
+							setresendDisabled(false);
+							return 0;
+						}
+						return prev - 1;
+					});
+				}, 1000);
+			}
+		}else{
+			startTimer();
+		}
+		return (()=> clearInterval(intervalRef.current));
+	}, []);
 
 	const handleChange = (index, value)=>{
 		if(!/^[0-9]?$/.test(value)) return;
@@ -37,18 +96,51 @@ function OtpVerification() {
 		try{
 			const joinOTP = otp.join('');
 			if(joinOTP.length === 4 && email){
-				await dispatch(verifyOTP({email, otp: joinOTP})).unwrap();
-				navigate('/signin');
+				if(flow === 'signup'){
+					await dispatch(verifyOTP({email, otp: joinOTP})).unwrap();
+					localStorage.removeItem('otpEmail')
+					navigate('/signin');
+				}else{
+					await dispatch(verifyForgotOTP({email, otp: joinOTP})).unwrap();
+					localStorage.removeItem('forgotMail');
+					navigate('/forgotpassword2');
+				}
+				localStorage.removeItem(`otpStartTime_${flow}`);
+				clearInterval(intervalRef.current);
 			}
 		}catch(err){
 			console.log('otp verification error', err)
 		}
 	}
 
-	const getFiledError = (fieldName)=>{
-		return errorByAction.verifyOTP?.find(e => e.field === fieldName)?.message;
+	const handleResend = async ()=>{
+		try{
+			if(flow === 'signup'){
+				await dispatch(resendOTP({email})).unwrap();
+			}else{
+				await dispatch(resendForgotOTP({email})).unwrap();
+			}
+		startTimer();
+		}catch(err){
+			console.log('resend otp error', err);
+		}
+	}
+	
+	const getFiledErrorOfVerify = (fieldName)=>{
+		if(flow === 'signup'){
+			return errorByAction.verifyOTP?.find(e => e.field === fieldName)?.message;
+		}else{
+			return errorByAction.verifyForgotOTP?.find(e => e.field === fieldName)?.message;
+		}
 	}
 
+	const getFiledErrorOfResend = (fieldName)=>{
+		if(flow === 'signup'){
+			return errorByAction.resendOTP?.find(e => e.field === fieldName)?.message;
+		}else{
+			return errorByAction.resendForgotOTP?.find(e => e.field === fieldName)?.message;
+		}
+	}
 	return (
 		<div className="min-vh-100 d-flex align-items-center justify-content-center bg-black px-2 py-4">
 		<div className="container">
@@ -67,7 +159,8 @@ function OtpVerification() {
 				<div className="w-100 confrim-otp">
 				<h4 className="mb-3 fw-semibold">Confirm with OTP</h4>
 				<p className="mb-4 small text-light">Please check your mail address for OTP</p>
-				{getFiledError ('general') && <small className='text-danger'>{getFiledError ('general')}</small>}
+				{getFiledErrorOfVerify ('general') && <small className='text-danger'>{getFiledErrorOfVerify ('general')}</small>}
+				{getFiledErrorOfResend ('general') && <small className='text-danger'>{getFiledErrorOfResend ('general')}</small>}
 				{/* OTP Inputs */}
 				<div className="d-flex gap-2 justify-content-between mb-4 mt-4">
 					{otp.map((value, index)=> (
@@ -85,8 +178,13 @@ function OtpVerification() {
 
 				{/* Timer and Resend */}
 				<div className="d-flex justify-content-between mb-3 small">
-					<span className="text-light">Remaining Time: <span className="text-primary">49s</span></span>
-					<button type="button" className="btn btn-link p-0 text-decoration-none text-primary">Resend OTP</button>
+					<span className="text-light">Remaining Time: <span className="text-primary">{timer}</span></span>
+					<button type="button" 
+						className="btn btn-link p-0 text-decoration-none text-primary"
+						onClick={handleResend}
+						disabled={resendDisabled || loading}
+					>
+						Resend OTP</button>
 				</div>
 
 				{/* Submit Button */}
@@ -101,8 +199,8 @@ function OtpVerification() {
 
 				{/* Back to Login */}
 				<div className="text-center">
-					<Link to="/signin" className="small text-decoration-none">
-						Go back to Login Page?
+					<Link to={flow === 'signup' ? '/signup' : '/forgotpassword'} className="small text-decoration-none">
+						{flow === 'signup' ? 'Go back to SingUp Page?' : 'Go back to Forgot Password?'}
 					</Link>
 				</div>
 				</div>

@@ -19,7 +19,7 @@ export const verifyOTP = createAsyncThunk('auth/verifyOTP', async({email, otp}, 
     }
 });
 
-export const resendOTP = createAsyncThunk('auth/resendOTP', async(email, {rejectWithValue})=>{
+export const resendOTP = createAsyncThunk('auth/resendOTP', async({email}, {rejectWithValue})=>{
     try{
         const response = await instance.post('/auth/otp-resend', {email});
         return response.data;
@@ -35,7 +35,34 @@ export const signinUser = createAsyncThunk('auth/signinUser', async(formData, {r
     }catch(err){
         return rejectWithValue(err.response.data.errors);
     }
-})
+});
+
+export const forgotPassword = createAsyncThunk('auth/forgotPassword', async({email}, {rejectWithValue})=>{
+    try{
+        const response = await instance.post('auth/forgot-password', {email});
+        return response.data;
+    }catch(err){
+        return rejectWithValue(err.response.data.errors);
+    };
+});
+
+export const verifyForgotOTP = createAsyncThunk('auth/verifyForgotOtp', async({email, otp}, {rejectWithValue})=>{
+    try{
+        const response = await instance.post('auth/forgot-verify', {email, otp});
+        return response.data;
+    }catch(err){
+        return rejectWithValue(err.response.data.errors);
+    };
+});
+
+export const resendForgotOTP = createAsyncThunk('auth/resendForgotOTP', async({email}, {rejectWithValue})=>{
+    try{
+        const response = await instance.post('auth/forgot-resend', {email});
+        return response.data
+    }catch(err){
+        return rejectWithValue(err.response.data.errors);
+    }
+});
 
 const authSlice = createSlice({
     name: 'auth',
@@ -52,7 +79,7 @@ const authSlice = createSlice({
             state.loading = true;
             state.errorByAction.signupUser = null;
         })
-        .addCase(signupUser.fulfilled, (state, action)=>{
+        .addCase(signupUser.fulfilled, state=>{
             state.loading = false;
             state.errorByAction.signupUser = null;
         })
@@ -100,6 +127,45 @@ const authSlice = createSlice({
         .addCase(signinUser.rejected, (state, action)=>{
             state.loading = false;
             state.errorByAction.signinUser = action.payload;
+        })
+        //resetpassword
+        .addCase(forgotPassword.pending, state=>{
+            state.loading = true;
+            state.errorByAction.forgotPassword = null;
+        })
+        .addCase(forgotPassword.fulfilled, state=>{
+            state.loading = false;
+            state.errorByAction.forgotPassword = null;
+        })
+        .addCase(forgotPassword.rejected, (state, action)=>{
+            state.loading = false;
+            state.errorByAction.forgotPassword = action.payload;
+        })
+        //verifyForgotOtp
+        .addCase(verifyForgotOTP.pending, state=>{
+            state.loading = true;
+            state.errorByAction.verifyForgotOTP = null;
+        })
+        .addCase(verifyForgotOTP.fulfilled, state=>{
+            state.loading = false;
+            state.errorByAction.verifyForgotOTP = null;
+        })
+        .addCase(verifyForgotOTP.rejected, (state, action)=>{
+            state.loading = false;
+            state.errorByAction.verifyForgotOTP = action.payload;
+        })
+        //resendFotgotOtp
+        .addCase(resendForgotOTP.pending, state=>{
+            state.loading = true;
+            state.errorByAction.resendForgotOTP = null;
+        })
+        .addCase(resendForgotOTP.fulfilled, state=>{
+            state.loading = false;
+            state.errorByAction.resendForgotOTP = null;
+        })
+        .addCase(resendForgotOTP.rejected, (state, action)=>{
+            state.loading = false;
+            state.errorByAction.resendForgotOTP = action.payload;
         })
     }
 })
