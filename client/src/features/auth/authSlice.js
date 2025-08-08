@@ -64,6 +64,16 @@ export const resendForgotOTP = createAsyncThunk('auth/resendForgotOTP', async({e
     }
 });
 
+export const resetForgotPassword = createAsyncThunk('auth/resetForgotPassword', async({email, formData}, {rejectWithValue})=>{
+    try{
+        const response = await instance.post('auth/reset-forgot-password', {email, ...formData});
+        return response.data;
+    }catch(err){
+        return rejectWithValue(err.response.data.errors);
+    }
+   
+})
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
@@ -166,6 +176,19 @@ const authSlice = createSlice({
         .addCase(resendForgotOTP.rejected, (state, action)=>{
             state.loading = false;
             state.errorByAction.resendForgotOTP = action.payload;
+        })
+        //resetForgotPassword
+        .addCase(resetForgotPassword.pending, state=>{
+            state.loading = true;
+            state.errorByAction.resetForgotPassword = null;
+        })
+        .addCase(resetForgotPassword.fulfilled, state=>{
+            state.loading = false;
+            state.errorByAction.resetForgotPassword = null;
+        })
+        .addCase(resetForgotPassword.rejected, (state, action)=>{
+            state.loading = false;
+            state.errorByAction.resetForgotPassword = action.payload;
         })
     }
 })

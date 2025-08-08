@@ -1,6 +1,32 @@
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { resetForgotPassword } from '../../../features/auth/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 
 function ForgotPassword2() {
+	const {loading, errorByAction} = useSelector(state => state.auth);
+	const [formData, setFormData] = useState({newPassword: '', newConfirmPassword: ''});
+	const dispatch = useDispatch();
+	const navigate = useNavigate()
+	const email = localStorage.getItem('forgotMail');
+
+	const handleData = (e)=>{
+		setFormData({...formData, [e.target.name] : e.target.value});
+	}
+
+	const handleSubmit = async(e)=>{
+		e.preventDefault();
+		try{
+			await dispatch(resetForgotPassword({email, formData})).unwrap();
+			navigate('/signin');
+		}catch(err){
+			console.log('change forgotpassword error', err);
+		}
+	}
+
+	const getFieldError = (fieldName)=>{
+		return errorByAction.resetForgotPassword?.find(e => e.field === fieldName)?.message;
+	}
 	return (
 		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white px-3 py-4 signUp">
 			<div className="container">
@@ -23,7 +49,7 @@ function ForgotPassword2() {
 								Please Enter your new Password
 							</p>
 
-							<form noValidate>
+							<form noValidate onSubmit={handleSubmit}>
 								{/* new password */}
 								<div className="mb-5 position-relative">
 									<label htmlFor="newPassword" className="form-label small text-light">New Password</label>
@@ -36,6 +62,8 @@ function ForgotPassword2() {
 											id="newPassword"
 											className="form-control text-light bg-transparent"
 											placeholder="Enter your Password"
+											name='newPassword'
+											onChange={handleData}
 											required
 										/>
 										<button
@@ -46,6 +74,7 @@ function ForgotPassword2() {
 											<i className="bi bi-eye-slash" />
 										</button>
 									</div>
+									{getFieldError('newPassword') && <small className='text-danger'>{getFieldError('newPassword')}</small>}
 								</div>
 								{/*confirm Password */}
 								<div className="mb-5 position-relative">
@@ -59,6 +88,8 @@ function ForgotPassword2() {
 											id="confirmPassword"
 											className="form-control text-light bg-transparent"
 											placeholder="Enter your Password"
+											name='newConfirmPassword'
+											onChange={handleData}
 											required
 										/>
 										<button
@@ -69,6 +100,7 @@ function ForgotPassword2() {
 											<i className="bi bi-eye-slash" />
 										</button>
 									</div>
+									{getFieldError('newConfirmPassword') && <small className='text-danger'>{getFieldError('newConfirmPassword')}</small>}
 								</div>
 								<div className="d-grid mb-4">
 									<button type="submit" className="btn btn-primary rounded-pill custom-register-btn mx-auto w-75">

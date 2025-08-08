@@ -164,3 +164,22 @@ export const resendForgotOTP = async(req, res)=>{
         return res.status(500).json({message: 'Internal server error'});
     }
 }
+
+export const forgotResetPassword = async(req, res)=>{
+    const {email, newPassword} = req.body;
+
+    try{
+        const user = await User.findOne({email});
+        if(!user){
+            return res.status(400).json({errors: [{field: 'general', message: 'user not found'}]});
+        }
+
+        const hashed = await bcrypt.hash(newPassword, 10);
+        await User.findOneAndUpdate({email}, {password: hashed});
+
+        res.status(200).json({message: 'password reset successfully'});
+    }catch(err){
+        return res.status(500).json({message: 'internal server error'});
+    }
+
+}

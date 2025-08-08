@@ -45,9 +45,28 @@ export const validateSignIn = [
     .matches(/[@#$?_-]/).withMessage('Password must contain at least one special character'),
 ]
 
-export const validateforResetPass = [
+export const validateEmail = [
     body('email')
     .notEmpty().withMessage('Email is Required').bail()
     .isEmail().withMessage('Enter a valid email')
     .normalizeEmail(),
+
+]
+export const validateforResetPass = [
+    body('newPassword')
+    .notEmpty().withMessage('Password is Required').bail()
+    .isLength({min: 6}).withMessage('Password must be at least 6 characters')
+    .matches(/[a-z]/).withMessage('Password must contain at least one lowercase letter')
+    .matches(/[A-Z]/).withMessage('Password must contain at least one uppercase letter')
+    .matches(/[0-9]/).withMessage('Password must contain at least one number')
+    .matches(/[@#$?_-]/).withMessage('Password must contain at least one special character'),
+
+    body('newConfirmPassword')
+    .notEmpty().withMessage('Confirm Password is Required').bail()
+    .custom((pass, {req})=>{
+        if(pass !== req.body.newPassword){
+            throw new Error('Password is not Matching');
+        }
+        return true;
+    })
 ]

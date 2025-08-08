@@ -102,7 +102,6 @@ function OtpVerification() {
 					navigate('/signin');
 				}else{
 					await dispatch(verifyForgotOTP({email, otp: joinOTP})).unwrap();
-					localStorage.removeItem('forgotMail');
 					navigate('/forgotpassword2');
 				}
 				localStorage.removeItem(`otpStartTime_${flow}`);
