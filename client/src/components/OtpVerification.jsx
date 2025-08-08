@@ -45,6 +45,10 @@ function OtpVerification() {
 		}
 	}
 
+	const getFiledError = (fieldName)=>{
+		return errorByAction.verifyOTP?.find(e => e.field === fieldName)?.message;
+	}
+
 	return (
 		<div className="min-vh-100 d-flex align-items-center justify-content-center bg-black px-2 py-4">
 		<div className="container">
@@ -63,9 +67,9 @@ function OtpVerification() {
 				<div className="w-100 confrim-otp">
 				<h4 className="mb-3 fw-semibold">Confirm with OTP</h4>
 				<p className="mb-4 small text-light">Please check your mail address for OTP</p>
-
+				{getFiledError ('general') && <small className='text-danger'>{getFiledError ('general')}</small>}
 				{/* OTP Inputs */}
-				<div className="d-flex gap-2 justify-content-between mb-4">
+				<div className="d-flex gap-2 justify-content-between mb-4 mt-4">
 					{otp.map((value, index)=> (
 						<input key={index} 
 						type="text" 
@@ -89,7 +93,7 @@ function OtpVerification() {
 				<div className="d-grid mb-4">
 					<button type="submit" className="btn btn-primary rounded-pill py-2" 
 						onClick={handleSubmit} 
-						disabled={loading}
+						disabled={loading || otp.join('').length < 4}
 					>
 						{loading ? 'Verifying...': 'Send OTP'}
 					</button>

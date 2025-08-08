@@ -6,7 +6,7 @@ import { handleValidation } from '../middlewares/validators/handleValidation.js'
 const router = express.Router();
 
 router.post('/signup', validateSignUp, handleValidation, SignUp);
-router.post('/otp-verify', verifyOTP);
+router.post('/otp-verify', handleValidation, verifyOTP);
 router.post('/otp-resend', resendOTP);
 router.post('/signin', validateSignIn, handleValidation, SignIn);
 

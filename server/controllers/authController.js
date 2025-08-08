@@ -18,7 +18,7 @@ export const SignUp = async(req, res)=>{
 
         const user = JSON.stringify({name, password: hashed, otp: hashedOtp})
         
-        await redisClient.set(`otp:${email}`, user, {EX: 60});
+        await redisClient.set(`otp:${email}`, user, {EX: 120});
 
         await sendOTP(email, otp);
 
@@ -34,7 +34,7 @@ export const verifyOTP = async(req, res)=>{
     try{
         const redisData = await redisClient.get(`otp:${email}`);
         if(!redisData){
-            return res.status(400).json({message: 'OTP expired or invalid'});
+            return res.status(400).json({errors: [{field: 'general', message: 'OTP is expired please resend it again'}]});
         }
 
         const {name, password, otp: hashedOtp} = JSON.parse(redisData);
@@ -67,7 +67,7 @@ export const resendOTP = async(req, res)=>{
         const hashedOTP = await bcrypt.hash(otp, 10);
 
         const updatedUser = JSON.stringify({name, password, otp: hashedOTP});
-        await redisClient.set(`otp:${email}`, updatedUser, {EX: 60});
+        await redisClient.set(`otp:${email}`, updatedUser, {EX: 120});
 
         await sendOTP(email, otp);
         return res.status(200).json({message: 'OTP resended successfully'});
@@ -91,7 +91,7 @@ export const SignIn = async(req, res)=>{
             sameSite: 'Strict',
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
-        res.status(200).json({success: true, message: 'login successful', rest});
+    res.status(200).json({success: true, message: 'login successful', user: rest});
     }catch(err){
         res.status(500).json({ message: 'Internal server error' });
     }

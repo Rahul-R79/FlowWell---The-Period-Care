@@ -31,7 +31,8 @@ function SignUp() {
 		e.preventDefault();
 		try{
 			await dispatch(signupUser(formData)).unwrap();
-			navigate('/signin')
+			localStorage.setItem('otpEmail', formData.email);
+			navigate('/otpverification')
 		}catch(err){
 			console.log('signup error', err);
 		}
