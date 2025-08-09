@@ -5,10 +5,12 @@ import OtpVerification from "./components/OtpVerification";
 import ForgotPassword from "./pages/user/auth/ForgotPassword";
 import ForgotPassword2 from "./pages/user/auth/ForgotPassword2";
 import Home from "./pages/user/Home";
+import ClearErrorOnRouteChange from "./components/clearErrors";
 
 function App(){
     return(
         <BrowserRouter>
+            <ClearErrorOnRouteChange/>
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/signup" element={<SignUp/>}/>
