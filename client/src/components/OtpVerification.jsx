@@ -99,10 +99,10 @@ function OtpVerification() {
 				if(flow === 'signup'){
 					await dispatch(verifyOTP({email, otp: joinOTP})).unwrap();
 					localStorage.removeItem('otpEmail')
-					navigate('/signin');
+					navigate('/signin', { replace: true });
 				}else{
 					await dispatch(verifyForgotOTP({email, otp: joinOTP})).unwrap();
-					navigate('/forgotpassword2');
+					navigate('/forgotpassword2', { replace: true });
 				}
 				localStorage.removeItem(`otpStartTime_${flow}`);
 				clearInterval(intervalRef.current);

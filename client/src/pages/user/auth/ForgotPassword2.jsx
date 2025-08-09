@@ -26,7 +26,7 @@ function ForgotPassword2() {
 		try{
 			await dispatch(resetForgotPassword({email, formData})).unwrap();
 			localStorage.removeItem('forgotMail');
-			navigate('/signin');
+			navigate('/signin', {replace: true});
 		}catch(err){
 			console.log('change forgotpassword error', err);
 		}

@@ -79,7 +79,8 @@ const authSlice = createSlice({
     initialState: {
         user: null,
         loading: false,
-        errorByAction: {}
+        errorByAction: {},
+        forgotPasswordEmaiVerify: false,
     },
     reducers: {
         clearErrors: (state)=>{
@@ -163,6 +164,7 @@ const authSlice = createSlice({
         .addCase(verifyForgotOTP.fulfilled, state=>{
             state.loading = false;
             state.errorByAction.verifyForgotOTP = null;
+            state.forgotPasswordEmaiVerify = true;
         })
         .addCase(verifyForgotOTP.rejected, (state, action)=>{
             state.loading = false;
