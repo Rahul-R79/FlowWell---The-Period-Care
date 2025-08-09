@@ -10,6 +10,11 @@ function SignIn() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
+	const [showPassword, setShowPassword] = useState(false);
+	const togglePassword = () => setShowPassword(prev => !prev);
+
+	const apiUrl = import.meta.env.VITE_API_URL;
+
 	const [formData, setFormData] = useState({
 		email: '', 
 		password: ''
@@ -34,7 +39,7 @@ function SignIn() {
 	}
 	
 	return (
-		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white px-3 py-4 signUp">
+		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white px-3 py-4 authForm">
 			<div className="container">
 				<div className="row shadow-lg rounded-4 overflow-hidden bg-transparent">
 					
@@ -92,7 +97,7 @@ function SignIn() {
 											<i className="bi bi-lock" />
 										</span>
 										<input
-											type="password"
+											type={showPassword ? 'text' : 'password'}
 											id="password"
 											className="form-control text-light bg-transparent"
 											placeholder="Enter your Password"
@@ -103,29 +108,20 @@ function SignIn() {
 										/>
 										<button
 											type="button"
-											className="btn position-absolute end-0 top-50 translate-middle-y text-secondary p-0"
+											className="btn position-absolute end-0 top-50 translate-middle-y text-secondary p-0 eye-button"
 											aria-label="Toggle password visibility"
+											onClick={togglePassword}
 										>
-											<i className="bi bi-eye-slash" />
+											<i className={showPassword ? "bi bi-eye" : "bi bi-eye-slash"} />
 										</button>
 									</div>
 									{getFieldError('password') && <small className='text-danger'>{getFieldError('password')}</small>}
 								</div>
-                                <div className="mb-5 d-flex justify-content-between align-items-center">
-                                <div className="form-check mb-0">
-                                    <input
-                                    className="form-check-input square-checkbox"
-                                    type="checkbox"
-                                    id="squareCheck"
-                                    />
-                                    <label className="form-check-label small" htmlFor="squareCheck">
-                                    Remember Me
-                                    </label>
-                                    </div>
+                                <div className="mb-5 text-end">
                                     <Link to='/forgotpassword' className="text-primary mb-0 small text-decoration-none">
                                         Forgot Password
                                     </Link>
-                                    </div>
+                                </div>
 								{/* Login Button */}
 								<div className="d-grid mb-4">
 									<button type="submit" className="btn btn-primary rounded-pill custom-register-btn mx-auto w-75">
@@ -136,14 +132,15 @@ function SignIn() {
 								{/* Google Sign-In */}
 								<div className="text-center text-light mb-3 small">Continue with</div>
 								<div className="d-grid">
-									<button type="button" className="btn btn-light d-flex align-items-center justify-content-center gap-2 px-3 py-3 rounded mx-auto google-btn">
+									<button type="button" onClick={() => window.location.href = `${apiUrl}/api/auth/google`}
+									className="btn btn-light d-flex align-items-center justify-content-center gap-2 px-3 py-3 rounded mx-auto google-btn">
 										<img
 											src="/images/icons/google_icon.webp"
 											alt="Google"
 											width="20"
 											height="20"
 										/>
-										<span className="fw-medium google-text">Sign in with Google</span>
+										<span className="fw-medium google-text">Signin with Google</span>
 									</button>
 								</div>
 							</form>

@@ -15,9 +15,17 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: function() { return !this.googleId; },
         trim: true,
+    },
+    googleId: { 
+        type: String, 
+        unique: true 
+    },
+    avatar: {
+        type: String 
     }
+
 }, {timestamps: true});
 
 export default mongoose.model('User', userSchema);

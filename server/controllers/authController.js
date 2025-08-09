@@ -86,7 +86,7 @@ export const SignIn = async(req, res)=>{
         const token = generateToken({id: user._id});
         const {password: hashedPassword, ...rest} = user._doc;
         res.cookie('access-token', token, {
-            httponly: true,
+            httpOnly: true,
             secure: false,
             sameSite: 'Strict',
             maxAge: 7 * 24 * 60 * 60 * 1000
@@ -182,4 +182,25 @@ export const forgotResetPassword = async(req, res)=>{
         return res.status(500).json({message: 'internal server error'});
     }
 
+};
+
+export const googleAuthCallback = async(req, res)=>{
+    try{
+        if(!req.user){
+            return res.status(401).json({message: "google auth failed"});
+        }
+        const token = generateToken({id: req.user._id});
+
+        res.cookie('access-token', token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'Strict', 
+            maxAge: 7 * 24 * 60 * 60 * 1000, 
+        });
+
+        res.redirect(process.env.CLIENT_URL);
+        
+    }catch(err){
+        return res.status(500).json({message: 'internal server error'});
+    }
 }

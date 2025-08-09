@@ -28,7 +28,7 @@ function ForgotPassword() {
 	}
 
 	return (
-		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white px-3 py-4 signUp">
+		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white px-3 py-4 authForm">
 			<div className="container">
 				<div className="row shadow-lg rounded-4 overflow-hidden bg-transparent">
 					

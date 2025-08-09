@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { signupUser } from '../../../features/auth/authSlice';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 
 function SignUp() {
 	const { user, loading, errorByAction } = useSelector(state => state.auth);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const apiUrl = import.meta.env.VITE_API_URL;
 
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -44,11 +45,11 @@ function SignUp() {
 	};
 
 	return (
-		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white py-4 px-3 signUp">
+		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white py-4 px-3 authForm">
 			<div className="container">
 				<div className="row shadow-lg rounded-4 overflow-hidden bg-transparent">
 					<div className="col-lg-6 bg-white d-flex align-items-center justify-content-center">
-						<div className="w-100 px-3 text-center">
+						<div className="w-100 px-3 text-center tip">
 							<h4 className="fw-bold text-dark mb-3 mt-3 text-flowwell">FlowWell</h4>
 							<img src="/images/hero/form-hero7.webp"
 								alt="FlowWell menstrual gift hamper"
@@ -167,13 +168,14 @@ function SignUp() {
 							{/* Google Sign-In */}
 							<div className="text-center text-light mb-3 small">Continue with</div>
 							<div className="d-grid">
-								<button type="button" className="btn btn-light d-flex align-items-center justify-content-center gap-2 px-3 py-3 rounded mx-auto google-btn">
+								<button type="button" onClick={() => window.location.href = `${apiUrl}/api/auth/google`}
+								className="btn btn-light d-flex align-items-center justify-content-center gap-2 px-3 py-3 rounded mx-auto google-btn">
 									<img src="/images/icons/google_icon.webp"
 										alt="Google"
 										width="20"
 										height="20"
 									/>
-									<span className="fw-medium google-text">Sign in with Google</span>
+									<span className="fw-medium google-text">Signin with Google</span>
 								</button>
 							</div>
 						</form>

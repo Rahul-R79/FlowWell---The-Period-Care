@@ -8,6 +8,13 @@ function ForgotPassword2() {
 	const [formData, setFormData] = useState({newPassword: '', newConfirmPassword: ''});
 	const dispatch = useDispatch();
 	const navigate = useNavigate()
+
+	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+	const togglePassword = () => setShowPassword(prev => !prev);
+	const toggleConfirmPassword = () => setShowConfirmPassword(prev => !prev);
+
 	const email = localStorage.getItem('forgotMail');
 
 	const handleData = (e)=>{
@@ -18,6 +25,7 @@ function ForgotPassword2() {
 		e.preventDefault();
 		try{
 			await dispatch(resetForgotPassword({email, formData})).unwrap();
+			localStorage.removeItem('forgotMail');
 			navigate('/signin');
 		}catch(err){
 			console.log('change forgotpassword error', err);
@@ -28,7 +36,7 @@ function ForgotPassword2() {
 		return errorByAction.resetForgotPassword?.find(e => e.field === fieldName)?.message;
 	}
 	return (
-		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white px-3 py-4 signUp">
+		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white px-3 py-4 authForm">
 			<div className="container">
 				<div className="row shadow-lg rounded-4 overflow-hidden bg-transparent">
 					
@@ -58,7 +66,7 @@ function ForgotPassword2() {
 											<i className="bi bi-lock" />
 										</span>
 										<input
-											type="password"
+											type={showPassword ? "text" : "password"}
 											id="newPassword"
 											className="form-control text-light bg-transparent"
 											placeholder="Enter your Password"
@@ -68,10 +76,11 @@ function ForgotPassword2() {
 										/>
 										<button
 											type="button"
-											className="btn position-absolute end-0 top-50 translate-middle-y text-secondary p-0"
+											className="btn position-absolute end-0 top-50 translate-middle-y text-secondary p-0 eye-button"
 											aria-label="Toggle password visibility"
+											onClick={togglePassword}
 										>
-											<i className="bi bi-eye-slash" />
+											<i className={showPassword ? "bi bi-eye" : "bi bi-eye-slash" }/>
 										</button>
 									</div>
 									{getFieldError('newPassword') && <small className='text-danger'>{getFieldError('newPassword')}</small>}
@@ -84,7 +93,7 @@ function ForgotPassword2() {
 											<i className="bi bi-lock" />
 										</span>
 										<input
-											type="password"
+											type={showConfirmPassword ? "text" : "password"}
 											id="confirmPassword"
 											className="form-control text-light bg-transparent"
 											placeholder="Enter your Password"
@@ -94,10 +103,11 @@ function ForgotPassword2() {
 										/>
 										<button
 											type="button"
-											className="btn position-absolute end-0 top-50 translate-middle-y text-secondary p-0"
+											className="btn position-absolute end-0 top-50 translate-middle-y text-secondary p-0 eye-button"
 											aria-label="Toggle password visibility"
+											onClick={toggleConfirmPassword}
 										>
-											<i className="bi bi-eye-slash" />
+											<i className={showConfirmPassword ? "bi bi-eye" : "bi bi-eye-slash" }/>
 										</button>
 									</div>
 									{getFieldError('newConfirmPassword') && <small className='text-danger'>{getFieldError('newConfirmPassword')}</small>}
@@ -109,7 +119,7 @@ function ForgotPassword2() {
 								</div>
                                 <div className="text-center">
                                         <Link to="/signin" className="small text-decoration-none">
-                                        Go back to Login Page?
+                                        	Go back to Login Page?
                                         </Link>
                                 </div>
 							</form>

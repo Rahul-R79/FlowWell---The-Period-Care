@@ -1,13 +1,13 @@
-.signUp{
+.authForm{
     background-color: #000;
 }
 
-.hero-img{
-    max-width: 90%;
+.text-flowwell{
+    text-align: left !important;
 }
 
-.text-flowwell{
-  text-align: left !important;
+.col-lg-6.bg-white {
+    height: 100%;               
 }
 
 .right-form{
@@ -15,40 +15,40 @@
 }
 
 ::placeholder {
-  color: #fff !important;
-  opacity: 1;
+    color: #fff !important;
+    opacity: 1;
 }
 
 .form-control {
-  border: none;
-  border-bottom: 1px solid #ccc;
-  border-radius: 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
 }
 .eye-button{
-  z-index: 10 !important;
+    z-index: 10 !important;
 }
 .form-control:focus {
-  border-bottom-color: #5f92ff;
-  box-shadow: none;
+    border-bottom-color: #5f92ff;
+    box-shadow: none;
 }
 
 .google-text{
-  color: #7fa8ff;
+    color: #7fa8ff;
 }
 
 .google-btn {
-  background-color: #ecf2ff;
-  width: 100%;
+    background-color: #ecf2ff;
+    width: 100%;
 }
 
 .google-btn:hover{
-  background-color: #fff !important;
+    background-color: #fff !important;
 }
 
 @media (min-width: 767px) {
-  .google-btn {
-    width: 50% !important;
-  }
+    .google-btn {
+        width: 50% !important;
+    }
 }
 
 

@@ -81,7 +81,11 @@ const authSlice = createSlice({
         loading: false,
         errorByAction: {}
     },
-    reducers: {},
+    reducers: {
+        clearErrors: (state)=>{
+            state.errorByAction = {};
+        }
+    },
     extraReducers: builder => {
         builder
         //signUp
@@ -193,4 +197,5 @@ const authSlice = createSlice({
     }
 })
 
+export const {clearErrors} = authSlice.actions;
 export default authSlice.reducer;
