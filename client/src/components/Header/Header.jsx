@@ -1,9 +1,15 @@
 import { Navbar, Nav, Container, Form, Offcanvas, Row, Col } from "react-bootstrap";
-import { FaSearch, FaUserCircle } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
 import {Link} from "react-router-dom"
+import { useSelector } from "react-redux";
+import { FaRegHeart } from "react-icons/fa";
+import { BsCart3 } from "react-icons/bs";
+
 import "./header.css";
 
 export default function Header() {
+    const {user} = useSelector(state => state.auth);
     return (
         <header className="container">
         {["lg"].map((expand) => (
@@ -44,8 +50,15 @@ export default function Header() {
 
                                 {/* signin */}
                                 <Col xs={12} lg="auto" className="d-flex justify-content-lg-end justify-content-center align-items-center gap-3">
-                                    <FaUserCircle size={28} className="text-dark" />
-                                    <Link to={'/signup'} className="btn btn-outline-dark px-4"> Sign Up </Link>
+                                    <Link to={'/userprofile'}><CgProfile size={28} className="text-dark" /></Link>
+                                    {user ? (
+                                        <>
+                                            <FaRegHeart size={24} className="text-danger" title="Wishlist" />
+                                            <BsCart3  size={24} className="text-dark" title="Cart" />
+                                        </>
+                                    ): (
+                                        <Link to={'/signup'} className="btn btn-outline-dark px-4"> Sign Up </Link>
+                                    )}
                                 </Col>
                             </Row>
                         </Offcanvas.Body>

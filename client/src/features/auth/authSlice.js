@@ -12,7 +12,7 @@ export const signupUser = createAsyncThunk('auth/signupUser', async(formData, {r
 
 export const verifyOTP = createAsyncThunk('auth/verifyOTP', async({email, otp}, {rejectWithValue})=>{
     try{
-        const response = await instance.post('auth/otp-verify', {email, otp});
+        const response = await instance.post('/auth/otp-verify', {email, otp});
         return response.data.user
     }catch(err){
         return rejectWithValue(err.response.data.errors);
@@ -72,6 +72,24 @@ export const resetForgotPassword = createAsyncThunk('auth/resetForgotPassword', 
         return rejectWithValue(err.response.data.errors);
     }
    
+});
+
+export const getCurrentUser = createAsyncThunk('/auth/getCurrentUser', async(_, {rejectWithValue})=>{
+    try{
+        const response = await instance.get('/auth/authme');
+        return response.data.user;
+    }catch(err){
+        return rejectWithValue(err.response.data.errors)
+    }
+})
+
+export const logoutUser = createAsyncThunk('/auth/logoutUser', async(_, {rejectWithValue})=>{
+    try{
+        await instance.post('/auth/logout');
+        return true;
+    }catch(err){
+        return rejectWithValue(err.response.data);
+    }
 })
 
 const authSlice = createSlice({
@@ -195,6 +213,35 @@ const authSlice = createSlice({
         .addCase(resetForgotPassword.rejected, (state, action)=>{
             state.loading = false;
             state.errorByAction.resetForgotPassword = action.payload;
+        })
+        //getcurrentuser
+        .addCase(getCurrentUser.pending, state=>{
+            state.loading = true;
+            state.errorByAction.getCurrentUser = null;
+        })
+        .addCase(getCurrentUser.fulfilled, (state, action)=>{
+            state.loading = false;
+            state.user = action.payload;
+            state.errorByAction.getCurrentUser = null;
+        })
+        .addCase(getCurrentUser.rejected, (state, action)=>{
+            state.loading = false;
+            state.errorByAction.getCurrentUser = action.payload;
+            state.user = null;
+        })
+        //logout user
+        .addCase(logoutUser.pending, state=>{
+            state.loading = true;
+            state.errorByAction.logoutUser = null;
+        })
+        .addCase(logoutUser.fulfilled, state=>{
+            state.loading = false;
+            state.errorByAction.logoutUser = null;
+            state.user = null;
+        })
+        .addCase(logoutUser.rejected, (state, action)=>{
+            state.loading = false;
+            state.errorByAction.logoutUser = action.payload
         })
     }
 })
