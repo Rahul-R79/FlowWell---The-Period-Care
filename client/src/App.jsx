@@ -8,21 +8,35 @@ import Home from "./pages/user/home/Home";
 import ClearErrorOnRouteChange from "./components/clearErrors";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoute";
+import UserProfile from "./pages/user/profile/UserProfile";
+import { useDispatch } from "react-redux";
+import { getCurrentUser } from "./features/auth/authSlice";
+import { PublicRoute } from "./components/PublicRoute";
+import { useEffect } from "react";
 
 function App(){
+    const dispatch = useDispatch();
     const {forgotPasswordEmaiVerify} = useSelector(state => state.auth);
+
+    useEffect(()=>{
+        dispatch(getCurrentUser());
+    }, []);
+
     return(
         <BrowserRouter>
             <ClearErrorOnRouteChange/>
             <Routes>
-                <Route path="/signup" element={<SignUp/>}/>
-                <Route path="/signin" element={<SignIn/>}/>
-                <Route path="/forgotpassword" element={<ForgotPassword/>}/>
-                <Route path="/" element={<Home/>}/>
-                <Route path="/otpverification" element={<OtpVerification />} />
+                <Route element={<PublicRoute/>}>
+                    <Route path="/signup" element={<SignUp/>}/>
+                    <Route path="/signin" element={<SignIn/>}/>
+                    <Route path="/forgotpassword" element={<ForgotPassword/>}/>
+                    <Route path="/otpverification" element={<OtpVerification />} />
+                </Route>
                 <Route element={<ProtectedRoute isAllowed={forgotPasswordEmaiVerify} redirectPath="/forgotpassword" />}>
                     <Route path="/forgotpassword2" element={<ForgotPassword2 />} />
                 </Route>
+                <Route path="/" element={<Home/>}/>
+                <Route path="/userprofile" element={<UserProfile/>}/>
             </Routes>
         </BrowserRouter>
     )

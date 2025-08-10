@@ -1,11 +1,13 @@
 import express from 'express';
 import { 
+    authMe,
     forgotPassword, 
     forgotResetPassword, 
     googleAuthCallback, 
     resendForgotOTP, 
     resendOTP, SignIn, 
     SignUp, 
+    userLogout, 
     verifyForgotOTP, 
     verifyOTP 
 } from '../controllers/authController.js';
@@ -31,4 +33,6 @@ router.post('/forgot-resend', handleValidation, resendForgotOTP);
 router.post('/reset-forgot-password', ProtectedRoute, validateforResetPass, handleValidation, forgotResetPassword);
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}));
 router.get('/google/callback', passport.authenticate('google', {failureRedirect: '/signin', session: false}), googleAuthCallback);
+router.get('/authme', ProtectedRoute, authMe);
+router.post('/logout', userLogout);
 export default router;

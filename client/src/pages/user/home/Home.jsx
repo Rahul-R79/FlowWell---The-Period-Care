@@ -3,8 +3,10 @@ import Header from "../../../components/Header/Header";
 import ReviewsTab from "../../../components/Reviews/ReviewsTab";
 import { Container, Row, Col, Button, Image } from "react-bootstrap";
 import './home.css'
+import { useSelector } from "react-redux";
 
 function Home(){
+	const {user} = useSelector(state => state.auth);
     return(
         <>
             <Header/>
@@ -39,11 +41,19 @@ function Home(){
 					</Col>
 					{/* Image Section */}
 					<Col md={12} lg={7} className="text-center">
-						<img
+						{user? (
+							<img
+							src="/images/hero/hero_img2.webp"
+							alt="Hero"
+							className="img-fluid hero-img-main"
+							/>
+						): (
+							<img
 							src="/images/hero/hero_img.webp"
 							alt="Hero"
 							className="img-fluid hero-img-main"
-						/>
+							/>
+						)}
 					</Col>
 				</Row>
 				</Container>
