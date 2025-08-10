@@ -1,0 +1,11 @@
+.review-tab{
+    margin-bottom: 120px;
+}
+.review-card{
+    font-family: 'Courier New', Courier, monospace;
+}
+@media (max-width: 1000px) {
+    .review-tab{
+        margin-bottom: 60px;
+    }
+}

@@ -1,0 +1,58 @@
+/* hero image */
+.hero-img-main {
+  width: 100%;
+  max-width: 800px; 
+}
+
+/* gift hamper section */
+.gift-hampers-section {
+	background-color: #f5f5f5;
+	border-radius: 0.75rem;
+	padding: 2rem 0;
+}
+
+.gift-hampers-container {
+	width: 100%;
+	margin: 0 auto;
+}
+
+.gift-hampers-heading {
+	font-size: 2rem;
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 3rem;
+}
+
+.gift-card {
+	background-color: rgb(249, 247, 247);
+	border-radius: 0.75rem; 
+	padding: 1rem;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); 
+}
+
+.gift-image {
+  	max-width: 150px;
+}
+
+.gift-text {
+	font-weight: 300;
+	margin-bottom: 0;
+	text-align: center;
+}
+
+@media (min-width: 576px) {
+	.gift-card {
+		flex-direction: row;
+	}
+	.gift-card.flex-sm-row-reverse {
+		flex-direction: row-reverse;
+	}
+	.gift-text {
+		text-align: left;
+	}
+}
+

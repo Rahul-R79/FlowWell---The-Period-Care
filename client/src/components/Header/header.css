@@ -1,0 +1,16 @@
+.search-bar {
+    display: flex;
+    align-items: center;
+    border-radius: 50px;
+    background-color: #f8f9fa;
+    padding: 0.4rem 1rem;
+    width: 100%;
+    max-width: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+
+.custom-placeholder::placeholder {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
