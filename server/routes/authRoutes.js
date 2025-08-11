@@ -34,6 +34,4 @@ router.post('/forgot-resend', handleValidation, resendForgotOTP);
 router.post('/reset-forgot-password', validateforResetPass, handleValidation, forgotResetPassword);
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}));
 router.get('/google/callback', passport.authenticate('google', {failureRedirect: '/signin', session: false}), googleAuthCallback);
-router.get('/authme', ProtectedRoute, noCacheMiddleware, authMe);
-router.post('/logout', noCacheMiddleware, userLogout);
 export default router;

@@ -213,35 +213,6 @@ const authSlice = createSlice({
             state.loadingByAction.resetForgotPassword = false;
             state.errorByAction.resetForgotPassword = action.payload;
         })
-        //getcurrentuser
-        .addCase(getCurrentUser.pending, state=>{
-            state.loadingByAction.getCurrentUser = true;
-            state.errorByAction.getCurrentUser = null;
-        })
-        .addCase(getCurrentUser.fulfilled, (state, action)=>{
-            state.loadingByAction.getCurrentUser = false;
-            state.user = action.payload;
-            state.errorByAction.getCurrentUser = null;
-        })
-        .addCase(getCurrentUser.rejected, (state, action)=>{
-            state.loadingByAction.getCurrentUser = false;
-            state.errorByAction.getCurrentUser = action.payload;
-            state.user = null;
-        })
-        //logout user
-        .addCase(logoutUser.pending, state=>{
-            state.loadingByAction.logoutUser = true;
-            state.errorByAction.logoutUser = null;
-        })
-        .addCase(logoutUser.fulfilled, state=>{
-            state.loadingByAction.logoutUser = false;
-            state.errorByAction.logoutUser = null;
-            state.user = null;
-        })
-        .addCase(logoutUser.rejected, (state, action)=>{
-            state.loadingByAction.logoutUser = false;
-            state.errorByAction.logoutUser = action.payload
-        })
     }
 })
 
