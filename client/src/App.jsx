@@ -8,9 +8,26 @@ import Home from "./pages/user/home/Home";
 import ClearErrorOnRouteChange from "./components/clearErrors";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoute";
+import UserProfile from "./pages/user/profile/UserProfile";
+import { useDispatch } from "react-redux";
+import { getCurrentUser } from "./features/auth/authSlice";
+import { PublicRoute } from "./components/PublicRoute";
+import { useEffect } from "react";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 function App(){
-    const {forgotPasswordEmaiVerify} = useSelector(state => state.auth);
+    const {forgotPasswordEmaiVerify, loadingByAction} = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+    const getuserLoading = loadingByAction?.getCurrentUser
+
+    useEffect(()=>{
+        dispatch(getCurrentUser());
+    }, [dispatch]);
+
+    if (getuserLoading){
+        return <LoadingSpinner/>
+    }
+
     return(
         <BrowserRouter>
             <ClearErrorOnRouteChange/>
