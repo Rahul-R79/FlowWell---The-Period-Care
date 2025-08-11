@@ -76,10 +76,28 @@ export const resetForgotPassword = createAsyncThunk('auth/resetForgotPassword', 
 
 export const getCurrentUser = createAsyncThunk('/auth/getCurrentUser', async(_, {rejectWithValue})=>{
     try{
-        const response = await instance.get('/auth/authme');
+        const response = await instance.get('/auth/userauthme');
         return response.data.user;
     }catch(err){
         return rejectWithValue(err.response.data.errors)
+    }
+})
+
+export const adminSignin = createAsyncThunk('/auth/adminSignin', async(formData, {rejectWithValue})=>{
+    try{
+        const response = await instance.post('/auth/adminsignin', formData);
+        return response.data.admin;
+    }catch(err){
+        return rejectWithValue(err.response.data.errors);
+    }
+});
+
+export const getCurrentAdmin = createAsyncThunk('/auth/getCurrentAdmin', async(_, {rejectWithValue})=>{
+    try{
+        const response = await instance.get('/auth/adminauthme');
+        return response.data.admin;
+    }catch(err){
+        return rejectWithValue(err.response.data.errors);
     }
 })
 
@@ -226,6 +244,35 @@ const authSlice = createSlice({
         .addCase(getCurrentUser.rejected, (state, action)=>{
             state.loadingByAction.getCurrentUser = false;
             state.errorByAction.getCurrentUser = action.payload;
+            state.user = null;
+        })
+        //adminsignin
+        .addCase(adminSignin.pending, state=>{
+            state.loadingByAction.adminSignin = true;
+            state.errorByAction.adminSignin = null;
+        })
+        .addCase(adminSignin.fulfilled, (state, action)=>{
+            state.loadingByAction.adminSignin = false;
+            state.user = action.payload;
+            state.errorByAction.adminSignin = null;
+        })
+        .addCase(adminSignin.rejected, (state, action)=>{
+            state.loadingByAction.adminSignin = false;
+            state.errorByAction.adminSignin = action.payload;
+        })
+        //getcurrentAdmin
+        .addCase(getCurrentAdmin.pending, state=>{
+            state.loadingByAction.getCurrentAdmin = true;
+            state.errorByAction.getCurrentAdmin = null;
+        })
+        .addCase(getCurrentAdmin.fulfilled, (state, action)=>{
+            state.loadingByAction.getCurrentAdmin = false;
+            state.user = action.payload;
+            state.errorByAction.getCurrentAdmin = null;
+        })
+        .addCase(getCurrentAdmin.rejected, (state, action)=>{
+            state.loadingByAction.getCurrentAdmin = false;
+            state.errorByAction.getCurrentAdmin = action.payload;
             state.user = null;
         })
         //logout user

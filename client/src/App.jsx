@@ -14,9 +14,12 @@ import { getCurrentUser } from "./features/auth/authSlice";
 import { PublicRoute } from "./components/PublicRoute";
 import { useEffect } from "react";
 import LoadingSpinner from "./components/LoadingSpinner";
+import AdminSignIn from "./pages/admin/AdminSignIn";
+import DashBoard from "./pages/admin/DashBoard";
 
 function App(){
-    const {forgotPasswordEmaiVerify, loadingByAction} = useSelector(state => state.auth);
+    const {user, forgotPasswordEmaiVerify, loadingByAction} = useSelector(state => state.auth);
+    const isLoggedIn = Boolean(user);
     const dispatch = useDispatch();
     const getuserLoading = loadingByAction?.getCurrentUser
 
@@ -41,8 +44,12 @@ function App(){
                 <Route element={<ProtectedRoute isAllowed={forgotPasswordEmaiVerify} redirectPath="/forgotpassword" />}>
                     <Route path="/forgotpassword2" element={<ForgotPassword2 />} />
                 </Route>
+                <Route element={<ProtectedRoute isAllowed={isLoggedIn} redirectPath="/signup"/>}>
+                    <Route path="/userprofile" element={<UserProfile/>}/>
+                </Route>
                 <Route path="/" element={<Home/>}/>
-                <Route path="/userprofile" element={<UserProfile/>}/>
+                <Route path="/adminsignin" element={<AdminSignIn/>}/>
+                <Route path="/dashboard" element={<DashBoard/>} />
             </Routes>
         </BrowserRouter>
     )

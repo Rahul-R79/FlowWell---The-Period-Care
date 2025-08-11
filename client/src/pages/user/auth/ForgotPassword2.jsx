@@ -76,6 +76,7 @@ function ForgotPassword2() {
 											className="form-control text-light bg-transparent"
 											placeholder="Enter your Password"
 											name='newPassword'
+											value={formData.newPassword}
 											onChange={handleData}
 											required
 										/>
@@ -103,6 +104,7 @@ function ForgotPassword2() {
 											className="form-control text-light bg-transparent"
 											placeholder="Enter your Password"
 											name='newConfirmPassword'
+											value={formData.newConfirmPassword}
 											onChange={handleData}
 											required
 										/>

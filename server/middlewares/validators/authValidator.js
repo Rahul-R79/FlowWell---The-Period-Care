@@ -70,3 +70,18 @@ export const validateforResetPass = [
         return true;
     })
 ]
+
+export const validateAdminSignIn = [
+    body('email')
+    .notEmpty().withMessage('Email is Required').bail()
+    .isEmail().withMessage('Enter a valid email')
+    .normalizeEmail(),
+
+    body('password')
+    .notEmpty().withMessage('Password is Required').bail()
+    .isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+    .matches(/[a-z]/).withMessage('Password must contain at least one lowercase letter')
+    .matches(/[A-Z]/).withMessage('Password must contain at least one uppercase letter')
+    .matches(/[0-9]/).withMessage('Password must contain at least one number')
+    .matches(/[@#$?_-]/).withMessage('Password must contain at least one special character')
+];

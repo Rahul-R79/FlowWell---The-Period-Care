@@ -4,6 +4,7 @@ import generateToken from '../utils/jwt.js';
 import crypto from 'crypto'
 import redisClient from '../utils/redis.js';
 import sendOTP from '../utils/sendOtpEmail.js';
+import Admin from '../models/Admin.js';
 
 export const SignUp = async(req, res)=>{
     const {name, email, password} = req.body;
@@ -83,7 +84,7 @@ export const SignIn = async(req, res)=>{
         if(!user || !(await bcrypt.compare(password, user.password))){
             return res.status(401).json({errors: [{field: 'general', message: 'Invalid Email or Password'}]});
         }
-        const token = generateToken({id: user._id});
+        const token = generateToken({id: user._id, role: 'user'});
         const {password: hashedPassword, ...rest} = user._doc;
         res.cookie('access-token', token, {
             httpOnly: true,
@@ -189,7 +190,7 @@ export const googleAuthCallback = async(req, res)=>{
         if(!req.user){
             return res.status(401).json({message: "google auth failed"});
         }
-        const token = generateToken({id: req.user._id});
+        const token = generateToken({id: req.user._id, role: 'user'});
 
         res.cookie('access-token', token, {
             httpOnly: true,
@@ -205,7 +206,7 @@ export const googleAuthCallback = async(req, res)=>{
     }
 }
 
-export const authMe = async(req, res)=>{
+export const userauthMe = async(req, res)=>{
     try{
         const userId = req.user.id;
 
@@ -218,6 +219,53 @@ export const authMe = async(req, res)=>{
         res.json({user});
     }catch(err){
         return res.status(500).json({message: 'internal server error'});
+    }
+}
+
+export const adminSignin = async(req, res)=>{
+    const {email, password} = req.body;
+
+    try{
+        const admin = await Admin.findOne({email});
+
+        if(!admin){
+            return res.status(400).json({errors: [{field: 'general', message: 'Invalid Credentials'}]});
+        }
+
+        const isMatch = await bcrypt.compare(password, admin.password);
+        if(!isMatch){
+            return res.status(400).json({errors: [{field: 'general', message: 'Invalid Credentials'}]});
+        }
+
+        const token = generateToken({id: admin._id, role: 'admin'});
+        const {password: pwd, ...rest} = admin._doc
+
+        res.cookie('access-token', token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'Strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
+        return res.status(200).json({message: 'admin signed in successfully', admin: rest});
+    }catch(err){
+        return res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+export const adminauthMe = async(req, res)=>{
+    try{
+        const adminId = req.admin.id;
+
+        const admin = await Admin.findById(adminId).select('-password');
+
+        if(!admin){
+            return res.status(404).json({message: 'admin not found'});
+        }
+
+        res.json({admin});
+    }catch(err){
+        return res.status(500).json({message: 'internal server error'})
     }
 }
 
