@@ -20,6 +20,7 @@ import {
 import { handleValidation } from '../middlewares/validators/handleValidation.js';
 import passport from '../config/passport.js'
 import ProtectedRoute from '../middlewares/verifyToken.js';
+import noCacheMiddleware from '../middlewares/cacheControlMiddleware.js';
 
 const router = express.Router();
 
@@ -30,9 +31,9 @@ router.post('/signin', validateSignIn, handleValidation, SignIn);
 router.post('/forgot-password', validateEmail, handleValidation, forgotPassword);
 router.post('/forgot-verify', handleValidation, verifyForgotOTP);
 router.post('/forgot-resend', handleValidation, resendForgotOTP);
-router.post('/reset-forgot-password', ProtectedRoute, validateforResetPass, handleValidation, forgotResetPassword);
+router.post('/reset-forgot-password', validateforResetPass, handleValidation, forgotResetPassword);
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}));
 router.get('/google/callback', passport.authenticate('google', {failureRedirect: '/signin', session: false}), googleAuthCallback);
-router.get('/authme', ProtectedRoute, authMe);
-router.post('/logout', userLogout);
+router.get('/authme', ProtectedRoute, noCacheMiddleware, authMe);
+router.post('/logout', noCacheMiddleware, userLogout);
 export default router;

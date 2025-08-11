@@ -2,13 +2,15 @@ import { Link } from 'react-router-dom';
 import './auth.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { signinUser } from '../../../features/auth/authSlice';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 function SignIn() {
-	const {user, loading, errorByAction} = useSelector(state => state.auth);
+	const {user, loadingByAction, errorByAction} = useSelector(state => state.auth);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const signInLoading = loadingByAction.signinUser;
 
 	const [showPassword, setShowPassword] = useState(false);
 	const togglePassword = () => setShowPassword(prev => !prev);
@@ -39,6 +41,8 @@ function SignIn() {
 	}
 	
 	return (
+		<>
+		{signInLoading && <LoadingSpinner/>}
 		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white px-3 py-4 authForm">
 			<div className="container">
 				<div className="row shadow-lg rounded-4 overflow-hidden bg-transparent">
@@ -150,6 +154,7 @@ function SignIn() {
 				</div>
 			</div>
 		</div>
+		</>
 	);
 }
 

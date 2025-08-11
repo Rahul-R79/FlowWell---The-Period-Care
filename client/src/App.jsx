@@ -13,14 +13,20 @@ import { useDispatch } from "react-redux";
 import { getCurrentUser } from "./features/auth/authSlice";
 import { PublicRoute } from "./components/PublicRoute";
 import { useEffect } from "react";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 function App(){
+    const {forgotPasswordEmaiVerify, loadingByAction} = useSelector(state => state.auth);
     const dispatch = useDispatch();
-    const {forgotPasswordEmaiVerify} = useSelector(state => state.auth);
+    const getuserLoading = loadingByAction?.getCurrentUser
 
     useEffect(()=>{
         dispatch(getCurrentUser());
-    }, []);
+    }, [dispatch]);
+
+    if (getuserLoading){
+        return <LoadingSpinner/>
+    }
 
     return(
         <BrowserRouter>

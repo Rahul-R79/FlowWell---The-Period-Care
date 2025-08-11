@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { forgotPassword } from '../../../features/auth/authSlice';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 function ForgotPassword() {
-	const {user, loading, errorByAction} = useSelector(state => state.auth);
+	const {user, loadingByAction, errorByAction} = useSelector(state => state.auth);
 	const [email, setEmail] = useState('');
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const forgotPasswordLoading = loadingByAction.forgotPassword;
 
 	const getFieldError = (fieldName)=>{
 		return errorByAction.forgotPassword?.find(e => e.field === fieldName)?.message;
@@ -28,6 +30,8 @@ function ForgotPassword() {
 	}
 
 	return (
+		<>
+		{forgotPasswordLoading && <LoadingSpinner/>}
 		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white px-3 py-4 authForm">
 			<div className="container">
 				<div className="row shadow-lg rounded-4 overflow-hidden bg-transparent">
@@ -74,8 +78,8 @@ function ForgotPassword() {
 
 								{/* Login Button */}
 								<div className="d-grid mb-4">
-									<button type="submit" className="btn btn-primary rounded-pill custom-register-btn mx-auto w-75" disabled={loading}>
-										{loading ? 'Verifying...': 'Send OTP'}
+									<button type="submit" className="btn btn-primary rounded-pill custom-register-btn mx-auto w-75" disabled={forgotPasswordLoading}>
+										Send OTP
 									</button>
 								</div>
                                 <div className="text-center">
@@ -90,6 +94,7 @@ function ForgotPassword() {
 				</div>
 			</div>
 		</div>
+		</>
 	);
 }
 

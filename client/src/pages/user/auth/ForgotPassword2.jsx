@@ -2,12 +2,14 @@ import { useNavigate, Link } from 'react-router-dom';
 import { resetForgotPassword } from '../../../features/auth/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 function ForgotPassword2() {
-	const {loading, errorByAction} = useSelector(state => state.auth);
+	const {loadingByAction, errorByAction} = useSelector(state => state.auth);
 	const [formData, setFormData] = useState({newPassword: '', newConfirmPassword: ''});
 	const dispatch = useDispatch();
 	const navigate = useNavigate()
+	const resetPasswordLoading = loadingByAction.resetForgotPassword;
 
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -35,7 +37,10 @@ function ForgotPassword2() {
 	const getFieldError = (fieldName)=>{
 		return errorByAction.resetForgotPassword?.find(e => e.field === fieldName)?.message;
 	}
+
 	return (
+		<>
+		{resetPasswordLoading && <LoadingSpinner/>}
 		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white px-3 py-4 authForm">
 			<div className="container">
 				<div className="row shadow-lg rounded-4 overflow-hidden bg-transparent">
@@ -113,7 +118,7 @@ function ForgotPassword2() {
 									{getFieldError('newConfirmPassword') && <small className='text-danger'>{getFieldError('newConfirmPassword')}</small>}
 								</div>
 								<div className="d-grid mb-4">
-									<button type="submit" className="btn btn-primary rounded-pill custom-register-btn mx-auto w-75">
+									<button type="submit" className="btn btn-primary rounded-pill custom-register-btn mx-auto w-75" disabled={resetPasswordLoading}>
 										Change Password
 									</button>
 								</div>
@@ -129,6 +134,7 @@ function ForgotPassword2() {
 				</div>
 			</div>
 		</div>
+		</>
 	);
 }
 

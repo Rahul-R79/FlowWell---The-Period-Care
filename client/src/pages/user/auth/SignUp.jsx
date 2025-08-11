@@ -4,12 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { signupUser } from '../../../features/auth/authSlice';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 function SignUp() {
-	const { user, loading, errorByAction } = useSelector(state => state.auth);
+	const { user, loadingByAction, errorByAction } = useSelector(state => state.auth);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const apiUrl = import.meta.env.VITE_API_URL;
+	const signUpLoading = loadingByAction.signupUser;
 
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -45,6 +47,8 @@ function SignUp() {
 	};
 
 	return (
+		<>
+		{signUpLoading && <LoadingSpinner/>}
 		<div className="min-vh-100 d-flex align-items-center justify-content-center text-white py-4 px-3 authForm">
 			<div className="container">
 				<div className="row shadow-lg rounded-4 overflow-hidden bg-transparent">
@@ -160,8 +164,8 @@ function SignUp() {
 
 							{/* Register Button */}
 							<div className="d-grid mb-4">
-								<button type="submit" className="btn btn-primary rounded-pill custom-register-btn mx-auto w-75" disabled={loading}>
-									{loading ? 'Registering...' : 'Register'}
+								<button type="submit" className="btn btn-primary rounded-pill custom-register-btn mx-auto w-75" disabled={signUpLoading}>
+									Register
 								</button>
 							</div>
 
@@ -183,6 +187,7 @@ function SignUp() {
 				</div>
 			</div>
 		</div>
+		</>
 	);
 }
 

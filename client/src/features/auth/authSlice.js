@@ -96,7 +96,7 @@ const authSlice = createSlice({
     name: 'auth',
     initialState: {
         user: null,
-        loading: false,
+        loadingByAction: {},
         errorByAction: {},
         forgotPasswordEmaiVerify: false,
     },
@@ -109,138 +109,137 @@ const authSlice = createSlice({
         builder
         //signUp
         .addCase(signupUser.pending, state=>{
-            state.loading = true;
+            state.loadingByAction.signupUser = true;
             state.errorByAction.signupUser = null;
         })
         .addCase(signupUser.fulfilled, state=>{
-            state.loading = false;
+            state.loadingByAction.signupUser = false;
             state.errorByAction.signupUser = null;
         })
         .addCase(signupUser.rejected, (state, action)=>{
-            state.loading = false;
+            state.loadingByAction.signupUser = false;
             state.errorByAction.signupUser = action.payload;
         })
         //verifyOTp
         .addCase(verifyOTP.pending, state=>{
-            state.loading = true;
+            state.loadingByAction.verifyOTP = true;
             state.errorByAction.verifyOTP = null;
         })
         .addCase(verifyOTP.fulfilled, (state, action)=>{
-            state.loading = false;
-            state.user = action.payload;
+            state.loadingByAction.verifyOTP = false;
             state.errorByAction.verifyOTP = null;
         })
         .addCase(verifyOTP.rejected, (state, action)=>{
-            state.loading = false;
+            state.loadingByAction.verifyOTP = false;
             state.errorByAction.verifyOTP = action.payload;
         })
         //resendOTP
         .addCase(resendOTP.pending, state=>{
-            state.loading = true;
+            state.loadingByAction.resendOTP = true;
             state.errorByAction.resendOTP = null;
         })
         .addCase(resendOTP.fulfilled, state=>{
-            state.loading = false;
+            state.loadingByAction.resendOTP = false;
             state.errorByAction.resendOTP = null;
         })
         .addCase(resendOTP.rejected, (state, action)=>{
-            state.loading = false;
+            state.loadingByAction.resendOTP = false;
             state.errorByAction.resendOTP = action.payload;
         })
         //signIn
         .addCase(signinUser.pending, state =>{
-            state.loading = true;
+            state.loadingByAction.signinUser = true;
             state.errorByAction.signinUser = null;
         })
         .addCase(signinUser.fulfilled, (state, action)=>{
-            state.loading = false;
+            state.loadingByAction.signinUser = false;
             state.user = action.payload;
             state.errorByAction.signinUser = null;
         })
         .addCase(signinUser.rejected, (state, action)=>{
-            state.loading = false;
+            state.loadingByAction.signinUser = false;
             state.errorByAction.signinUser = action.payload;
         })
         //resetpassword
         .addCase(forgotPassword.pending, state=>{
-            state.loading = true;
+            state.loadingByAction.forgotPassword = true;
             state.errorByAction.forgotPassword = null;
         })
         .addCase(forgotPassword.fulfilled, state=>{
-            state.loading = false;
+            state.loadingByAction.forgotPassword = false;
             state.errorByAction.forgotPassword = null;
         })
         .addCase(forgotPassword.rejected, (state, action)=>{
-            state.loading = false;
+            state.loadingByAction.forgotPassword = false;
             state.errorByAction.forgotPassword = action.payload;
         })
         //verifyForgotOtp
         .addCase(verifyForgotOTP.pending, state=>{
-            state.loading = true;
+            state.loadingByAction.verifyForgotOTP = true;
             state.errorByAction.verifyForgotOTP = null;
         })
         .addCase(verifyForgotOTP.fulfilled, state=>{
-            state.loading = false;
+            state.loadingByAction.verifyForgotOTP = false;
             state.errorByAction.verifyForgotOTP = null;
             state.forgotPasswordEmaiVerify = true;
         })
         .addCase(verifyForgotOTP.rejected, (state, action)=>{
-            state.loading = false;
+            state.loadingByAction.verifyForgotOTP = false;
             state.errorByAction.verifyForgotOTP = action.payload;
         })
         //resendFotgotOtp
         .addCase(resendForgotOTP.pending, state=>{
-            state.loading = true;
+            state.loadingByAction.resendForgotOTP = true;
             state.errorByAction.resendForgotOTP = null;
         })
         .addCase(resendForgotOTP.fulfilled, state=>{
-            state.loading = false;
+            state.loadingByAction.resendForgotOTP = false;
             state.errorByAction.resendForgotOTP = null;
         })
         .addCase(resendForgotOTP.rejected, (state, action)=>{
-            state.loading = false;
+            state.loadingByAction.resendForgotOTP = false;
             state.errorByAction.resendForgotOTP = action.payload;
         })
         //resetForgotPassword
         .addCase(resetForgotPassword.pending, state=>{
-            state.loading = true;
+            state.loadingByAction.resetForgotPassword = true;
             state.errorByAction.resetForgotPassword = null;
         })
         .addCase(resetForgotPassword.fulfilled, state=>{
-            state.loading = false;
+            state.loadingByAction.resetForgotPassword = false;
             state.errorByAction.resetForgotPassword = null;
         })
         .addCase(resetForgotPassword.rejected, (state, action)=>{
-            state.loading = false;
+            state.loadingByAction.resetForgotPassword = false;
             state.errorByAction.resetForgotPassword = action.payload;
         })
         //getcurrentuser
         .addCase(getCurrentUser.pending, state=>{
-            state.loading = true;
+            state.loadingByAction.getCurrentUser = true;
             state.errorByAction.getCurrentUser = null;
         })
         .addCase(getCurrentUser.fulfilled, (state, action)=>{
-            state.loading = false;
+            state.loadingByAction.getCurrentUser = false;
             state.user = action.payload;
             state.errorByAction.getCurrentUser = null;
         })
         .addCase(getCurrentUser.rejected, (state, action)=>{
-            state.loading = false;
+            state.loadingByAction.getCurrentUser = false;
             state.errorByAction.getCurrentUser = action.payload;
             state.user = null;
         })
         //logout user
         .addCase(logoutUser.pending, state=>{
-            state.loading = true;
+            state.loadingByAction.logoutUser = true;
             state.errorByAction.logoutUser = null;
         })
         .addCase(logoutUser.fulfilled, state=>{
-            state.loading = false;
+            state.loadingByAction.logoutUser = false;
             state.errorByAction.logoutUser = null;
             state.user = null;
         })
         .addCase(logoutUser.rejected, (state, action)=>{
-            state.loading = false;
+            state.loadingByAction.logoutUser = false;
             state.errorByAction.logoutUser = action.payload
         })
     }

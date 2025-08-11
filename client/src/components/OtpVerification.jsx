@@ -5,9 +5,10 @@ import { verifyForgotOTP, resendForgotOTP } from '../features/auth/authSlice';
 import { useNavigate,  Link} from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import LoadingSpinner from './LoadingSpinner';
 
 function OtpVerification() {
-	const {user, loading, errorByAction} = useSelector(state => state.auth);
+	const {user, loadingByAction, errorByAction} = useSelector(state => state.auth);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -19,6 +20,12 @@ function OtpVerification() {
 	const [resendDisabled, setresendDisabled] = useState(true);
 	const inputRef = useRef([]);
 	const intervalRef = useRef(null)
+
+	const isVerifying = flow === 'signup' ? loadingByAction.verifyOTP : loadingByAction.verifyForgotOTP;
+
+	const isResending = flow === 'signup' ? loadingByAction.resendOTP : loadingByAction.resendForgotOTP;
+
+	const loading = isVerifying || isResending;
 
 	const email =  flow === 'signup' ? localStorage.getItem('otpEmail') : localStorage.getItem('forgotMail');
 
@@ -141,6 +148,8 @@ function OtpVerification() {
 		}
 	}
 	return (
+		<>
+		{loading && <LoadingSpinner/>}
 		<div className="min-vh-100 d-flex align-items-center justify-content-center bg-black px-2 py-4">
 		<div className="container">
 			<div className="row shadow-lg overflow-hidden rounded-4 bg-dark text-white">
@@ -183,7 +192,8 @@ function OtpVerification() {
 						onClick={handleResend}
 						disabled={resendDisabled || loading}
 					>
-						Resend OTP</button>
+						Resend OTP
+					</button>
 				</div>
 
 				{/* Submit Button */}
@@ -192,7 +202,7 @@ function OtpVerification() {
 						onClick={handleSubmit} 
 						disabled={loading || otp.join('').length < 4}
 					>
-						{loading ? 'Verifying...': 'Send OTP'}
+						Send OTP
 					</button>
 				</div>
 
@@ -208,6 +218,7 @@ function OtpVerification() {
 			</div>
 		</div>
 		</div>
+		</>
 	);
 }
 
