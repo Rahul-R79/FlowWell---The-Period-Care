@@ -38,7 +38,7 @@ function SignIn() {
 
 	const getFieldError = (fieldName)=>{
 		return errorByAction.signinUser?.find(e => e.field === fieldName)?.message;
-	}
+	};
 	
 	return (
 		<>
