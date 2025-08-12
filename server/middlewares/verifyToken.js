@@ -1,9 +1,12 @@
 import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export const userProtectedRoute = (req, res, next)=>{
-    const token = req.cookies['access-token'];
+    const token = req.cookies['user-access-token'];
 
     if(!token) return res.status(401).json({message: 'Access denied'});
 
@@ -20,7 +23,7 @@ export const userProtectedRoute = (req, res, next)=>{
 }
 
 export const adminProtectedRoute = (req, res, next)=>{
-    const token = req.cookies['access-token'];
+    const token = req.cookies['admin-access-token'];
 
     if(!token) return res.status(401).json({message: 'Access denied'});
 

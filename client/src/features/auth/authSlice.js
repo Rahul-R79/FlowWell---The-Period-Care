@@ -83,24 +83,6 @@ export const getCurrentUser = createAsyncThunk('/auth/getCurrentUser', async(_, 
     }
 })
 
-export const adminSignin = createAsyncThunk('/auth/adminSignin', async(formData, {rejectWithValue})=>{
-    try{
-        const response = await instance.post('/auth/adminsignin', formData);
-        return response.data.admin;
-    }catch(err){
-        return rejectWithValue(err.response.data.errors);
-    }
-});
-
-export const getCurrentAdmin = createAsyncThunk('/auth/getCurrentAdmin', async(_, {rejectWithValue})=>{
-    try{
-        const response = await instance.get('/auth/adminauthme');
-        return response.data.admin;
-    }catch(err){
-        return rejectWithValue(err.response.data.errors);
-    }
-})
-
 export const logoutUser = createAsyncThunk('/auth/logoutUser', async(_, {rejectWithValue})=>{
     try{
         await instance.post('/auth/logout');
@@ -226,6 +208,7 @@ const authSlice = createSlice({
         .addCase(resetForgotPassword.fulfilled, state=>{
             state.loadingByAction.resetForgotPassword = false;
             state.errorByAction.resetForgotPassword = null;
+            state.forgotPasswordEmaiVerify = false;
         })
         .addCase(resetForgotPassword.rejected, (state, action)=>{
             state.loadingByAction.resetForgotPassword = false;
@@ -246,35 +229,6 @@ const authSlice = createSlice({
             state.errorByAction.getCurrentUser = action.payload;
             state.user = null;
         })
-        //adminsignin
-        .addCase(adminSignin.pending, state=>{
-            state.loadingByAction.adminSignin = true;
-            state.errorByAction.adminSignin = null;
-        })
-        .addCase(adminSignin.fulfilled, (state, action)=>{
-            state.loadingByAction.adminSignin = false;
-            state.user = action.payload;
-            state.errorByAction.adminSignin = null;
-        })
-        .addCase(adminSignin.rejected, (state, action)=>{
-            state.loadingByAction.adminSignin = false;
-            state.errorByAction.adminSignin = action.payload;
-        })
-        //getcurrentAdmin
-        .addCase(getCurrentAdmin.pending, state=>{
-            state.loadingByAction.getCurrentAdmin = true;
-            state.errorByAction.getCurrentAdmin = null;
-        })
-        .addCase(getCurrentAdmin.fulfilled, (state, action)=>{
-            state.loadingByAction.getCurrentAdmin = false;
-            state.user = action.payload;
-            state.errorByAction.getCurrentAdmin = null;
-        })
-        .addCase(getCurrentAdmin.rejected, (state, action)=>{
-            state.loadingByAction.getCurrentAdmin = false;
-            state.errorByAction.getCurrentAdmin = action.payload;
-            state.user = null;
-        })
         //logout user
         .addCase(logoutUser.pending, state=>{
             state.loadingByAction.logoutUser = true;
@@ -284,6 +238,7 @@ const authSlice = createSlice({
             state.loadingByAction.logoutUser = false;
             state.errorByAction.logoutUser = null;
             state.user = null;
+            state.forgotPasswordEmaiVerify = false;
         })
         .addCase(logoutUser.rejected, (state, action)=>{
             state.loadingByAction.logoutUser = false;

@@ -16,18 +16,23 @@ import { useEffect } from "react";
 import LoadingSpinner from "./components/LoadingSpinner";
 import AdminSignIn from "./pages/admin/AdminSignIn";
 import DashBoard from "./pages/admin/DashBoard";
+import { getCurrentAdmin } from "./features/auth/authAdminSlice";
 
 function App(){
     const {user, forgotPasswordEmaiVerify, loadingByAction} = useSelector(state => state.auth);
-    const isLoggedIn = Boolean(user);
+    const {admin} = useSelector(state => state.adminAuth);
+    const isLoggedInUser = Boolean(user);
+    const isLoggedInAdmin = Boolean(admin);
+    const getUserLoading = loadingByAction?.getCurrentUser;
+    const getAdminLoading = loadingByAction?.getCurrentAdmin;
     const dispatch = useDispatch();
-    const getuserLoading = loadingByAction?.getCurrentUser
 
     useEffect(()=>{
+        dispatch(getCurrentAdmin());
         dispatch(getCurrentUser());
     }, [dispatch]);
 
-    if (getuserLoading){
+    if (getUserLoading || getAdminLoading){
         return <LoadingSpinner/>
     }
 
@@ -41,15 +46,17 @@ function App(){
                     <Route path="/forgotpassword" element={<ForgotPassword/>}/>
                     <Route path="/otpverification" element={<OtpVerification />} />
                 </Route>
-                <Route element={<ProtectedRoute isAllowed={forgotPasswordEmaiVerify} redirectPath="/forgotpassword" />}>
+                <Route element={<ProtectedRoute isAllowed={forgotPasswordEmaiVerify} redirectPath="/forgotpassword"/>}>
                     <Route path="/forgotpassword2" element={<ForgotPassword2 />} />
                 </Route>
-                <Route element={<ProtectedRoute isAllowed={isLoggedIn} redirectPath="/signup"/>}>
+                <Route element={<ProtectedRoute isAllowed={isLoggedInUser} redirectPath="/signup"/>}>
                     <Route path="/userprofile" element={<UserProfile/>}/>
                 </Route>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/adminsignin" element={<AdminSignIn/>}/>
-                <Route path="/dashboard" element={<DashBoard/>} />
+                <Route element={<ProtectedRoute isAllowed={isLoggedInAdmin} redirectPath="/adminsignin"/>}>
+                    <Route path="/dashboard" element={<DashBoard/>} />
+                </Route>
             </Routes>
         </BrowserRouter>
     )

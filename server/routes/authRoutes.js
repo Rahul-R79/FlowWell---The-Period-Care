@@ -1,6 +1,7 @@
 import express from 'express';
 import { 
     adminauthMe,
+    adminLogout,
     adminSignin,
     forgotPassword, 
     forgotResetPassword, 
@@ -39,6 +40,7 @@ router.get('/google', passport.authenticate('google', {scope: ['profile', 'email
 router.get('/google/callback', passport.authenticate('google', {failureRedirect: '/signin', session: false}), googleAuthCallback);
 router.get('/userauthme', userProtectedRoute, noCacheMiddleware, userauthMe);
 router.post('/adminsignin', validateAdminSignIn, handleValidation, adminSignin);
-router.get('/adminauthme', adminProtectedRoute, noCacheMiddleware, adminauthMe);
+router.get('/adminauthme', adminProtectedRoute, adminauthMe);
+router.post('/adminlogout', noCacheMiddleware, adminLogout);
 router.post('/logout', noCacheMiddleware, userLogout);
 export default router;

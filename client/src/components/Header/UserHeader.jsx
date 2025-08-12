@@ -8,7 +8,7 @@ import { BsCart3 } from "react-icons/bs";
 
 import "./header.css";
 
-export default function Header() {
+export default function UserHeader() {
     const {user} = useSelector(state => state.auth);
     return (
         <header className="container">

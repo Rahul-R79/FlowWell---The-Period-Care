@@ -1,5 +1,5 @@
-import Footer from "../../../components/Footer/Footer";
-import Header from "../../../components/Header/Header";
+import Footer from "../../../components/Footer/UserFooter";
+import UserHeader from "../../../components/Header/UserHeader";
 import ReviewsTab from "../../../components/Reviews/ReviewsTab";
 import { Container, Row, Col, Button, Image } from "react-bootstrap";
 import './home.css'
@@ -9,7 +9,7 @@ function Home(){
 	const {user} = useSelector(state => state.auth);
     return(
         <>
-            <Header/>
+            <UserHeader/>
             {/* hero section */}
 			<section className="container hero-section">
 				<Container className="py-5">

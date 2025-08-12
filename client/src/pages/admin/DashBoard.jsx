@@ -1,17 +1,30 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentAdmin } from "../../features/auth/authSlice";
-import { useEffect } from "react";
+import { adminLogout } from "../../features/auth/authAdminSlice";
+import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 function DashBoard(){
+    const {admin, loadingByAction, errorByAction} = useSelector(state => state.adminAuth);
     const dispatch = useDispatch();
-    const {user, loadingByAction, errorByAction} = useSelector(state => state.auth);
+    const navigate = useNavigate();
+    const getAdminLoading = loadingByAction?.adminLogout;
 
-    useEffect(()=>{
-        dispatch(getCurrentAdmin());
-    }, [dispatch]);
+    const handleAdminLogout = async(e)=>{
+        e.preventDefault();
+        try{
+            await dispatch(adminLogout()).unwrap();
+            navigate('/adminsignin');
+        }catch(err){
+            console.log('adminlogout error', err);
+        }
+    }
     
     return(
-        <h1>dashboard</h1>
+        <>
+            {getAdminLoading && <LoadingSpinner/>}
+            <h1>dashboard</h1>
+            <button onClick={handleAdminLogout} disabled={getAdminLoading}>Logout</button>
+        </>
     )
 }
 

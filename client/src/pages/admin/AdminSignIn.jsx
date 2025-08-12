@@ -1,17 +1,18 @@
-import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { adminSignin } from '../../features/auth/authSlice';
+import { adminSignin } from '../../features/auth/authAdminSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function AdminSignIn() {
     const [formData, setFormData] = useState({email: '', password: ''});
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {user, loadingByAction, errorByAction} = useSelector(state => state.auth);
+    const {admin, loadingByAction, errorByAction} = useSelector(state => state.adminAuth);
 
     const [showPassword, setShowPassword] = useState(false);
     const togglePassword = () => setShowPassword(prev => !prev);
+    const getAdminLoading = loadingByAction?.adminSignin;
 
     const handleData = (e)=>{
         setFormData({...formData, [e.target.name] : e.target.value});
@@ -33,6 +34,7 @@ function AdminSignIn() {
 
     return (
         <>
+        {getAdminLoading && <LoadingSpinner/>}
         <div className="min-vh-100 d-flex align-items-center justify-content-center text-white px-3 py-4 authForm">
             <div className="container">
                 <div className="row shadow-lg rounded-4 overflow-hidden bg-transparent">

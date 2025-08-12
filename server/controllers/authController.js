@@ -86,13 +86,13 @@ export const SignIn = async(req, res)=>{
         }
         const token = generateToken({id: user._id, role: 'user'});
         const {password: hashedPassword, ...rest} = user._doc;
-        res.cookie('access-token', token, {
+        res.cookie('user-access-token', token, {
             httpOnly: true,
             secure: false,
             sameSite: 'Strict',
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
-    res.status(200).json({success: true, message: 'login successful', user: rest});
+    res.status(200).json({success: true, message: 'login successful', user: { ...rest, role: 'user' }});
     }catch(err){
         return res.status(500).json({ message: 'Internal server error' });
     }
@@ -192,7 +192,7 @@ export const googleAuthCallback = async(req, res)=>{
         }
         const token = generateToken({id: req.user._id, role: 'user'});
 
-        res.cookie('access-token', token, {
+        res.cookie('user-access-token', token, {
             httpOnly: true,
             secure: false,
             sameSite: 'Strict', 
@@ -240,14 +240,14 @@ export const adminSignin = async(req, res)=>{
         const token = generateToken({id: admin._id, role: 'admin'});
         const {password: pwd, ...rest} = admin._doc
 
-        res.cookie('access-token', token, {
+        res.cookie('admin-access-token', token, {
             httpOnly: true,
             secure: false,
             sameSite: 'Strict',
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
-        return res.status(200).json({message: 'admin signed in successfully', admin: rest});
+        return res.status(200).json({message: 'admin signed in successfully', admin: {...rest, role: 'admin'}});
     }catch(err){
         return res.status(500).json({message: 'Internal server error'});
     }
@@ -269,9 +269,22 @@ export const adminauthMe = async(req, res)=>{
     }
 }
 
+export const adminLogout = (req, res)=>{
+    try{
+        res.clearCookie('admin-access-token', {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'Strict'
+        });
+        return res.status(200).json({message: 'admin logged out successfully'});
+    }catch(err){
+        return res.status(500).json({message: 'internal server error'});
+    }
+}
+
 export const userLogout = (req, res)=>{
     try{
-        res.clearCookie('access-token', {
+        res.clearCookie('user-access-token', {
             httpOnly: true,
             secure: false,
             sameSite: 'Strict'
