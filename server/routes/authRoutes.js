@@ -43,4 +43,5 @@ router.post('/adminsignin', validateAdminSignIn, handleValidation, adminSignin);
 router.get('/adminauthme', adminProtectedRoute, adminauthMe);
 router.post('/adminlogout', noCacheMiddleware, adminLogout);
 router.post('/logout', noCacheMiddleware, userLogout);
+
 export default router;

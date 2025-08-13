@@ -17,6 +17,7 @@ import LoadingSpinner from "./components/LoadingSpinner";
 import AdminSignIn from "./pages/admin/AdminSignIn";
 import DashBoard from "./pages/admin/DashBoard";
 import { getCurrentAdmin } from "./features/auth/authAdminSlice";
+import Customers from "./pages/admin/customers/Customers";
 
 function App(){
     const {user, forgotPasswordEmaiVerify, loadingByAction} = useSelector(state => state.auth);
@@ -57,6 +58,7 @@ function App(){
                 <Route element={<ProtectedRoute isAllowed={isLoggedInAdmin} redirectPath="/adminsignin"/>}>
                     <Route path="/dashboard" element={<DashBoard/>} />
                 </Route>
+                <Route path="/customers" element={<Customers/>}/>
             </Routes>
         </BrowserRouter>
     )

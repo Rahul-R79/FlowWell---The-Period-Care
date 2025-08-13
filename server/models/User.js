@@ -20,12 +20,15 @@ const userSchema = new mongoose.Schema({
     },
     googleId: { 
         type: String, 
-        unique: true 
+        sparse: true
     },
     avatar: {
         type: String 
+    },
+    isBlocked: {
+        type: Boolean,
+        default: false
     }
-
 }, {timestamps: true});
 
 export default mongoose.model('User', userSchema);

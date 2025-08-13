@@ -20,6 +20,11 @@
 	color: #333;
 }
 
+.offcanvas.offcanvas-start {
+  	width: 220px !important; 
+}
+
+
 .sidebar-item:hover {
   	background-color: #d7d7d7;
 }

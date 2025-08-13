@@ -13,7 +13,7 @@ const sidebarItems = [
     { icon: <BsBag size={20} />, text: 'Order' },
     { icon: <BsCardList size={20} />, text: 'Products' },
     { icon: <BsBarChart size={20} />, text: 'Sales report' },
-    { icon: <BsPeople size={20} />, text: 'Customer' },
+    { icon: <BsPeople size={20} />, text: 'Customer', path: '/customers'},
     { icon: <BsTicket size={20} />, text: 'Coupon' },
     { icon: <BsGrid size={20} />, text: 'Category' },
     { icon: <BsArrowRepeat size={20} />, text: 'Refund/Return' },
@@ -21,7 +21,7 @@ const sidebarItems = [
     { icon: <BsPersonPlus size={20} />, text: 'Referrals' },
 ];
 
-const SidebarContent = ({ closeMenu, handleAdminLogout, getAdminLoading }) => (
+const SidebarContent = ({ closeMenu, handleAdminLogout, getAdminLoading, navigate }) => (
     <div className="sidebar-content d-flex flex-column justify-content-between align-items-center py-4 container">
         {/* Logo / Title */}
         <div className="px-3 mb-4 py-4 logo-head">
@@ -31,7 +31,11 @@ const SidebarContent = ({ closeMenu, handleAdminLogout, getAdminLoading }) => (
         {/* Menu Items */}
         <div>
             {sidebarItems.map((item, idx) => (
-                <div key={idx} className="d-flex align-items-center px-3 py-2 mb-2 sidebar-item" onClick={closeMenu}>
+                <div key={idx} className="d-flex align-items-center px-3 py-2 mb-2 sidebar-item" 
+                    onClick={() => {
+                        navigate(item.path);
+                        if (closeMenu) closeMenu();
+                    }}>
                     {item.icon}
                     <span className="ms-2">{item.text}</span>
                 </div>
@@ -92,6 +96,7 @@ export default function Sidebar() {
                 <SidebarContent
                     handleAdminLogout={handleAdminLogout}
                     getAdminLoading={getAdminLoading}
+                    navigate={navigate}
                 />
             </div>
         )}
@@ -105,9 +110,10 @@ export default function Sidebar() {
                 </Offcanvas.Header>
                 <Offcanvas.Body className="p-0">
                     <SidebarContent
-                    closeMenu={() => setShow(false)}
-                    handleAdminLogout={handleAdminLogout}
-                    getAdminLoading={getAdminLoading}
+                        closeMenu={() => setShow(false)}
+                        handleAdminLogout={handleAdminLogout}
+                        navigate={navigate}
+                        getAdminLoading={getAdminLoading}
                     />
                 </Offcanvas.Body>
             </Offcanvas>

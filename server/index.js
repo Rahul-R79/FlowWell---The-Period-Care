@@ -4,6 +4,7 @@ import cors from 'cors'
 import dotenv from 'dotenv';
 import { ConnectDB } from './config/db.js';
 import authRoutes from './routes/authRoutes.js'
+import adminRoutes from './routes/adminRoutes.js'
 import passport from './config/passport.js';
 
 dotenv.config();
@@ -22,6 +23,7 @@ app.use(cors({
 app.use(passport.initialize());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.listen(3000, ()=>{
     console.log('http://localhost:3000');

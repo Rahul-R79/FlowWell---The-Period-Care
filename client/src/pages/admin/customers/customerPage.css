@@ -1,0 +1,76 @@
+/* Make table text smaller on mobile */
+/* @media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+  
+    td, th {
+        padding: 0.5rem;
+        white-space: nowrap; 
+    }
+
+    h4 {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    svg {
+        width: 18px !important;
+        height: 18px !important;
+    }
+} */
+
+@media (min-width: 992px) {
+  .main-content {
+    margin-left: 220px; 
+  }
+}
+
+.search-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 100%; 
+    max-width: 250px; 
+}
+
+.search-icon {
+    position: absolute;
+    left: 218px;
+    font-size: 1rem;
+    color: #262626;
+    pointer-events: none;
+    transition: font-size 0.2s ease;
+}
+
+.search-input {
+    width: 100%;
+    border-radius: 50px;
+    border: 1px solid #d6d6d6 !important;
+    padding: 0.4rem 1rem 0.4rem 2.2rem;
+}
+
+.search-input::placeholder {
+    color: rgb(199, 199, 199) !important;
+    opacity: 1 !important;
+}
+
+@media (max-width: 576px) {
+    .search-wrapper {
+        max-width: 180px; 
+    }
+    .search-icon {
+        font-size: 0.85rem; 
+        left: 10px;
+    }
+    .search-input {
+        padding-left: 2rem; 
+    }
+}
+
+
+/* Allow table cell text to wrap instead of hiding behind sidebar */
+/* .table td {
+  white-space: normal;
+} */
+
