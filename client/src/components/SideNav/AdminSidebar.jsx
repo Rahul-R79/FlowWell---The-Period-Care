@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Button, Offcanvas } from 'react-bootstrap';
-import {BsList, BsGraphUp, BsBag, BsCardList, BsBarChart, BsPeople, BsTicket, BsGrid, BsArrowRepeat, BsCollection, BsPersonPlus} from 'react-icons/bs';
+import { BsList, BsGraphUp, BsBag, BsCardList, BsBarChart, BsPeople, BsTicket, BsGrid, BsArrowRepeat, BsCollection, BsPersonPlus } from 'react-icons/bs';
 import './adminSidebar.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { adminLogout } from '../../features/auth/authAdminSlice';
+import { MdAdminPanelSettings } from "react-icons/md";
+import LoadingSpinner from '../LoadingSpinner';
 
 const sidebarItems = [
     { icon: <BsGraphUp size={20} />, text: 'Dashboard' },
@@ -16,7 +21,7 @@ const sidebarItems = [
     { icon: <BsPersonPlus size={20} />, text: 'Referrals' },
 ];
 
-const SidebarContent = ({ closeMenu }) => (
+const SidebarContent = ({ closeMenu, handleAdminLogout, getAdminLoading }) => (
     <div className="sidebar-content d-flex flex-column justify-content-between align-items-center py-4 container">
         {/* Logo / Title */}
         <div className="px-3 mb-4 py-4 logo-head">
@@ -35,7 +40,7 @@ const SidebarContent = ({ closeMenu }) => (
 
         {/* Sign Out Button */}
         <div className="px-3 mt-3 w-100">
-            <Button variant="danger" className="w-100 rounded-3 fw-semibold fs-6">
+            <Button variant="danger" className="w-100 rounded-3 fw-semibold fs-6" onClick={handleAdminLogout} disabled={getAdminLoading}>
                 Sign Out
             </Button>
         </div>
@@ -43,24 +48,39 @@ const SidebarContent = ({ closeMenu }) => (
 );
 
 export default function Sidebar() {
+    const { loadingByAction } = useSelector(state => state.adminAuth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const getAdminLoading = loadingByAction?.adminLogout;
+
+    const handleAdminLogout = async (e) => {
+        e.preventDefault();
+        try {
+            await dispatch(adminLogout()).unwrap();
+            navigate('/adminsignin');
+        }catch(err) {
+            console.error('adminLogout error:', err);
+        }
+    };
+
     const [show, setShow] = useState(false);
-    const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 992); 
+    const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 992);
 
     useEffect(() => {
         const handleResize = () => {
-            setIsDesktop(window.innerWidth >= 992);
-            if(window.innerWidth >= 992) {
-                setShow(false);
-            }
+            const desktop = window.innerWidth >= 992;
+            setIsDesktop(desktop);
+            if (desktop) setShow(false);
         };
-            window.addEventListener('resize', handleResize);
-            return () => window.removeEventListener('resize', handleResize);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     return (
         <>
+        {getAdminLoading && <LoadingSpinner/>}
         {!isDesktop && (
-            <div className="p-3 border-bottom">
+            <div className="p-3 position-absolute top-0 start-0 z-3">
                 <Button variant="light" onClick={() => setShow(true)}>
                     <BsList size={28} />
                 </Button>
@@ -69,7 +89,10 @@ export default function Sidebar() {
 
         {isDesktop && (
             <div className="sidebar d-flex flex-column border-end">
-                <SidebarContent />
+                <SidebarContent
+                    handleAdminLogout={handleAdminLogout}
+                    getAdminLoading={getAdminLoading}
+                />
             </div>
         )}
 
@@ -77,12 +100,15 @@ export default function Sidebar() {
             <Offcanvas show={show} onHide={() => setShow(false)} placement="start">
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>
-                        <BsGrid size={24} />
+                    <MdAdminPanelSettings size={24} />
                     </Offcanvas.Title>
                 </Offcanvas.Header>
-
                 <Offcanvas.Body className="p-0">
-                    <SidebarContent closeMenu={() => setShow(false)} />
+                    <SidebarContent
+                    closeMenu={() => setShow(false)}
+                    handleAdminLogout={handleAdminLogout}
+                    getAdminLoading={getAdminLoading}
+                    />
                 </Offcanvas.Body>
             </Offcanvas>
         )}

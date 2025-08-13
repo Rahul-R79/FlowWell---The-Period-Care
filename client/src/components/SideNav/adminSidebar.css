@@ -1,0 +1,25 @@
+/* Fixed sidebar on desktop */
+.sidebar {
+    width: 220px;
+    background-color: #fff;
+	height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.logo-head{
+  	font-family: 'Times New Roman', Times, serif;
+}
+
+/* Menu Item Styling */
+.sidebar-item {
+	cursor: pointer;
+	border-radius: 6px;
+	transition: background-color 0.2s ease;
+	color: #333;
+}
+
+.sidebar-item:hover {
+  	background-color: #d7d7d7;
+}

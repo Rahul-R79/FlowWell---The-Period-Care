@@ -1,32 +1,20 @@
-import { useDispatch, useSelector } from "react-redux";
-import { adminLogout } from "../../features/auth/authAdminSlice";
-import { useNavigate } from "react-router-dom";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import Sidebar from "../../components/Sidebar/AdminSidebar";
+import Sidebar from "../../components/SideNav/AdminSidebar";
+import AdminFooter from "../../components/Footer/AdminFooter";
 
-function DashBoard(){
-    const {admin, loadingByAction, errorByAction} = useSelector(state => state.adminAuth);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const getAdminLoading = loadingByAction?.adminLogout;
 
-    const handleAdminLogout = async(e)=>{
-        e.preventDefault();
-        try{
-            await dispatch(adminLogout()).unwrap();
-            navigate('/adminsignin');
-        }catch(err){
-            console.log('adminlogout error', err);
-        }
-    }
-    
-    return(
-        <>
-            {getAdminLoading && <LoadingSpinner/>}
-            <Sidebar/>
-            {/* <button onClick={handleAdminLogout} disabled={getAdminLoading}>Logout</button> */}
-        </>
-    )
+export default function DashBoard() {
+    return (
+        <div className="d-flex flex-column min-vh-100">
+            <div className="d-flex flex-grow-1">
+                <Sidebar />
+                <main className="flex-grow-1 p-3 d-flex justify-content-center align-items-center">
+                    <div className="d-flex flex-column align-items-center">
+                        <h1>Dashboard Content</h1>
+                        <p>Work on progres......</p>
+                    </div>
+                </main>
+            </div>
+            <AdminFooter />
+        </div>
+    );
 }
-
-export default DashBoard;
