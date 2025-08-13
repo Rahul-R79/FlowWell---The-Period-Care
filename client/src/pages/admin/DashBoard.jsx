@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { adminLogout } from "../../features/auth/authAdminSlice";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import Sidebar from "../../components/Sidebar/AdminSidebar";
 
 function DashBoard(){
     const {admin, loadingByAction, errorByAction} = useSelector(state => state.adminAuth);
@@ -22,8 +23,8 @@ function DashBoard(){
     return(
         <>
             {getAdminLoading && <LoadingSpinner/>}
-            <h1>dashboard</h1>
-            <button onClick={handleAdminLogout} disabled={getAdminLoading}>Logout</button>
+            <Sidebar/>
+            {/* <button onClick={handleAdminLogout} disabled={getAdminLoading}>Logout</button> */}
         </>
     )
 }

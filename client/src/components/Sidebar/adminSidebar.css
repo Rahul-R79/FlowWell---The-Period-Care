@@ -1,0 +1,42 @@
+/* Fixed sidebar on desktop */
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.logo-head{
+  font-family: 'Times New Roman', Times, serif;
+}
+/* Sidebar Content */
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Menu Item Styling */
+.sidebar-item {
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  color: #333;
+}
+
+.sidebar-item:hover {
+  background-color: #f5f5f5;
+}
+
+/* For the main content when sidebar is fixed */
+.main-content {
+  margin-left: 250px; /* Equal to sidebar width */
+  padding: 20px;
+}
+
+/* Mobile Offcanvas Adjustment */
+.offcanvas-body .sidebar-item {
+  padding: 0.5rem 1rem;
+}
