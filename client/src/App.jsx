@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UserProfile from "./pages/user/profile/UserProfile";
 import { useDispatch } from "react-redux";
-import { getCurrentUser } from "./features/auth/authSlice";
+import { getCurrentUser } from "./features/auth/authUserSlice";
 import { PublicRoute } from "./components/PublicRoute";
 import { useEffect } from "react";
 import LoadingSpinner from "./components/LoadingSpinner";
@@ -18,6 +18,9 @@ import AdminSignIn from "./pages/admin/AdminSignIn";
 import DashBoard from "./pages/admin/DashBoard";
 import { getCurrentAdmin } from "./features/auth/authAdminSlice";
 import Customers from "./pages/admin/customers/Customers";
+import CategoriesPage from "./pages/admin/categories/Categories";
+import EditCategories from "./pages/admin/categories/EditCategories";
+import AddCategories from "./pages/admin/categories/AddCategories";
 
 function App(){
     const {user, forgotPasswordEmaiVerify, loadingByAction} = useSelector(state => state.auth);
@@ -59,6 +62,9 @@ function App(){
                     <Route path="/dashboard" element={<DashBoard/>} />
                 </Route>
                 <Route path="/customers" element={<Customers/>}/>
+                <Route path="/categories" element={<CategoriesPage/>}/>
+                <Route path="/editcategories" element={<EditCategories/>}/>
+                <Route path="/addcategories" element={<AddCategories/>}/>
             </Routes>
         </BrowserRouter>
     )

@@ -1,5 +1,5 @@
 import { useNavigate, Link } from 'react-router-dom';
-import { resetForgotPassword } from '../../../features/auth/authSlice';
+import { resetForgotPassword } from '../../../features/auth/authUserSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import LoadingSpinner from '../../../components/LoadingSpinner';

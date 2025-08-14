@@ -1,7 +1,7 @@
 // import '../index.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { verifyOTP, resendOTP } from '../features/auth/authSlice';
-import { verifyForgotOTP, resendForgotOTP } from '../features/auth/authSlice';
+import { verifyOTP, resendOTP } from '../features/auth/authUserSlice';
+import { verifyForgotOTP, resendForgotOTP } from '../features/auth/authUserSlice';
 import { useNavigate,  Link} from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';

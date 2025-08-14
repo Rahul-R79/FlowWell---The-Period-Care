@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import instance from "../../utils/axios";
+import instance from "../utils/axios";
 
 
-export const getAllUsers = createAsyncThunk('/users/getAllUsers', async({page = 1, limit = 10}, {rejectWithValue})=>{
+export const getAllUsers = createAsyncThunk('/users/getAllUsers', async({page = 1, limit = 10, search = ""}, {rejectWithValue})=>{
     try{
-        const response = await instance.get(`/admin/users?page=${page}&limit=${limit}`);
+        const response = await instance.get(`/admin/users?page=${page}&limit=${limit}&search=${search}`);
         return response.data;
     }catch(err){
         return rejectWithValue(err.response.data);

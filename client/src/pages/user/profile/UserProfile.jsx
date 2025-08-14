@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux"
-import { logoutUser } from "../../../features/auth/authSlice"
+import { logoutUser } from "../../../features/auth/authUserSlice"
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 

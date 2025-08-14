@@ -1,23 +1,34 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Table, Button, Image, Form } from 'react-bootstrap';
 import { FaTrash, FaCheckCircle, FaBan, FaSearch } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import Sidebar from '../../../components/SideNav/AdminSidebar';
 import AdminFooter from '../../../components/Footer/AdminFooter';
-import { deleteUsers, unblockUser, blockUser, getAllUsers } from '../../../features/users/userSlice';
+import { deleteUsers, unblockUser, blockUser, getAllUsers } from '../../../features/userSlice';
 import './customerPage.css';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { confirmAlert } from '../../../utils/confirmAlert';
 import PaginationButton from '../../../components/Pagination';
-import { setCurrentPage } from '../../../features/users/userSlice';
+import { setCurrentPage } from '../../../features/userSlice';
 
 const CustomersPage = () => {
     const dispatch = useDispatch();
     const { users, currentPage, totalPages, loadingByAction } = useSelector(state => state.users);
+    
+    const [search, setSearch] = useState('');
+    const [debouncedSearch, setDebouncedSearch] = useState('');
+
+    useEffect(()=>{
+        const handler = setTimeout(() => {
+            setDebouncedSearch(search);
+            dispatch(setCurrentPage(1));
+        }, 500);
+        return () => clearTimeout(handler);
+    }, [dispatch, search]);
 
     useEffect(() => {
-        dispatch(getAllUsers({page: currentPage}));
-    }, [dispatch, currentPage]);
+        dispatch(getAllUsers({page:currentPage, search: debouncedSearch}));
+    }, [dispatch, currentPage, debouncedSearch]);
 
     const handleDelete = async(userId)=>{
         try{
@@ -81,6 +92,8 @@ const CustomersPage = () => {
                                 type="text"
                                 placeholder="Search customers"
                                 className="search-input"
+                                value={search}
+                                onChange={(e)=> setSearch(e.target.value)}
                             />
                             <FaSearch className="search-icon" />
                         </div>

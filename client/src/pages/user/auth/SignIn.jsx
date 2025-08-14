@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import './auth.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { signinUser } from '../../../features/auth/authSlice';
+import { signinUser } from '../../../features/auth/authUserSlice';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../../../components/LoadingSpinner';
