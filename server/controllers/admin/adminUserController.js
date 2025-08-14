@@ -2,8 +2,19 @@ import User from "../../models/User.js";
 
 export const getAllUsers = async(req, res)=>{
     try{
-        const users = await User.find().select("-password");
-        res.status(200).json(users);
+        let {page = 1, limit = 10} = req.query;
+        page = parseInt(page);
+        limit = parseInt(limit);
+
+        const totalUsers = await User.countDocuments();
+        const totalPages = Math.ceil(totalUsers / limit);
+
+        const users = await User.find()
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .sort({createdAt: -1})
+        .select("-password");
+        res.status(200).json({users, currentPage: page, totalPages, totalUsers});
     }catch(err){
         res.status(500).json({message: 'server error'});
     }

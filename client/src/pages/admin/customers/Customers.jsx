@@ -9,14 +9,15 @@ import './customerPage.css';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { confirmAlert } from '../../../utils/confirmAlert';
 import PaginationButton from '../../../components/Pagination';
+import { setCurrentPage } from '../../../features/users/userSlice';
 
 const CustomersPage = () => {
     const dispatch = useDispatch();
-    const { users, loadingByAction } = useSelector(state => state.users);
+    const { users, currentPage, totalPages, loadingByAction } = useSelector(state => state.users);
 
     useEffect(() => {
-        dispatch(getAllUsers());
-    }, [dispatch]);
+        dispatch(getAllUsers({page: currentPage}));
+    }, [dispatch, currentPage]);
 
     const handleDelete = async(userId)=>{
         try{
@@ -148,7 +149,13 @@ const CustomersPage = () => {
                         </Table>
                     </div>
                 </div>
-                <PaginationButton/>
+                <PaginationButton
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={(page) => {
+                        dispatch(setCurrentPage(page));
+                    }}
+                />
                 <AdminFooter />
             </div>
         </div>

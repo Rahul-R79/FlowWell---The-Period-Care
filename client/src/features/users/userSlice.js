@@ -3,9 +3,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import instance from "../../utils/axios";
 
 
-export const getAllUsers = createAsyncThunk('/users/getAllUsers', async(_, {rejectWithValue})=>{
+export const getAllUsers = createAsyncThunk('/users/getAllUsers', async({page = 1, limit = 10}, {rejectWithValue})=>{
     try{
-        const response = await instance.get('/admin/users');
+        const response = await instance.get(`/admin/users?page=${page}&limit=${limit}`);
         return response.data;
     }catch(err){
         return rejectWithValue(err.response.data);
@@ -43,10 +43,17 @@ const userSlice = createSlice({
     name: 'users',
     initialState: {
         users: [],
+        currentPage: 1,
+        totalPages: 1,
+        totalUsers: 0,
         loadingByAction: {},
         errorByAction: {},
     },
-    reducers: {}, 
+    reducers: {
+        setCurrentPage: (state, action)=>{
+            state.currentPage = action.payload;
+        }
+    }, 
     extraReducers: (builder)=>{
         builder
         //get all users
@@ -56,7 +63,10 @@ const userSlice = createSlice({
         })
         .addCase(getAllUsers.fulfilled, (state, action)=>{
             state.loadingByAction.getAllUsers = false;
-            state.users = action.payload;
+            state.users = action.payload.users;
+            state.currentPage = action.payload.currentPage;
+            state.totalPages = action.payload.totalPages;
+            state.totalUsers = action.payload.totalUsers;
             state.errorByAction.getAllUsers = null;
         })
         .addCase(getAllUsers.rejected, (state, action)=>{
@@ -110,4 +120,5 @@ const userSlice = createSlice({
     }
 })
 
+export const {setCurrentPage} = userSlice.actions;
 export default userSlice.reducer;
