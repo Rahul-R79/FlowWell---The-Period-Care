@@ -80,9 +80,14 @@ export const resendOTP = async(req, res)=>{
 export const SignIn = async(req, res)=>{
     const {email, password} = req.body;
     try{
-        const user = await User.findOne({email})
+        const user = await User.findOne({email});
+
         if(!user || !(await bcrypt.compare(password, user.password))){
             return res.status(401).json({errors: [{field: 'general', message: 'Invalid Email or Password'}]});
+        }
+
+        if(user.isBlocked){
+            return res.status(403).json({errors: [{field: 'general', message: 'Your account is blocked. Contact admin'}]});
         }
         const token = generateToken({id: user._id, role: 'user'});
         const {password: hashedPassword, ...rest} = user._doc;
@@ -190,6 +195,14 @@ export const googleAuthCallback = async(req, res)=>{
         if(!req.user){
             return res.status(401).json({message: "google auth failed"});
         }
+
+        const user = await User.findById(req.user._id);
+        if(!user) return res.status(404).json({message: 'user not found'});
+
+        if(user.isBlocked){
+            return res.status(403).json({message: 'Your account has been blocked please contact admin'});
+        }
+
         const token = generateToken({id: req.user._id, role: 'user'});
 
         res.cookie('user-access-token', token, {
