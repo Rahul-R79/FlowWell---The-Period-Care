@@ -23,7 +23,7 @@ export const deleteUsers = createAsyncThunk('/users/deleteUsers', async(userId, 
 
 export const blockUser = createAsyncThunk('/users/blockUser', async(userId, {rejectWithValue})=>{
     try{
-        const response = await instance.put(`admin/users/block/${userId}`);
+        const response = await instance.patch(`admin/users/block/${userId}`);
         return response.data.user
     }catch(err){
         return rejectWithValue(err.response.data);
@@ -32,7 +32,7 @@ export const blockUser = createAsyncThunk('/users/blockUser', async(userId, {rej
 
 export const unblockUser = createAsyncThunk('/users/unblockUser', async(userId, {rejectWithValue})=>{
     try{
-        const response = await instance.put(`admin/users/unblock/${userId}`);
+        const response = await instance.patch(`admin/users/unblock/${userId}`);
         return response.data.user
     }catch(err){
         return rejectWithValue(err.response.data);

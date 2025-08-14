@@ -114,7 +114,7 @@ const CustomersPage = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {users.map(({_id, name, email, orders = 0, amount = 0, isBlocked=false, status = 'Active', avatar}) => (
+                                {users.map(({_id, name, email, orders = 0, amount = 0, isBlocked=false, avatar}) => (
                                     <tr key={_id}>
                                         <td className="d-flex align-items-center">
                                             <Image

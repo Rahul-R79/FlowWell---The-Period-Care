@@ -40,6 +40,7 @@ const AddCategories = () => {
 
     return (
         <>
+            {loadingByAction.addCategory && <LoadingSpinner/>}
             <div className='d-flex flex-column flex-lg-row min-vh-100'>
                 <Sidebar />
                 <div className='flex-grow-1 d-flex flex-column main-content'>
@@ -96,7 +97,9 @@ const AddCategories = () => {
                                     <Button
                                         variant='dark'
                                         type="submit"
-                                        className='px-5 py-2 rounded'>
+                                        className='px-5 py-2 rounded'
+                                        disabled={loadingByAction.addCategory}
+                                        >
                                         Add
                                     </Button>
                                 </Col>
