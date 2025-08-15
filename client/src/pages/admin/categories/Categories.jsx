@@ -1,6 +1,8 @@
 import { Form, Button, Table, Row, Col } from "react-bootstrap";
-import { FaSearch, FaTrash } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import { MdOutlineModeEdit } from "react-icons/md";
+import { SiTicktick } from "react-icons/si";
+import { MdUpdateDisabled } from "react-icons/md";
 import Sidebar from "../../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../../components/Footer/AdminFooter";
 import PaginationButton from "../../../components/Pagination";
@@ -11,6 +13,8 @@ import { getCategory } from "../../../features/categorySlice";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { useEffect, useState } from "react";
 import { setCurrentPage } from "../../../features/categorySlice";
+import { changeStatus } from "../../../features/categorySlice";
+import { confirmAlert } from "../../../utils/confirmAlert";
 
 const CategoriesPage = () => {
     const dispatch = useDispatch();
@@ -32,8 +36,30 @@ const CategoriesPage = () => {
         dispatch(getCategory({page: currentPage, search: debouncedSearch}));
     }, [dispatch, currentPage, debouncedSearch]);
 
+    const handlechangeStatus = async(id)=>{
+        try{
+            await dispatch(changeStatus(id)).unwrap();
+        }catch(err){
+            console.log('change status error', err);
+        }
+    }
+
+    const handleStatusClick = async(id, currentStatus)=>{
+        const confirmed = await confirmAlert(
+            'Change Status?',
+            `Are you sure you want to ${currentStatus === 'active' ? 'deactivate' : 'activate'} this category?`,
+            'Submit',
+            'Cancel'
+        );
+
+        if(confirmed){
+            handlechangeStatus(id);
+        }
+    }
+
     return (
         <>
+            {loadingByAction.getCategory && <LoadingSpinner/>}
             <div className='d-flex flex-column flex-lg-row min-vh-100'>
                 <Sidebar />
                 <div className='flex-grow-1 d-flex flex-column main-content'>
@@ -72,19 +98,31 @@ const CategoriesPage = () => {
                                 <tr>
                                     <th>Category Name</th>
                                     <th>Description</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {category.filter(Boolean).map(({_id, name, description}) => (
+                                {category.map(({_id, name, description, status}) => (
                                     <tr key={_id}>
                                         <td>{name}</td>
                                         <td>{description}</td>
+                                        <td> 
+                                            <Button size="sm" variant={status === "active" ? "outline-success" : "outline-danger"} style={{ width: 80 }} disabled>
+                                                {status.charAt(0).toUpperCase() + status.slice(1)}
+                                            </Button>
+                                        </td>
                                         <td>
-                                            <Link to='/editcategories' style={{ color: "inherit", textDecoration: "none" }}>
+                                            <Link to={`/editcategories/${_id}`} style={{ color: "inherit", textDecoration: "none" }}>
                                                 <MdOutlineModeEdit className='me-3'style={{ cursor: "pointer" }}/>
                                             </Link>
-                                            <FaTrash style={{ cursor: "pointer" }}/>
+                                            <button onClick={()=> handleStatusClick(_id, status)} style={{ background: "none", border: "none", padding: 0 }}>
+                                                {status === 'active' ? (
+                                                    <SiTicktick style={{ cursor: "pointer", color: 'green'}}/>
+                                                ): (
+                                                    <MdUpdateDisabled style={{ cursor: "pointer", color: 'red'}}/>
+                                                )}
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}

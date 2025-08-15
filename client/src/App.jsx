@@ -63,7 +63,7 @@ function App(){
                 </Route>
                 <Route path="/customers" element={<Customers/>}/>
                 <Route path="/categories" element={<CategoriesPage/>}/>
-                <Route path="/editcategories" element={<EditCategories/>}/>
+                <Route path="/editcategories/:id" element={<EditCategories/>}/>
                 <Route path="/addcategories" element={<AddCategories/>}/>
             </Routes>
         </BrowserRouter>

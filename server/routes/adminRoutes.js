@@ -8,7 +8,13 @@ import {
 import { adminProtectedRoute } from '../middlewares/verifyToken.js';
 import { validateCategory } from '../middlewares/validators/categoryValidator.js';
 import { handleValidation } from '../middlewares/validators/handleValidation.js';
-import { addCategory, getCategory } from '../controllers/admin/adminCategoryController.js';
+import { 
+    addCategory, 
+    categoryStatus, 
+    editCategory, 
+    getCategory, 
+    getSingleCategory 
+} from '../controllers/admin/adminCategoryController.js';
 
 const router = express.Router();
 
@@ -17,7 +23,11 @@ router.delete('/users/:userId', adminProtectedRoute, deleteUser);
 router.patch('/users/block/:userId', adminProtectedRoute, blockUser);
 router.patch('/users/unblock/:userId', adminProtectedRoute, unblockUser);
 
-router.post('/category/add', validateCategory, handleValidation, adminProtectedRoute, addCategory);
+
 router.get('/category', adminProtectedRoute, getCategory);
+router.post('/category/add', validateCategory, handleValidation, adminProtectedRoute, addCategory);
+router.get('/category/:id', adminProtectedRoute, getSingleCategory);
+router.patch('/category/:id', validateCategory, handleValidation, adminProtectedRoute, editCategory);
+router.patch('/category/status/:id', adminProtectedRoute, categoryStatus);
 
 export default router;
