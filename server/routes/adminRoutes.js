@@ -15,6 +15,8 @@ import {
     getCategory, 
     getSingleCategory 
 } from '../controllers/admin/adminCategoryController.js';
+import { addProduct } from '../controllers/admin/adminProductsController.js';
+import { validateProduct } from '../middlewares/validators/productValidator.js';
 
 const router = express.Router();
 
@@ -30,4 +32,6 @@ router.get('/category/:id', adminProtectedRoute, getSingleCategory);
 router.patch('/category/:id', validateCategory, handleValidation, adminProtectedRoute, editCategory);
 router.patch('/category/status/:id', adminProtectedRoute, categoryStatus);
 
+
+router.post('/products/add', validateProduct, handleValidation, adminProtectedRoute, addProduct);
 export default router;

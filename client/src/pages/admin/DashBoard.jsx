@@ -1,6 +1,5 @@
 import Sidebar from "../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../components/Footer/AdminFooter";
-import Customers from "./customers/Customers";
 
 
 export default function DashBoard() {

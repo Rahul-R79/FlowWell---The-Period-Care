@@ -21,6 +21,9 @@ import Customers from "./pages/admin/customers/Customers";
 import CategoriesPage from "./pages/admin/categories/Categories";
 import EditCategories from "./pages/admin/categories/EditCategories";
 import AddCategories from "./pages/admin/categories/AddCategories";
+import AddProducts from "./pages/admin/products/AddProducts";
+import EditProducts from "./pages/admin/products/EditProducts";
+import Products from "./pages/admin/products/Products";
 
 function App(){
     const {user, forgotPasswordEmaiVerify, loadingByAction} = useSelector(state => state.auth);
@@ -65,6 +68,10 @@ function App(){
                 <Route path="/categories" element={<CategoriesPage/>}/>
                 <Route path="/editcategories/:id" element={<EditCategories/>}/>
                 <Route path="/addcategories" element={<AddCategories/>}/>
+
+                <Route path="/products" element={<Products/>}/>
+                <Route path="/products/add" element={<AddProducts/>}/>
+                <Route path="/products/edit" element={<EditProducts/>}/>
             </Routes>
         </BrowserRouter>
     )

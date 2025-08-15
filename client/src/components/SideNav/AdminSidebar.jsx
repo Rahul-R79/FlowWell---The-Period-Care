@@ -11,7 +11,7 @@ import LoadingSpinner from '../LoadingSpinner';
 const sidebarItems = [
     { icon: <BsGraphUp size={20} />, text: 'Dashboard', path: '/dashboard'},
     { icon: <BsBag size={20} />, text: 'Order' },
-    { icon: <BsCardList size={20} />, text: 'Products' },
+    { icon: <BsCardList size={20} />, text: 'Products', path: '/products'},
     { icon: <BsBarChart size={20} />, text: 'Sales report' },
     { icon: <BsPeople size={20} />, text: 'Customer', path: '/customers'},
     { icon: <BsTicket size={20} />, text: 'Coupon' },
