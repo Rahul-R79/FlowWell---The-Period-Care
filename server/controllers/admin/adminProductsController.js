@@ -1,10 +1,10 @@
 import Product from "../../models/Product.js";
+import cloudinary from "../../utils/cloudinary.js";
 
 export const addProduct = async(req, res)=>{
     const {
         name, 
         description, 
-        images, 
         basePrice, 
         discountPrice, 
         category,
@@ -18,10 +18,25 @@ export const addProduct = async(req, res)=>{
             return res.status(400).json({errors: [{field: 'general', message: 'Product already exist'}]});
         }
 
+        const imageUrls = await Promise.all(
+            req.files.map((file)=>{
+                return new Promise((resolve, reject)=>{
+                    const uploadStrem = cloudinary.uploader.upload_stream(
+                        {folder: 'products'},
+                        (error, result)=>{
+                            if(error) reject(error);
+                            else resolve(result.secure_url);
+                        }
+                    )
+                    uploadStrem.end(file.buffer);
+                })
+            })
+        )
+
         const product = await Product.create({
             name,
             description, 
-            images, 
+            images: imageUrls,
             basePrice, 
             discountPrice, 
             category,
@@ -29,7 +44,7 @@ export const addProduct = async(req, res)=>{
         });
 
         res.status(201).json({product});
-    }catch(err){
+    }catch(err){                
         return res.status(500).json({message: 'internal server error'});
     }
 }

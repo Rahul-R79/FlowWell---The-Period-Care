@@ -21,7 +21,7 @@ export const validateProduct = [
         .withMessage("Base price must be a number greater than 0"),
 
     body("discountPrice")
-        .optional()
+        .optional({checkFalsy: true})
         .isFloat({ min: 0 })
         .withMessage("Discount price must be a number greater than or equal to 0")
         .custom((value, { req }) => {
@@ -35,8 +35,6 @@ export const validateProduct = [
         .notEmpty().withMessage("Category is required"),
     
     body("sizes")
-        .isArray({ min: 1 })
-        .withMessage("At least one size variant is required")
         .custom((sizes)=>{
             const sizeSet = new Set();
             for(let item of sizes){
@@ -47,12 +45,10 @@ export const validateProduct = [
             }
             return true
         }),
-
-    body("sizes.*.size")
-        .notEmpty().withMessage("Size is required"),
     
     body("sizes.*.stock")
         .notEmpty().withMessage("Stock is required")
         .isInt({ min: 0 })
         .withMessage("Stock must be a non-negative integer"),
 ]
+
