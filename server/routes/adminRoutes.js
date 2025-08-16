@@ -16,7 +16,7 @@ import {
     getSingleCategory 
 } from '../controllers/admin/adminCategoryController.js';
 import { addProduct } from '../controllers/admin/adminProductsController.js';
-import { validateProduct } from '../middlewares/validators/productValidator.js';
+import { parseFormData, validateProduct } from '../middlewares/validators/productValidator.js';
 import upload from '../middlewares/multer.js';
 
 const router = express.Router();
@@ -34,5 +34,5 @@ router.patch('/category/:id', validateCategory, handleValidation, adminProtected
 router.patch('/category/status/:id', adminProtectedRoute, categoryStatus);
 
 
-router.post('/products/add', validateProduct, handleValidation, adminProtectedRoute, upload.array('images', 4), addProduct);
+router.post('/products/add', upload.array('images', 4), parseFormData, validateProduct, handleValidation, adminProtectedRoute, addProduct);
 export default router;

@@ -12,8 +12,10 @@ import { useEffect, useState } from "react";
 import { getCategory } from "../../../features/categorySlice";
 
 const AddProducts = () => {
-    const { errorByAction, loadingByAction } = useSelector(state => state.products);
-    const {category} = useSelector(state => state.category);
+    const { errorByAction, loadingByAction } = useSelector(
+        (state) => state.products
+    );
+    const { category } = useSelector((state) => state.category);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -25,7 +27,7 @@ const AddProducts = () => {
         basePrice: "",
         discountPrice: "",
         category: "",
-        sizes: [{ stock: "", size: "" }], 
+        sizes: [{ stock: "", size: "" }],
     });
 
     const handleData = (e) => {
@@ -34,8 +36,22 @@ const AddProducts = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const data = new FormData();
+        data.append("name", formData.name);
+        data.append("description", formData.description);
+        data.append("basePrice", formData.basePrice);
+        data.append("discountPrice", formData.discountPrice);
+        data.append("category", formData.category);
+
+        data.append("sizes", JSON.stringify(formData.sizes));
+
+        formData.images.forEach((file) => {
+            if (file) data.append("images", file);
+        });
+
         try {
-            await dispatch(addProduct(formData)).unwrap();
+            await dispatch(addProduct(data)).unwrap();
             navigate("/products");
         } catch (err) {
             console.log("product add error", err);
@@ -69,18 +85,18 @@ const AddProducts = () => {
         );
     };
 
-    const handleImageChange = (e, index)=>{
+    const handleImageChange = (e, index) => {
         const file = e.target.files[0];
-        if(!file) return 
+        if (!file) return;
 
         const newImages = [...formData.images];
         newImages[index] = file;
-        setFormData({...formData, images: newImages});
-    }
+        setFormData({ ...formData, images: newImages });
+    };
 
     useEffect(() => {
         dispatch(clearAddProductError());
-        dispatch(getCategory({limit: 100}));
+        dispatch(getCategory({ limit: 100 }));
     }, [dispatch]);
 
     return (
@@ -110,6 +126,11 @@ const AddProducts = () => {
                             {getFieldError("name") && (
                                 <small className='text-danger'>
                                     {getFieldError("name")}
+                                </small>
+                            )}
+                            {getFieldError("general") && (
+                                <small className='text-danger'>
+                                    {getFieldError("general")}
                                 </small>
                             )}
                         </Form.Group>
@@ -153,7 +174,12 @@ const AddProducts = () => {
                                                 type='file'
                                                 id={`fileInput${num}`}
                                                 style={{ display: "none" }}
-                                                onChange={(e)=> handleImageChange(e, num-1)}
+                                                onChange={(e) =>
+                                                    handleImageChange(
+                                                        e,
+                                                        num - 1
+                                                    )
+                                                }
                                             />
                                             <label
                                                 htmlFor={`fileInput${num}`}
@@ -219,14 +245,20 @@ const AddProducts = () => {
                                         name='category'
                                         value={formData.category}
                                         onChange={handleData}>
-                                        <option value="">Select category</option>
+                                        <option value=''>
+                                            Select category
+                                        </option>
                                         {category
-                                        .filter(cat => cat.status === 'active')
-                                        .map((value)=> (
-                                            <option key={value._id} value={value._id}>
-                                                {value.name}
-                                            </option>
-                                        ))}
+                                            .filter(
+                                                (cat) => cat.status === "active"
+                                            )
+                                            .map((value) => (
+                                                <option
+                                                    key={value._id}
+                                                    value={value._id}>
+                                                    {value.name}
+                                                </option>
+                                            ))}
                                     </Form.Select>
                                     {getFieldError("category") && (
                                         <small className='text-danger'>
@@ -281,18 +313,29 @@ const AddProducts = () => {
                                                     e.target.value
                                                 )
                                             }>
-                                            <option>Regular</option>
+                                            <option value=''>
+                                                Select size
+                                            </option>
                                             <option>Small</option>
                                             <option>Medium</option>
                                             <option>Large</option>
                                         </Form.Select>
+                                        {getFieldError(
+                                            `sizes.${index}.size`
+                                        ) && (
+                                            <small className='text-danger'>
+                                                {getFieldError(
+                                                    `sizes.${index}.size`
+                                                )}
+                                            </small>
+                                        )}
                                         {getFieldError("sizes") && (
                                             <small className='text-danger'>
                                                 {getFieldError("sizes")}
                                             </small>
                                         )}
                                     </Form.Group>
-                                    <div className="mt-2">
+                                    <div className='mt-2'>
                                         {index !== 0 && (
                                             <Button
                                                 variant='danger'
@@ -304,14 +347,13 @@ const AddProducts = () => {
                                         )}
                                     </div>
                                 </Col>
-
                             </Row>
                         ))}
 
                         <Button
                             variant='primary'
                             className='mb-4'
-                            type="button"
+                            type='button'
                             onClick={addSizeVarient}>
                             Add Variant
                         </Button>
