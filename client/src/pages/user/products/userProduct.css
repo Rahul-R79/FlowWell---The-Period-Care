@@ -1,0 +1,41 @@
+.product-page {
+    margin-bottom: 120px !important;
+}
+
+@media (max-width: 1000px) {
+    .product-page {
+        margin-bottom: 60px !important;
+    }
+}
+
+.product-page h4 {
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.product-img {
+    width: 100%; 
+    max-width: 300px; 
+    height: auto; 
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.clear-btn {
+    color: #bebebe;
+    border-bottom: 0.5px solid #bebebe;
+    cursor: pointer;
+}
+
+.sticky-filter {
+    position: sticky;
+    top: 80px; 
+    align-self: start;
+}
+

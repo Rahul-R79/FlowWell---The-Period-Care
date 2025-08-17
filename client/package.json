@@ -26,6 +26,7 @@
     "react-easy-crop": "^5.5.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.7.1",
+    "react-select": "^5.10.2",
     "redux-persist": "^6.0.0",
     "sweetalert2": "^11.22.3",
     "sweetalert2-react-content": "^5.1.0"
