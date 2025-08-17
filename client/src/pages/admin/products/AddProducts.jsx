@@ -28,34 +28,18 @@ const AddProducts = () => {
         discountPrice: "",
         category: "",
         sizes: [{ stock: "", size: "" }],
+        offer: "",
     });
+
+    const [imagePreviews, setImagePreviews] = useState([
+        null,
+        null,
+        null,
+        null,
+    ]);
 
     const handleData = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const data = new FormData();
-        data.append("name", formData.name);
-        data.append("description", formData.description);
-        data.append("basePrice", formData.basePrice);
-        data.append("discountPrice", formData.discountPrice);
-        data.append("category", formData.category);
-
-        data.append("sizes", JSON.stringify(formData.sizes));
-
-        formData.images.forEach((file) => {
-            if (file) data.append("images", file);
-        });
-
-        try {
-            await dispatch(addProduct(data)).unwrap();
-            navigate("/products");
-        } catch (err) {
-            console.log("product add error", err);
-        }
     };
 
     const handleSizeChange = (index, field, value) => {
@@ -85,13 +69,46 @@ const AddProducts = () => {
         );
     };
 
-    const handleImageChange = (e, index) => {
+    // --- Image handler without cropper ---
+    const handleImageSelect = (e, index) => {
         const file = e.target.files[0];
         if (!file) return;
 
         const newImages = [...formData.images];
         newImages[index] = file;
+
+        const newPreviews = [...imagePreviews];
+        newPreviews[index] = URL.createObjectURL(file);
+
         setFormData({ ...formData, images: newImages });
+        setImagePreviews(newPreviews);
+    };
+
+    // --- Submit ---
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const data = new FormData();
+        data.append("name", formData.name);
+        data.append("description", formData.description);
+        data.append("basePrice", formData.basePrice);
+        data.append("discountPrice", formData.discountPrice);
+        data.append("category", formData.category);
+        data.append("sizes", JSON.stringify(formData.sizes));
+
+        if (formData.offer && formData.offer.trim() !== "") {
+            data.append("offer", formData.offer);
+        }
+        formData.images.forEach((file) => {
+            if (file) data.append("images", file);
+        });
+
+        try {
+            await dispatch(addProduct(data)).unwrap();
+            navigate("/products");
+        } catch (err) {
+            console.log("product add error", err);
+        }
     };
 
     useEffect(() => {
@@ -166,7 +183,10 @@ const AddProducts = () => {
                                         className='mb-3'>
                                         <div className='d-flex flex-column align-items-center justify-content-center p-3 image-upload-box'>
                                             <img
-                                                src='../images/add-img.webp'
+                                                src={
+                                                    imagePreviews[num - 1] ||
+                                                    "../images/add-img.webp"
+                                                }
                                                 alt='Add'
                                                 className='mb-2 upload-icon'
                                             />
@@ -175,7 +195,7 @@ const AddProducts = () => {
                                                 id={`fileInput${num}`}
                                                 style={{ display: "none" }}
                                                 onChange={(e) =>
-                                                    handleImageChange(
+                                                    handleImageSelect(
                                                         e,
                                                         num - 1
                                                     )
@@ -271,7 +291,7 @@ const AddProducts = () => {
 
                         {/* Stock & Size */}
                         {formData.sizes.map((variant, index) => (
-                            <Row className='mb-4' key={index}>
+                            <Row className='mb-2' key={index}>
                                 <Col>
                                     <Form.Group>
                                         <Form.Label>Stock Limit</Form.Label>
@@ -350,13 +370,46 @@ const AddProducts = () => {
                             </Row>
                         ))}
 
-                        <Button
-                            variant='primary'
-                            className='mb-4'
-                            type='button'
-                            onClick={addSizeVarient}>
-                            Add Variant
-                        </Button>
+                        {/* offers and discount */}
+                        <Row className='mb-4'>
+                            <Col>
+                                <Form.Group>
+                                    <Form.Label>Offers</Form.Label>
+                                    <div>
+                                        <Form.Check
+                                            type='checkbox'
+                                            label='Flat 50'
+                                            name='offer'
+                                            value='FLAT'
+                                            checked={formData.offer?.includes(
+                                                "FLAT"
+                                            )}
+                                            onChange={handleData}
+                                        />
+                                        <Form.Check
+                                            type='checkbox'
+                                            label='Buy One Get One Free'
+                                            name='offer'
+                                            value='BOGO'
+                                            checked={formData.offer?.includes(
+                                                "BOGO"
+                                            )}
+                                            onChange={handleData}
+                                        />
+                                    </div>
+                                </Form.Group>
+                            </Col>
+                            {/* varient button */}
+                            <Col>
+                                <Button
+                                    variant='primary'
+                                    className='mb-4'
+                                    type='button'
+                                    onClick={addSizeVarient}>
+                                    Add Variant
+                                </Button>
+                            </Col>
+                        </Row>
 
                         {/* Buttons */}
                         <div className='d-flex justify-content-center gap-2'>

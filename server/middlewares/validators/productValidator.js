@@ -8,8 +8,10 @@ export const parseFormData = (req, res, next) => {
 
         if (req.body.basePrice)
             req.body.basePrice = parseFloat(req.body.basePrice);
+
         if (req.body.discountPrice)
             req.body.discountPrice = parseFloat(req.body.discountPrice);
+
         if (req.body.sizes && Array.isArray(req.body.sizes)) {
             req.body.sizes = req.body.sizes.map((item) => ({
                 size: item.size,
@@ -24,11 +26,11 @@ export const parseFormData = (req, res, next) => {
 
         next();
     } catch (err) {
-        return res
-            .status(400)
-            .json({
-                errors: [{ field: "sizes", message: "Invalid sizes format" }],
-            });
+        return res.status(400).json({
+            errors: [
+                { field: "formData", message: "Invalid form data format" },
+            ],
+        });
     }
 };
 

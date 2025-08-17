@@ -29,6 +29,11 @@ const productSchema = mongoose.Schema({
             stock: {type: Number, required: true}
         }
     ],
+    offer: {
+        type: String,
+        enum: ["FLAT", "BOGO"], 
+        default: null
+    },
     isActive: { 
         type: Boolean, 
         default: true 
