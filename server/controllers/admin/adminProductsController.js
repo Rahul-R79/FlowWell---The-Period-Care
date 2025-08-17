@@ -51,3 +51,26 @@ export const addProduct = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+
+export const getProduct = async(req, res)=>{
+    try{
+        let {page = 1, limit = 10, search = ''} = req.query;
+        page = parseInt(page);
+        limit = parseInt(limit);
+
+        const query = search ? {name: {$regex: search, $options: 'i'}} : {};
+
+        const totalProducts = await Product.countDocuments(query);
+        const totalPages = Math.ceil(totalProducts / limit);
+
+        const products = await Product.find(query).populate("category", "name")
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .sort({createdAt: -1})
+
+        res.status(200).json({products, currentPage: page, totalPages, totalProducts});
+    }catch(err){        
+        return res.status(500).json({message: 'internal server error'});
+    }
+}

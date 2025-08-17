@@ -4,61 +4,36 @@ import { MdOutlineModeEdit } from "react-icons/md";
 import { SiTicktick } from "react-icons/si";
 import { MdUpdateDisabled } from "react-icons/md";
 import { Link } from "react-router-dom";
-
+import { getProduct, setCurrentPage } from "../../../features/productSlice";
+import { useSelector, useDispatch } from "react-redux";
 import Sidebar from "../../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../../components/Footer/AdminFooter";
 import "./products.css";
+import { useEffect, useState } from "react";
+import PaginationButton from "../../../components/Pagination";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const ProductsPage = () => {
-    const products = [
-        {
-            name: "Menstrual Cups",
-            id: "BS6FXA5E",
-            price: 50,
-            category: "Cups",
-            stock: 40,
-            addedOn: "01-04-2025",
-            status: "active",
-        },
-        {
-            name: "Menstrual Cups",
-            id: "BS6FXB5T",
-            price: 90,
-            category: "Cups",
-            stock: 40,
-            addedOn: "01-04-2025",
-            status: "inactive",
-        },
-        {
-            name: "Menstrual Cups",
-            id: "BS6FXC2K",
-            price: 60,
-            category: "Cups",
-            stock: 40,
-            addedOn: "01-04-2025",
-            status: "active",
-        },
-        {
-            name: "Menstrual Cups",
-            id: "BS6FXD2O",
-            price: 50,
-            category: "Cups",
-            stock: 40,
-            addedOn: "01-04-2025",
-            status: "active",
-        },
-        {
-            name: "Menstrual Cups",
-            id: "BS6FXA8Q",
-            price: 100,
-            category: "Cups",
-            stock: 40,
-            addedOn: "01-04-2025",
-            status: "inactive",
-        },
-    ];
+    const {products, currentPage, totalPages, loadingByAction} = useSelector(state => state.products);
+    const dispatch = useDispatch();
+    const [search, setSearch] = useState('');
+    const [debouncedSearch, setDebouncedSearch] = useState('');
+
+    useEffect(()=>{
+        const handler = setTimeout(() => {
+            setDebouncedSearch(search);
+            dispatch(setCurrentPage(1));
+        }, 500);
+        return ()=> clearTimeout(handler);
+    }, [dispatch, search]);
+
+    useEffect(()=>{
+        dispatch(getProduct({page: currentPage, search: debouncedSearch}))
+    }, [dispatch, currentPage, debouncedSearch]);
 
     return (
+        <>
+        {loadingByAction.getProduct && <LoadingSpinner/>}
         <div className='d-flex flex-column flex-lg-row min-vh-100'>
             <Sidebar />
             <div className='flex-grow-1 d-flex flex-column main-content'>
@@ -73,6 +48,8 @@ const ProductsPage = () => {
                                     type='text'
                                     placeholder='Search here'
                                     className='rounded-pill ps-5 search-input'
+                                    value={search}
+                                    onChange={(e)=> setSearch(e.target.value)}
                                 />
                                 <FaSearch className='search-icon position-absolute top-50 start-0 translate-middle-y ms-3 text-muted' />
                             </div>
@@ -89,7 +66,7 @@ const ProductsPage = () => {
                         <thead>
                             <tr>
                                 <th>Product Name</th>
-                                <th>Product ID</th>
+                                <th>Size</th>
                                 <th>Price</th>
                                 <th>Category</th>
                                 <th>Stock</th>
@@ -101,35 +78,35 @@ const ProductsPage = () => {
                         <tbody>
                             {products.map(
                                 ({
-                                    id,
+                                    _id,
                                     name,
-                                    price,
+                                    sizes,
+                                    basePrice,
                                     category,
-                                    stock,
-                                    addedOn,
-                                    status,
+                                    createdAt,
+                                    isActive,
                                 }) => (
-                                    <tr key={id}>
+                                    <tr key={_id}>
                                         <td>{name}</td>
-                                        <td className='text-primary'>{id}</td>
-                                        <td>${price}</td>
-                                        <td>{category}</td>
-                                        <td>{stock}</td>
-                                        <td>{addedOn}</td>
+                                        <td className='text-primary'>{sizes.map(s => s.size).join(', ')}</td>
+                                        <td>₹{basePrice}</td>
+                                        <td>{category.name}</td>
+                                        <td className="text-primary">{sizes.map(s => s.stock).join(', ')}</td>
+                                        <td>{new Date(createdAt).toLocaleDateString()}</td>
                                         <td>
                                             <Button
                                                 size='sm'
                                                 variant={
-                                                    status === "active"
+                                                    isActive
                                                         ? "outline-success"
                                                         : "outline-danger"
                                                 }
                                                 style={{ width: 80 }}
                                                 disabled>
-                                                {status
-                                                    .charAt(0)
-                                                    .toUpperCase() +
-                                                    status.slice(1)}
+                                                {isActive
+                                                    ?
+                                                    "Active" : "Inactive"
+                                                }
                                             </Button>
                                         </td>
                                         <td>
@@ -152,7 +129,7 @@ const ProductsPage = () => {
                                                     border: "none",
                                                     padding: 0,
                                                 }}>
-                                                {status === "active" ? (
+                                                {isActive ? (
                                                     <SiTicktick
                                                         style={{
                                                             cursor: "pointer",
@@ -175,9 +152,17 @@ const ProductsPage = () => {
                         </tbody>
                     </Table>
                 </div>
+                <PaginationButton 
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={(page)=>{
+                        dispatch(setCurrentPage(page));
+                    }}
+                />
                 <AdminFooter />
             </div>
         </div>
+        </>
     );
 };
 

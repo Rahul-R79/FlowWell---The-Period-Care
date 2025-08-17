@@ -10,6 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCategory } from "../../../features/categorySlice";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const AddProducts = () => {
     const { errorByAction, loadingByAction } = useSelector(
@@ -20,6 +21,7 @@ const AddProducts = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+	//initial state
     const [formData, setFormData] = useState({
         name: "",
         description: "",
@@ -31,12 +33,8 @@ const AddProducts = () => {
         offer: "",
     });
 
-    const [imagePreviews, setImagePreviews] = useState([
-        null,
-        null,
-        null,
-        null,
-    ]);
+
+    const [imagePreviews, setImagePreviews] = useState([null,null,null,null,]);
 
     const handleData = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -69,7 +67,6 @@ const AddProducts = () => {
         );
     };
 
-    // --- Image handler without cropper ---
     const handleImageSelect = (e, index) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -84,7 +81,20 @@ const AddProducts = () => {
         setImagePreviews(newPreviews);
     };
 
-    // --- Submit ---
+    const handleRemoveImage = (index) => {
+        const newImages = [...formData.images];
+        const newPreviews = [...imagePreviews];
+
+        newImages[index] = null;
+        newPreviews[index] = null;
+
+        setFormData({ ...formData, images: newImages });
+        setImagePreviews(newPreviews);
+
+		const fileInput = document.getElementById(`fileInput${index + 1}`);
+    	if (fileInput) fileInput.value = "";
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -117,317 +127,350 @@ const AddProducts = () => {
     }, [dispatch]);
 
     return (
-        <div className='d-flex flex-column flex-lg-row min-vh-100'>
-            <Sidebar />
-            <div className='flex-grow-1 d-flex flex-column main-content'>
-                <div className='flex-grow-1 py-4 d-flex flex-column container product-form-container'>
-                    <h4 className='mb-4 text-center text-lg-start'>
-                        Add Product
-                    </h4>
+        <>
+            {loadingByAction.addProduct && <LoadingSpinner />}
+            <div className='d-flex flex-column flex-lg-row min-vh-100'>
+                <Sidebar />
+                <div className='flex-grow-1 d-flex flex-column main-content'>
+                    <div className='flex-grow-1 py-4 d-flex flex-column container product-form-container'>
+                        <h4 className='mb-4 text-center text-lg-start'>
+                            Add Product
+                        </h4>
 
-                    <Form
-                        className='p-4 border rounded bg-white shadow-sm'
-                        noValidate
-                        onSubmit={handleSubmit}>
-                        {/* Product Name */}
-                        <Form.Group className='mb-3'>
-                            <Form.Label>Product Name</Form.Label>
-                            <Form.Control
-                                type='text'
-                                placeholder='Enter product name'
-                                className='border'
-                                name='name'
-                                value={formData.name}
-                                onChange={handleData}
-                            />
-                            {getFieldError("name") && (
-                                <small className='text-danger'>
-                                    {getFieldError("name")}
-                                </small>
-                            )}
-                            {getFieldError("general") && (
-                                <small className='text-danger'>
-                                    {getFieldError("general")}
-                                </small>
-                            )}
-                        </Form.Group>
+                        <Form
+                            className='p-4 border rounded bg-white shadow-sm'
+                            noValidate
+                            onSubmit={handleSubmit}>
+                            {/* Product Name */}
+                            <Form.Group className='mb-3'>
+                                <Form.Label>Product Name</Form.Label>
+                                <Form.Control
+                                    type='text'
+                                    placeholder='Enter product name'
+                                    className='border'
+                                    name='name'
+                                    value={formData.name}
+                                    onChange={handleData}
+                                />
+                                {getFieldError("name") && (
+                                    <small className='text-danger'>
+                                        {getFieldError("name")}
+                                    </small>
+                                )}
+                                {getFieldError("general") && (
+                                    <small className='text-danger'>
+                                        {getFieldError("general")}
+                                    </small>
+                                )}
+                            </Form.Group>
 
-                        {/* Description */}
-                        <Form.Group className='mb-3'>
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control
-                                as='textarea'
-                                rows={3}
-                                placeholder='Write your description here...'
-                                className='border'
-                                name='description'
-                                value={formData.description}
-                                onChange={handleData}
-                            />
-                            {getFieldError("description") && (
-                                <small className='text-danger'>
-                                    {getFieldError("description")}
-                                </small>
-                            )}
-                        </Form.Group>
+                            {/* Description */}
+                            <Form.Group className='mb-3'>
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control
+                                    as='textarea'
+                                    rows={3}
+                                    placeholder='Write your description here...'
+                                    className='border'
+                                    name='description'
+                                    value={formData.description}
+                                    onChange={handleData}
+                                />
+                                {getFieldError("description") && (
+                                    <small className='text-danger'>
+                                        {getFieldError("description")}
+                                    </small>
+                                )}
+                            </Form.Group>
 
-                        {/* Image Uploads */}
-                        <Form.Group className='mb-3'>
-                            <Form.Label>Product Images</Form.Label>
-                            <Row>
-                                {[1, 2, 3, 4].map((num) => (
-                                    <Col
-                                        xs={6}
-                                        md={3}
-                                        key={num}
-                                        className='mb-3'>
-                                        <div className='d-flex flex-column align-items-center justify-content-center p-3 image-upload-box'>
-                                            <img
-                                                src={
-                                                    imagePreviews[num - 1] ||
-                                                    "../images/add-img.webp"
-                                                }
-                                                alt='Add'
-                                                className='mb-2 upload-icon'
-                                            />
-                                            <input
-                                                type='file'
-                                                id={`fileInput${num}`}
-                                                style={{ display: "none" }}
-                                                onChange={(e) =>
-                                                    handleImageSelect(
-                                                        e,
-                                                        num - 1
-                                                    )
-                                                }
-                                            />
-                                            <label
-                                                htmlFor={`fileInput${num}`}
-                                                className='addproduct-btn'>
-                                                Add Image
-                                            </label>
-                                        </div>
-                                    </Col>
-                                ))}
-                            </Row>
-                            {getFieldError("images") && (
-                                <small className='text-danger'>
-                                    {getFieldError("images")}
-                                </small>
-                            )}
-                        </Form.Group>
+                            {/* Image Uploads */}
+                            <Form.Group className='mb-3'>
+                                <Form.Label>Product Images</Form.Label>
+                                <Row>
+                                    {[1, 2, 3, 4].map((num) => (
+                                        <Col
+                                            xs={6}
+                                            md={3}
+                                            key={num}
+                                            className='mb-3'>
+                                            <div className='d-flex flex-column align-items-center justify-content-center p-3 image-upload-box position-relative'>
+                                                <img
+                                                    src={
+                                                        imagePreviews[
+                                                            num - 1
+                                                        ] ||
+                                                        "../images/add-img.webp"
+                                                    }
+                                                    alt='product-image'
+                                                    className='mb-2 upload-icon'
+                                                />
 
-                        {/* Price / Discount / Category */}
-                        <Row className='mb-3'>
-                            <Col>
-                                <Form.Group>
-                                    <Form.Label>Price</Form.Label>
-                                    <Form.Control
-                                        type='number'
-                                        placeholder='₹ 1399'
-                                        className='border'
-                                        min={10}
-                                        name='basePrice'
-                                        value={formData.basePrice}
-                                        onChange={handleData}
-                                    />
-                                    {getFieldError("basePrice") && (
-                                        <small className='text-danger'>
-                                            {getFieldError("basePrice")}
-                                        </small>
-                                    )}
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group>
-                                    <Form.Label>Discount Price</Form.Label>
-                                    <Form.Control
-                                        type='number'
-                                        placeholder='Enter discount price'
-                                        className='border'
-                                        min={10}
-                                        name='discountPrice'
-                                        value={formData.discountPrice}
-                                        onChange={handleData}
-                                    />
-                                    {getFieldError("discountPrice") && (
-                                        <small className='text-danger'>
-                                            {getFieldError("discountPrice")}
-                                        </small>
-                                    )}
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group>
-                                    <Form.Label>Category</Form.Label>
-                                    <Form.Select
-                                        className='border'
-                                        name='category'
-                                        value={formData.category}
-                                        onChange={handleData}>
-                                        <option value=''>
-                                            Select category
-                                        </option>
-                                        {category
-                                            .filter(
-                                                (cat) => cat.status === "active"
-                                            )
-                                            .map((value) => (
-                                                <option
-                                                    key={value._id}
-                                                    value={value._id}>
-                                                    {value.name}
-                                                </option>
-                                            ))}
-                                    </Form.Select>
-                                    {getFieldError("category") && (
-                                        <small className='text-danger'>
-                                            {getFieldError("category")}
-                                        </small>
-                                    )}
-                                </Form.Group>
-                            </Col>
-                        </Row>
+                                                {/* Cancel icon */}
+                                                {imagePreviews[num - 1] && (
+                                                    <button
+                                                        type='button'
+                                                        className='btn-close position-absolute top-0 end-0 m-2'
+                                                        aria-label='Remove'
+                                                        onClick={() =>
+                                                            handleRemoveImage(
+                                                                num - 1
+                                                            )
+                                                        }
+                                                    />
+                                                )}
 
-                        {/* Stock & Size */}
-                        {formData.sizes.map((variant, index) => (
-                            <Row className='mb-2' key={index}>
+                                                <input
+                                                    type='file'
+                                                    id={`fileInput${num}`}
+                                                    style={{ display: "none" }}
+                                                    onChange={(e) =>
+                                                        handleImageSelect(
+                                                            e,
+                                                            num - 1
+                                                        )
+                                                    }
+                                                />
+                                                <label
+                                                    htmlFor={`fileInput${num}`}
+                                                    className='addproduct-btn'>
+                                                    {imagePreviews[num - 1]
+                                                        ? "Change Image"
+                                                        : "Add Image"}
+                                                </label>
+                                            </div>
+                                        </Col>
+                                    ))}
+                                </Row>
+                                {getFieldError("images") && (
+                                    <small className='text-danger'>
+                                        {getFieldError("images")}
+                                    </small>
+                                )}
+                            </Form.Group>
+
+                            {/* Price / Discount / Category */}
+                            <Row className='mb-3'>
                                 <Col>
                                     <Form.Group>
-                                        <Form.Label>Stock Limit</Form.Label>
+                                        <Form.Label>Price</Form.Label>
                                         <Form.Control
                                             type='number'
-                                            placeholder='Enter stock limit'
+                                            placeholder='₹ 1399'
                                             className='border'
-                                            value={variant.stock}
-                                            onChange={(e) =>
-                                                handleSizeChange(
-                                                    index,
-                                                    "stock",
-                                                    e.target.value
-                                                )
-                                            }
-                                            min={1}
+                                            min={10}
+                                            name='basePrice'
+                                            value={formData.basePrice}
+                                            onChange={handleData}
                                         />
-                                        {getFieldError(
-                                            `sizes.${index}.stock`
-                                        ) && (
+                                        {getFieldError("basePrice") && (
                                             <small className='text-danger'>
-                                                {getFieldError(
-                                                    `sizes.${index}.stock`
-                                                )}
+                                                {getFieldError("basePrice")}
                                             </small>
                                         )}
                                     </Form.Group>
                                 </Col>
                                 <Col>
                                     <Form.Group>
-                                        <Form.Label>Size</Form.Label>
-                                        <Form.Select
+                                        <Form.Label>Discount Price</Form.Label>
+                                        <Form.Control
+                                            type='number'
+                                            placeholder='Enter discount price'
                                             className='border'
-                                            value={variant.size}
-                                            onChange={(e) =>
-                                                handleSizeChange(
-                                                    index,
-                                                    "size",
-                                                    e.target.value
-                                                )
-                                            }>
-                                            <option value=''>
-                                                Select size
-                                            </option>
-                                            <option>Small</option>
-                                            <option>Medium</option>
-                                            <option>Large</option>
-                                        </Form.Select>
-                                        {getFieldError(
-                                            `sizes.${index}.size`
-                                        ) && (
+                                            min={10}
+                                            name='discountPrice'
+                                            value={formData.discountPrice}
+                                            onChange={handleData}
+                                        />
+                                        {getFieldError("discountPrice") && (
                                             <small className='text-danger'>
-                                                {getFieldError(
-                                                    `sizes.${index}.size`
-                                                )}
-                                            </small>
-                                        )}
-                                        {getFieldError("sizes") && (
-                                            <small className='text-danger'>
-                                                {getFieldError("sizes")}
+                                                {getFieldError("discountPrice")}
                                             </small>
                                         )}
                                     </Form.Group>
-                                    <div className='mt-2'>
-                                        {index !== 0 && (
-                                            <Button
-                                                variant='danger'
-                                                onClick={() =>
-                                                    removeSizeVarient(index)
-                                                }>
-                                                Remove
-                                            </Button>
+                                </Col>
+                                <Col>
+                                    <Form.Group>
+                                        <Form.Label>Category</Form.Label>
+                                        <Form.Select
+                                            className='border'
+                                            name='category'
+                                            value={formData.category}
+                                            onChange={handleData}>
+                                            <option value=''>
+                                                Select category
+                                            </option>
+                                            {category
+                                                .filter(
+                                                    (cat) =>
+                                                        cat.status === "active"
+                                                )
+                                                .map((value) => (
+                                                    <option
+                                                        key={value._id}
+                                                        value={value._id}>
+                                                        {value.name}
+                                                    </option>
+                                                ))}
+                                        </Form.Select>
+                                        {getFieldError("category") && (
+                                            <small className='text-danger'>
+                                                {getFieldError("category")}
+                                            </small>
                                         )}
-                                    </div>
+                                    </Form.Group>
                                 </Col>
                             </Row>
-                        ))}
 
-                        {/* offers and discount */}
-                        <Row className='mb-4'>
-                            <Col>
-                                <Form.Group>
-                                    <Form.Label>Offers</Form.Label>
-                                    <div>
-                                        <Form.Check
-                                            type='checkbox'
-                                            label='Flat 50'
-                                            name='offer'
-                                            value='FLAT'
-                                            checked={formData.offer?.includes(
-                                                "FLAT"
+                            {/* Stock & Size */}
+                            {formData.sizes.map((variant, index) => (
+                                <Row className='mb-2' key={index}>
+                                    <Col>
+                                        <Form.Group>
+                                            <Form.Label>Stock Limit</Form.Label>
+                                            <Form.Control
+                                                type='number'
+                                                placeholder='Enter stock limit'
+                                                className='border'
+                                                value={variant.stock}
+                                                onChange={(e) =>
+                                                    handleSizeChange(
+                                                        index,
+                                                        "stock",
+                                                        e.target.value
+                                                    )
+                                                }
+                                                min={1}
+                                            />
+                                            {getFieldError(
+                                                `sizes.${index}.stock`
+                                            ) && (
+                                                <small className='text-danger'>
+                                                    {getFieldError(
+                                                        `sizes.${index}.stock`
+                                                    )}
+                                                </small>
                                             )}
-                                            onChange={handleData}
-                                        />
-                                        <Form.Check
-                                            type='checkbox'
-                                            label='Buy One Get One Free'
-                                            name='offer'
-                                            value='BOGO'
-                                            checked={formData.offer?.includes(
-                                                "BOGO"
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group>
+                                            <Form.Label>Size</Form.Label>
+                                            <Form.Select
+                                                className='border'
+                                                value={variant.size}
+                                                onChange={(e) =>
+                                                    handleSizeChange(
+                                                        index,
+                                                        "size",
+                                                        e.target.value
+                                                    )
+                                                }>
+                                                <option value=''>
+                                                    Select size
+                                                </option>
+                                                <option value='small'>
+                                                    Small
+                                                </option>
+                                                <option value='medium'>
+                                                    Medium
+                                                </option>
+                                                <option value='large'>
+                                                    Large
+                                                </option>
+                                                <option value='xl'>XL</option>
+                                                <option value='regular'>
+                                                    Regular
+                                                </option>
+                                            </Form.Select>
+                                            {getFieldError(
+                                                `sizes.${index}.size`
+                                            ) && (
+                                                <small className='text-danger'>
+                                                    {getFieldError(
+                                                        `sizes.${index}.size`
+                                                    )}
+                                                </small>
                                             )}
-                                            onChange={handleData}
-                                        />
-                                    </div>
-                                </Form.Group>
-                            </Col>
-                            {/* varient button */}
-                            <Col>
-                                <Button
-                                    variant='primary'
-                                    className='mb-4'
-                                    type='button'
-                                    onClick={addSizeVarient}>
-                                    Add Variant
+                                            {getFieldError("sizes") && (
+                                                <small className='text-danger'>
+                                                    {getFieldError("sizes")}
+                                                </small>
+                                            )}
+                                        </Form.Group>
+                                        <div className='mt-2'>
+                                            {index !== 0 && (
+                                                <Button
+                                                    variant='danger'
+                                                    onClick={() =>
+                                                        removeSizeVarient(index)
+                                                    }>
+                                                    Remove
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </Col>
+                                </Row>
+                            ))}
+
+                            {/* offers and discount */}
+                            <Row className='mb-4'>
+                                <Col>
+                                    <Form.Group>
+                                        <Form.Label>Offers</Form.Label>
+                                        <div>
+                                            <Form.Check
+                                                type='checkbox'
+                                                label='Flat 50'
+                                                name='offer'
+                                                value='FLAT'
+                                                checked={formData.offer?.includes(
+                                                    "FLAT"
+                                                )}
+                                                onChange={handleData}
+                                            />
+                                            <Form.Check
+                                                type='checkbox'
+                                                label='Buy One Get One Free'
+                                                name='offer'
+                                                value='BOGO'
+                                                checked={formData.offer?.includes(
+                                                    "BOGO"
+                                                )}
+                                                onChange={handleData}
+                                            />
+                                        </div>
+                                    </Form.Group>
+                                </Col>
+                                {/* varient button */}
+                                <Col>
+                                    <Button
+                                        variant='primary'
+                                        className='mb-4'
+                                        type='button'
+                                        onClick={addSizeVarient}>
+                                        Add Variant
+                                    </Button>
+                                </Col>
+                            </Row>
+
+                            {/* Buttons */}
+                            <div className='d-flex justify-content-center gap-2'>
+                                <Button variant='light' className='px-4'>
+                                    Cancel
                                 </Button>
-                            </Col>
-                        </Row>
-
-                        {/* Buttons */}
-                        <div className='d-flex justify-content-center gap-2'>
-                            <Button variant='light' className='px-4'>
-                                Cancel
-                            </Button>
-                            <Button
-                                variant='dark'
-                                className='px-4'
-                                type='submit'>
-                                Save
-                            </Button>
-                        </div>
-                    </Form>
+                                <Button
+                                    variant='dark'
+                                    className='px-4'
+                                    type='submit'>
+                                    Save
+                                </Button>
+                            </div>
+                        </Form>
+                    </div>
+                    <AdminFooter />
                 </div>
-                <AdminFooter />
             </div>
-        </div>
+        </>
     );
 };
 

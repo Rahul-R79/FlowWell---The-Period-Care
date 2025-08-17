@@ -2,6 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import instance from "../utils/axios";
 
+export const getProduct = createAsyncThunk('/products/getProduct', async({page = 1, limit = 10, search = ''}, {rejectWithValue})=>{
+    try{
+        const response = await instance.get(`/admin/products?page=${page}&limit=${limit}&search=${search}`);
+        return response.data;
+    }catch(err){
+        return rejectWithValue(err.response.data);
+    }
+});
+
 export const addProduct = createAsyncThunk('/products/addProduct', async(formData, {rejectWithValue})=>{
     try{
         const response = await instance.post('/admin/products/add', formData);
@@ -17,10 +26,16 @@ const productSlice = createSlice({
         products: [],
         errorByAction: {},
         loadingByAction: {},
+        currentPage: 1,
+        totalPages: 1,
+        totalProducts: 0,
     },
     reducers: {
         clearAddProductError: (state) => {
             state.errorByAction.addProduct = null;
+        },
+        setCurrentPage: (state, action) => {
+            state.currentPage = action.payload;
         }
     },
     extraReducers: (builder)=>{
@@ -39,8 +54,26 @@ const productSlice = createSlice({
             state.loadingByAction.addProduct = false;
             state.errorByAction.addProduct = action.payload;
         })
+
+        //get products
+        .addCase(getProduct.pending, state=>{
+            state.loadingByAction.getProduct = true;
+            state.errorByAction.getProduct = null;
+        })
+        .addCase(getProduct.fulfilled, (state, action)=>{
+            state.loadingByAction.getProduct = false;
+            state.errorByAction.getProduct = null;
+            state.products = action.payload.products;
+            state.currentPage = action.payload.currentPage;
+            state.totalPages = action.payload.totalPages;
+            state.totalProducts = action.payload.totalProducts;
+        })
+        .addCase(getProduct.rejected, (state, action)=>{
+            state.loadingByAction.getProduct = false;
+            state.errorByAction.getProduct = action.payload;
+        })
     }
 })
 
-export const {clearAddProductError} = productSlice.actions;
+export const {clearAddProductError, setCurrentPage} = productSlice.actions;
 export default productSlice.reducer;
