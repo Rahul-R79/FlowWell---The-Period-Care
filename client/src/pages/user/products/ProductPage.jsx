@@ -29,6 +29,7 @@ function ProductPage() {
 
     useEffect(() => {
         dispatch(getUserProducts(filters));
+        window.scrollTo(0, 0);
     }, [dispatch, filters]);
 
     const handleApplyFilters = () => {

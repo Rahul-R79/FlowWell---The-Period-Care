@@ -17,6 +17,7 @@ import { getUserProductById } from "../../../features/products/userProductSlice"
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
+import ReactImageMagnify from "react-image-magnify";
 
 function ProductDetailPage() {
     const dispatch = useDispatch();
@@ -28,6 +29,7 @@ function ProductDetailPage() {
 
     useEffect(() => {
         dispatch(getUserProductById(id));
+        window.scrollTo(0, 0);
     }, [dispatch, id]);
 
     const [quantity, setQuantity] = useState(1);
@@ -60,12 +62,33 @@ function ProductDetailPage() {
                             </div>
                             {/* Main Image */}
                             <div className='flex-grow-1 product-main'>
-                                <Image
-                                    src={productDetail?.images?.[0]}
-                                    fluid
-                                    rounded
-                                    className='border'
-                                />
+                                {productDetail?.images?.[0] && (
+                                    <ReactImageMagnify
+                                        {...{
+                                            smallImage: {
+                                                alt: productDetail.name,
+                                                isFluidWidth: true,
+                                                src: productDetail.images[0],
+                                            },
+                                            largeImage: {
+                                                src: productDetail.images[0],
+                                                width: 1200,
+                                                height: 1200,
+                                            },
+                                            lensStyle: {
+                                                backgroundColor:
+                                                    "rgba(0,0,0,.2)", 
+                                                border: "1px solid #000",
+                                            },
+                                            enlargedImageContainerStyle: {
+                                                zIndex: 9999,
+                                            },
+                                            enlargedImagePosition: "over", 
+                                            isHintEnabled: true, 
+                                            shouldUsePositiveSpaceLens: true, 
+                                        }}
+                                    />
+                                )}
                             </div>
                         </Col>
 
