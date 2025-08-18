@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
     addProduct,
     clearAddProductError,
-} from "../../../features/productSlice";
+} from "../../../features/products/adminProductSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCategory } from "../../../features/categorySlice";
@@ -14,7 +14,7 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const AddProducts = () => {
     const { errorByAction, loadingByAction } = useSelector(
-        (state) => state.products
+        (state) => state.adminProducts
     );
     const { category } = useSelector((state) => state.category);
 

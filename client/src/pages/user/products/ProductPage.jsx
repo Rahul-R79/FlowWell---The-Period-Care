@@ -1,125 +1,107 @@
-import { Container, Row, Col, Button } from "react-bootstrap";
-import Footer from "../../../components/Footer/UserFooter";
-import UserHeader from "../../../components/Header/UserHeader";
+import { useState, useEffect } from "react";
+import { Row, Col, Button } from "react-bootstrap";
 import Select from "react-select";
+import { useSelector, useDispatch } from "react-redux";
+import {
+    getUserProducts,
+    setFilters,
+    setCurrentPage,
+    clearProducts,
+} from "../../../features/products/userProductSlice";
+import UserHeader from "../../../components/Header/UserHeader";
+import Footer from "../../../components/Footer/UserFooter";
+import PaginationButton from "../../../components/Pagination";
 import "./userProduct.css";
-
-const products = [
-    {
-        id: 1,
-        name: "Flowell Menstrual Pads",
-        image: "/images/products/cups/flowwell-cups-01.webp",
-        type: "Pads",
-        size: "Regular",
-        price: "₹250",
-    },
-    {
-        id: 2,
-        name: "Flowell Menstrual Pads",
-        image: "/images/products/cups/flowwell-cups-01.webp",
-        type: "Pads",
-        size: "Regular",
-        price: "₹250",
-    },
-    {
-        id: 3,
-        name: "Flowell Period Panty",
-        image: "/images/products/cups/flowwell-cups-01.webp",
-        type: "Panty",
-        size: "M",
-        price: "₹450",
-    },
-    {
-        id: 4,
-        name: "Flowell Period Panty",
-        image: "/images/products/cups/flowwell-cups-01.webp",
-        type: "Panty",
-        size: "L",
-        price: "₹450",
-    },
-    {
-        id: 5,
-        name: "Flowell Heat Pad",
-        image: "/images/products/cups/flowwell-cups-01.webp",
-        type: "Pain Relief",
-        size: "Regular",
-        price: "₹150",
-    },
-    {
-        id: 6,
-        name: "Flowell Menstrual Kit",
-        image: "/images/products/cups/flowwell-cups-01.webp",
-        type: "Kit",
-        size: "Regular",
-        price: "₹999",
-    },
-    {
-        id: 7,
-        name: "Flowell Menstrual Cup",
-        image: "/images/products/cups/flowwell-cups-01.webp",
-        type: "Cup",
-        size: "Soft",
-        price: "₹799",
-    },
-    {
-        id: 8,
-        name: "Flowell Menstrual Kit",
-        image: "/images/products/cups/flowwell-cups-01.webp",
-        type: "Kit",
-        size: "Regular",
-        price: "₹999",
-    },
-];
-
-// Dropdown options
-const sortOptions = [
-    { value: "lowToHigh", label: "Price: Low to High" },
-    { value: "highToLow", label: "Price: High to Low" },
-    { value: "a-z", label: "Alphabetic: A-Z" },
-    { value: "z-a", label: "Alphabetic: Z-A" },
-    { value: "newest", label: "Newest Arrivals" },
-    { value: "rating", label: "Customer Ratings" },
-];
-
-const sizeOptions = [
-    { value: "regular", label: "Regular" },
-    { value: "m", label: "M" },
-    { value: "l", label: "L" },
-    { value: "xl", label: "XL" },
-];
-
-const priceOptions = [
-    { value: "under200", label: "Under ₹500" },
-    { value: "200to500", label: "₹500 - ₹1000" },
-    { value: "500to1000", label: "₹1000 - ₹2500" },
-    { value: "above1000", label: "Above ₹2500" },
-];
-
-const giftOptions = [
-    { value: "Standard", label: "Standard" },
-    { value: "Premium", label: "Premium" },
-    { value: "Exclusive", label: "Exclusive" },
-];
-
-const offerOptions = [
-    { value: "50off", label: "50% Off" },
-    { value: "b1g1", label: "Buy 1 Get 1" }
-];
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 function ProductPage() {
+    const dispatch = useDispatch();
+    const { products, filters, currentPage, totalPages, loadingByAction } =
+        useSelector((state) => state.userProducts);
+
+    const [selectedSort, setSelectedSort] = useState(null);
+    const [selectedSize, setSelectedSize] = useState([]);
+    const [selectedPrice, setSelectedPrice] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedOffer, setSelectedOffer] = useState([]);
+
+    useEffect(() => {
+        dispatch(getUserProducts(filters));
+    }, [dispatch, filters]);
+
+    const handleApplyFilters = () => {
+        dispatch(
+            setFilters({
+                sortBy: selectedSort?.value || "",
+                size: selectedSize.map((s) => s.value).join(","),
+                price: selectedPrice?.value || "",
+                categoryName: selectedCategory?.value || "",
+                offer: selectedOffer.map((o) => o.value).join(","),
+            })
+        );
+    };
+
+    const handleCategoryClick = (categoryName) => {
+        dispatch(setFilters({ categoryName }));
+    };
+
+    const clearAllfilters = () => {
+        dispatch(clearProducts());
+        setSelectedSort(null);
+        setSelectedSize([]);
+        setSelectedCategory(null);
+        setSelectedPrice(null);
+        setSelectedOffer([]);
+    };
+
+    const sortOptions = [
+        { value: "priceLowToHigh", label: "Price: Low to High" },
+        { value: "priceHighToLow", label: "Price: High to Low" },
+        { value: "aToZ", label: "Alphabetic: A-Z" },
+        { value: "zToA", label: "Alphabetic: Z-A" },
+        { value: "newArrivals", label: "Newest Arrivals" },
+        { value: "rating", label: "Customer Ratings" },
+    ];
+
+    const sizeOptions = [
+        { value: "regular", label: "Regular" },
+        { value: "medium", label: "M" },
+        { value: "large", label: "L" },
+        { value: "xl", label: "XL" },
+    ];
+
+    const priceOptions = [
+        { value: "under500", label: "Under ₹500" },
+        { value: "500to1000", label: "₹500 - ₹1000" },
+        { value: "1000to2500", label: "₹1000 - ₹2500" },
+        { value: "above2500", label: "Above ₹2500" },
+    ];
+
+    const giftOptions = [
+        { value: "Gift Hampers Standard", label: "Standard" },
+        { value: "Gift Hampers Premium", label: "Premium" },
+        { value: "Gift Hampers Exclusive", label: "Exclusive" },
+    ];
+
+    const offerOptions = [
+        { value: "FLAT", label: "50% Off" },
+        { value: "BOGO", label: "Buy 1 Get 1" },
+    ];
+
     return (
         <>
+            {loadingByAction.getUserProducts && <LoadingSpinner />}
             <UserHeader />
             <section className='product-page container my-5'>
                 <Row>
-                    {/* Left Filter Column */}
                     <Col lg={3} md={4} sm={12} className='mb-4'>
                         <div className='sticky-filter'>
                             <div className='d-flex justify-content-between align-items-center mb-3'>
                                 <h5>Filters</h5>
                                 <h6
                                     className='clear-btn'
-                                    style={{ cursor: "pointer" }}>
+                                    style={{ cursor: "pointer" }}
+                                    onClick={clearAllfilters}>
                                     Clear All
                                 </h6>
                             </div>
@@ -128,6 +110,8 @@ function ProductPage() {
                                 <label>Sort By</label>
                                 <Select
                                     options={sortOptions}
+                                    value={selectedSort}
+                                    onChange={setSelectedSort}
                                     placeholder='Sort By'
                                 />
                             </div>
@@ -136,8 +120,10 @@ function ProductPage() {
                                 <label>Size</label>
                                 <Select
                                     options={sizeOptions}
-                                    placeholder='Select Size'
+                                    value={selectedSize}
+                                    onChange={setSelectedSize}
                                     isMulti
+                                    placeholder='Select Size'
                                 />
                             </div>
 
@@ -145,6 +131,8 @@ function ProductPage() {
                                 <label>Price</label>
                                 <Select
                                     options={priceOptions}
+                                    value={selectedPrice}
+                                    onChange={setSelectedPrice}
                                     placeholder='Select Price'
                                 />
                             </div>
@@ -153,6 +141,8 @@ function ProductPage() {
                                 <label>Gift Hampers</label>
                                 <Select
                                     options={giftOptions}
+                                    value={selectedCategory}
+                                    onChange={setSelectedCategory}
                                     placeholder='Gift Hampers'
                                 />
                             </div>
@@ -161,63 +151,127 @@ function ProductPage() {
                                 <label>Offers</label>
                                 <Select
                                     options={offerOptions}
-                                    placeholder='Offers'
+                                    value={selectedOffer}
+                                    onChange={setSelectedOffer}
                                     isMulti
+                                    placeholder='Offers'
                                 />
                             </div>
 
-                            <Button variant='dark' className='w-100'>
+                            <Button
+                                variant='dark'
+                                className='w-100'
+                                onClick={handleApplyFilters}>
                                 Apply Filters
                             </Button>
                         </div>
                     </Col>
 
-                    {/* Product Listing */}
                     <Col lg={9} md={8} sm={12}>
                         <h4 className='mb-3'>All Products</h4>
 
-                        {/* Category Buttons */}
                         <div className='mb-4 d-flex flex-wrap gap-2'>
-                            <Button variant='outline-dark'>All</Button>
-                            <Button variant='outline-dark'>
-                                Menstrual Pads
-                            </Button>
-                            <Button variant='outline-dark'>
-                                Menstrual Cups
-                            </Button>
-                            <Button variant='outline-dark'>Period Panty</Button>
-                            <Button variant='outline-dark'>
-                                Menstrual Kit
-                            </Button>
+                            {[
+                                "All",
+                                "Sanitary Pads",
+                                "Menstrual Cups",
+                                "Tampons",
+                                "Period Kits",
+                            ].map((cat) => (
+                                <Button
+                                    key={cat}
+                                    variant='outline-dark'
+                                    onClick={() =>
+                                        handleCategoryClick(
+                                            cat === "All" ? "" : cat
+                                        )
+                                    }>
+                                    {cat}
+                                </Button>
+                            ))}
                         </div>
 
                         <Row xs={1} sm={2} md={3} className='g-4'>
-                            {products.map((product) => (
-                                <Col key={product.id} className='text-left'>
-                                    <div className='product-card'>
-                                        <img
-                                            src={product.image}
-                                            alt={product.name}
-                                            className='product-img'
-                                        />
-                                        <div className='mt-2 product-category'>
-                                            <h5 className='mt-2'>
-                                                {product.name}
-                                            </h5>
-                                            <p className='mb-0'>
-                                                {product.type}
-                                            </p>
-                                            <p className='mb-0'>
-                                                Size: {product.size}
-                                            </p>
-                                            <p className='mb-0 fw-bold'>
-                                                Price: {product.price}
-                                            </p>
+                            {loadingByAction.getUserProducts ? (
+                                <LoadingSpinner />
+                            ) : products.length === 0 ? (
+                                <p>No products found.</p>
+                            ) : (
+                                products.map((product) => (
+                                    <Col
+                                        key={product._id}
+                                        className='text-left'>
+                                        <div className='product-card'>
+                                            <img
+                                                src={product.images[0]}
+                                                alt={product.name}
+                                                className='product-img'
+                                            />
+                                            <div className='mt-2 product-category'>
+                                                <h5>{product.name}</h5>
+                                                <p className='mb-0'>
+                                                    {product.categoryName}
+                                                </p>
+                                                <div className='product-sizes d-flex align-items-center'>
+                                                    Size:
+                                                    {product.sizes.map(
+                                                        (s, index) => (
+                                                            <span
+                                                                key={index}
+                                                                className='size-box'>
+                                                                {s.size.length <= 3 ?
+                                                                    s.size.toUpperCase() : s.size.charAt(0).toUpperCase()
+                                                                }
+                                                            </span>
+                                                        )
+                                                    )}
+                                                </div>
+
+                                                <div className='product-pricing mt-2'>
+                                                    {product.finalPrice <
+                                                    product.basePrice ? (
+                                                        <p className='base-price'>
+                                                            ₹{product.basePrice}
+                                                        </p>
+                                                    ) : null}
+
+                                                    <p className='final-price'>
+                                                        ₹{product.finalPrice}
+                                                    </p>
+
+                                                    {/* If discounted, show savings */}
+                                                    {product.finalPrice < product.basePrice && (
+                                                        <p className='savings'>
+                                                            You save ₹
+                                                            {product.basePrice - product.finalPrice}
+                                                        </p>
+                                                    )}
+
+                                                    {/* Offer Badge */}
+                                                    {product.offer && (
+                                                        <span className='offer-badge'>
+                                                            {product.offer === "FLAT" ? "Flat 50% Off"
+                                                                : product.offer
+                                                            }
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Col>
-                            ))}
+                                    </Col>
+                                ))
+                            )}
                         </Row>
+
+                        <div className='mt-5'>
+                            <PaginationButton
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={(page) =>
+                                    dispatch(setCurrentPage(page))
+                                }
+                            />
+                        </div>
                     </Col>
                 </Row>
             </section>

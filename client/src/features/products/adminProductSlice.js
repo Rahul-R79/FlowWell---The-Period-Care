@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import instance from "../utils/axios";
+import instance from "../../utils/axios";
 
 export const getProduct = createAsyncThunk('/products/getProduct', async({page = 1, limit = 10, search = ''}, {rejectWithValue})=>{
     try{
@@ -20,8 +20,8 @@ export const addProduct = createAsyncThunk('/products/addProduct', async(formDat
     }
 });
 
-const productSlice = createSlice({
-    name: 'products',
+const adminProductSlice = createSlice({
+    name: 'adminProducts',
     initialState: {
         products: [],
         errorByAction: {},
@@ -75,5 +75,5 @@ const productSlice = createSlice({
     }
 })
 
-export const {clearAddProductError, setCurrentPage} = productSlice.actions;
-export default productSlice.reducer;
+export const {clearAddProductError, setCurrentPage} = adminProductSlice.actions;
+export default adminProductSlice.reducer;

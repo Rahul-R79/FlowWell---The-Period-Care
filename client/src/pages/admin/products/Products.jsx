@@ -4,7 +4,7 @@ import { MdOutlineModeEdit } from "react-icons/md";
 import { SiTicktick } from "react-icons/si";
 import { MdUpdateDisabled } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { getProduct, setCurrentPage } from "../../../features/productSlice";
+import { getProduct, setCurrentPage } from "../../../features/products/adminProductSlice";
 import { useSelector, useDispatch } from "react-redux";
 import Sidebar from "../../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../../components/Footer/AdminFooter";
@@ -14,7 +14,7 @@ import PaginationButton from "../../../components/Pagination";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const ProductsPage = () => {
-    const {products, currentPage, totalPages, loadingByAction} = useSelector(state => state.products);
+    const {products, currentPage, totalPages, loadingByAction} = useSelector(state => state.adminProducts);
     const dispatch = useDispatch();
     const [search, setSearch] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState('');
