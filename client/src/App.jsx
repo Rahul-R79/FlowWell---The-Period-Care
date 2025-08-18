@@ -49,12 +49,14 @@ function App(){
         <BrowserRouter>
             <ClearErrorOnRouteChange/>
             <Routes>
+
                 <Route element={<PublicRoute/>}>
                     <Route path="/signup" element={<SignUp/>}/>
                     <Route path="/signin" element={<SignIn/>}/>
                     <Route path="/forgotpassword" element={<ForgotPassword/>}/>
                     <Route path="/otpverification" element={<OtpVerification />} />
                 </Route>
+
                 <Route element={<ProtectedRoute isAllowed={forgotPasswordEmaiVerify} redirectPath="/forgotpassword"/>}>
                     <Route path="/forgotpassword2" element={<ForgotPassword2 />} />
                 </Route>
@@ -63,20 +65,21 @@ function App(){
                     <Route path="/user/product" element={<ProductPage/>}/>
                     <Route path="/user/productdetail/:id" element={<ProductDetailPage/>}/>
                 </Route>
-                <Route path="/" element={<Home/>}/>
-
-                <Route path="/adminsignin" element={<AdminSignIn/>}/>
+            
                 <Route element={<ProtectedRoute isAllowed={isLoggedInAdmin} redirectPath="/adminsignin"/>}>
                     <Route path="/dashboard" element={<DashBoard/>} />
+                    <Route path="/customers" element={<Customers/>}/>
+                    <Route path="/categories" element={<CategoriesPage/>}/>
+                    <Route path="/editcategories/:id" element={<EditCategories/>}/>
+                    <Route path="/addcategories" element={<AddCategories/>}/>
+                    <Route path="/products" element={<Products/>}/>
+                    <Route path="/products/add" element={<AddProducts/>}/>
+                    <Route path="/products/edit" element={<EditProducts/>}/>
                 </Route>
-                <Route path="/customers" element={<Customers/>}/>
-                <Route path="/categories" element={<CategoriesPage/>}/>
-                <Route path="/editcategories/:id" element={<EditCategories/>}/>
-                <Route path="/addcategories" element={<AddCategories/>}/>
-
-                <Route path="/products" element={<Products/>}/>
-                <Route path="/products/add" element={<AddProducts/>}/>
-                <Route path="/products/edit" element={<EditProducts/>}/>
+                
+                <Route path="/" element={<Home/>}/>
+                <Route path="/adminsignin" element={<AdminSignIn/>}/>
+                
             </Routes>
         </BrowserRouter>
     )

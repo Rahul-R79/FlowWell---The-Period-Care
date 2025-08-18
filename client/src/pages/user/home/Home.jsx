@@ -33,7 +33,6 @@ function Home() {
             <section className='container hero-section'>
                 <Container className='py-5'>
                     <Row className='align-items-center justify-content-between'>
-                        {/* Text */}
                         <Col md={12} lg={5} className='mb-4 mb-md-0'>
                             <h1 className='fw-bold w-sm-25'>
                                 Curated Care for Every Flow
@@ -64,7 +63,6 @@ function Home() {
                             </Row>
                         </Col>
 
-                        {/* Image */}
                         <Col md={12} lg={7} className='text-center'>
                             <img
                                 src={
@@ -91,7 +89,7 @@ function Home() {
 
             {/* New Arrivals Section */}
             <Container className='mb-5'>
-                <h2 className='mb-5 text-center'>New Arrivals</h2>
+                <h2 className='mb-5 text-center'>NEW ARRIVALS</h2>
                 <Row className='g-4'>
                     {newArrivals.map((product) => (
                         <Col key={product._id} xs={6} sm={4} md={3} lg={3}>
@@ -138,7 +136,7 @@ function Home() {
 
             {/* Period Kits Section */}
             <Container className='mb-5'>
-                <h2 className='mb-5 text-center'>Period Kits</h2>
+                <h2 className='mb-5 text-center'>PERIOD KITS</h2>
                 <Row className='g-4'>
                     {periodKits.map((product) => (
                         <Col key={product._id} xs={6} sm={4} md={3} lg={3}>

@@ -20,6 +20,15 @@ export const addProduct = createAsyncThunk('/products/addProduct', async(formDat
     }
 });
 
+export const productToggleStatus = createAsyncThunk('/products/productToggleStatus', async(id, {rejectWithValue})=>{
+    try{
+        const response = await instance.patch(`/admin/products/status/${id}`);
+        return response.data.product;
+    }catch(err){
+        return rejectWithValue(err.response.data);
+    }
+});
+
 const adminProductSlice = createSlice({
     name: 'adminProducts',
     initialState: {
@@ -71,6 +80,24 @@ const adminProductSlice = createSlice({
         .addCase(getProduct.rejected, (state, action)=>{
             state.loadingByAction.getProduct = false;
             state.errorByAction.getProduct = action.payload;
+        })
+
+        //change status
+        .addCase(productToggleStatus.pending, state=>{
+            state.loadingByAction.productToggleStatus = true;
+            state.errorByAction.productToggleStatus = null;
+        })
+        .addCase(productToggleStatus.fulfilled, (state, action)=>{
+            state.loadingByAction.productToggleStatus = false;
+            state.errorByAction.productToggleStatus = null;
+            const index = state.products.findIndex(product => product._id === action.payload._id)
+            if(index !== -1){
+                state.products[index] = action.payload;
+            }
+        })
+        .addCase(productToggleStatus.rejected, (state, action)=>{
+            state.loadingByAction.productToggleStatus = false;
+            state.errorByAction.productToggleStatus = action.payload;
         })
     }
 })
