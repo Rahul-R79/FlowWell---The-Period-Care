@@ -25,6 +25,7 @@ import AddProducts from "./pages/admin/products/AddProducts";
 import EditProducts from "./pages/admin/products/EditProducts";
 import Products from "./pages/admin/products/Products";
 import ProductPage from "./pages/user/products/ProductPage";
+import ProductDetailPage from "./pages/user/products/ProductDetailPage";
 
 function App(){
     const {user, forgotPasswordEmaiVerify, loadingByAction} = useSelector(state => state.auth);
@@ -60,6 +61,7 @@ function App(){
                 <Route element={<ProtectedRoute isAllowed={isLoggedInUser} redirectPath="/signup"/>}>
                     <Route path="/userprofile" element={<UserProfile/>}/>
                     <Route path="/user/product" element={<ProductPage/>}/>
+                    <Route path="/user/productdetail/:id" element={<ProductDetailPage/>}/>
                 </Route>
                 <Route path="/" element={<Home/>}/>
 

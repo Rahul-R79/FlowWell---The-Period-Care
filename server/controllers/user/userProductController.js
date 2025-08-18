@@ -71,7 +71,6 @@ export const getAllProducts = async(req, res)=>{
         const totalProducts = await Product.countDocuments(filter);
         const totalPages = Math.ceil(totalProducts / limit);
 
-
         const products = await Product.find(filter)
         .populate('category')
         .skip((page - 1) * limit)
@@ -103,3 +102,24 @@ export const getAllProducts = async(req, res)=>{
         return res.status(500).json({message: 'internal server error'});
     }
 }
+
+export const getProductById = async(req, res)=>{
+    const {id} = req.params;
+    try{
+        const product = await Product.findById(id).lean();
+
+        const similarProduct = await Product.find({
+            category: product.category,
+            _id: {$ne: id}
+        }).limit(4).lean();
+
+        if(!product){
+            return res.status(404).json({message: 'product not found'});
+        }
+
+        return res.status(200).json({product, similarProduct});
+    }catch(err){
+        return res.status(500).json({message: 'internal server error'});
+    }
+}
+

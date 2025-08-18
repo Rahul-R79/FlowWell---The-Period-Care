@@ -10,10 +10,21 @@ export const getUserProducts = createAsyncThunk('/user/getUserProducts', async(f
     }catch(err){
         return rejectWithValue(err.response.data);
     }
+});
+
+export const getUserProductById = createAsyncThunk('/user/getUserProductById', async(id, {rejectWithValue})=>{
+    try{
+        const response = await instance.get(`/user/product/${id}`);
+        return response.data;
+    }catch(err){
+        return rejectWithValue(err.response.data);
+    }
 })
 
 const initialState = {
     products: [],
+    productDetail: null,
+    similarProducts: [],
     filters: {
         page: 1,
         limit: 9,
@@ -52,6 +63,7 @@ const userProductSlice = createSlice({
     },
     extraReducers: (builder)=>{
         builder
+        //getProducts
         .addCase(getUserProducts.pending, state=>{
             state.loadingByAction.getUserProducts = true;
             state.errorByAction.getUserProducts = null;
@@ -68,6 +80,23 @@ const userProductSlice = createSlice({
             state.loadingByAction.getUserProducts = false;
             state.errorByAction.getUserProducts = action.payload;
         })
+
+        //getProductDetail
+        .addCase(getUserProductById.pending, state=>{
+            state.loadingByAction.getUserProductById = true;
+            state.errorByAction.getUserProductById = null;
+        })
+        .addCase(getUserProductById.fulfilled, (state, action)=>{
+            state.loadingByAction.getUserProductById = false;
+            state.errorByAction.getUserProductById = null;
+            state.productDetail = action.payload.product;
+            state.similarProducts = action.payload.similarProduct;
+        })
+        .addCase(getUserProductById.rejected, (state, action)=>{
+            state.loadingByAction.getUserProductById = false;
+            state.errorByAction.getUserProductById = action.payload;
+        })
+
     }
 });
 

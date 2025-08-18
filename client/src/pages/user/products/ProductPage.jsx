@@ -13,9 +13,11 @@ import Footer from "../../../components/Footer/UserFooter";
 import PaginationButton from "../../../components/Pagination";
 import "./userProduct.css";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import { useNavigate } from "react-router-dom";
 
 function ProductPage() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { products, filters, currentPage, totalPages, loadingByAction } =
         useSelector((state) => state.userProducts);
 
@@ -33,10 +35,10 @@ function ProductPage() {
         dispatch(
             setFilters({
                 sortBy: selectedSort?.value || "",
-                size: selectedSize.map((s) => s.value).join(","),
+                size: selectedSize.map((s) => s.value),
                 price: selectedPrice?.value || "",
                 categoryName: selectedCategory?.value || "",
-                offer: selectedOffer.map((o) => o.value).join(","),
+                offer: selectedOffer.map((o) => o.value)
             })
         );
     };
@@ -53,6 +55,10 @@ function ProductPage() {
         setSelectedPrice(null);
         setSelectedOffer([]);
     };
+
+    const productDetailById = (id)=>{
+        navigate(`/user/productdetail/${id}`);
+    }
 
     const sortOptions = [
         { value: "priceLowToHigh", label: "Price: Low to High" },
@@ -201,7 +207,7 @@ function ProductPage() {
                                     <Col
                                         key={product._id}
                                         className='text-left'>
-                                        <div className='product-card'>
+                                        <div className='product-card' onClick={()=> productDetailById(product._id)}>
                                             <img
                                                 src={product.images[0]}
                                                 alt={product.name}
