@@ -72,8 +72,8 @@ function ProductDetailPage() {
                                             },
                                             largeImage: {
                                                 src: productDetail.images[0],
-                                                width: 1200,
-                                                height: 1200,
+                                                width: 1000,
+                                                height: 1000,
                                             },
                                             lensStyle: {
                                                 backgroundColor:

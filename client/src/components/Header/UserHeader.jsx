@@ -29,9 +29,9 @@ export default function UserHeader() {
                                 {/* Nav Links */}
                                 <Col xs={12} lg="auto">
                                     <Nav className="fw-semibold justify-content-lg-start flex-lg-row flex-column text-center">
-                                        <Nav.Link href="#">Home</Nav.Link>
+                                        <Nav.Link href="/">Home</Nav.Link>
                                         <Nav.Link href="/user/product">Products</Nav.Link>
-                                        <Nav.Link href="#">New Arrivals</Nav.Link>
+                                        <Nav.Link href="/user/product">New Arrivals</Nav.Link>
                                         <Nav.Link href="#">About</Nav.Link>
                                     </Nav>
                                 </Col>
