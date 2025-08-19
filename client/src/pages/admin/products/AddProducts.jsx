@@ -455,7 +455,7 @@ const AddProducts = () => {
 
                             {/* Buttons */}
                             <div className='d-flex justify-content-center gap-2'>
-                                <Button variant='light' className='px-4'>
+                                <Button variant='light' className='px-4' onClick={()=> navigate('/products')}>
                                     Cancel
                                 </Button>
                                 <Button

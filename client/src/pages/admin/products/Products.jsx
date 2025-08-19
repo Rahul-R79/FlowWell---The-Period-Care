@@ -100,10 +100,10 @@ const ProductsPage = () => {
                             <thead>
                                 <tr>
                                     <th>Product Name</th>
-                                    <th>Size</th>
+                                    <th>Sizes</th>
                                     <th>Price</th>
                                     <th>Category</th>
-                                    <th>Stock</th>
+                                    <th>Total Stock</th>
                                     <th>Added On</th>
                                     <th>Status</th>
                                     <th>Actions</th>
@@ -123,16 +123,29 @@ const ProductsPage = () => {
                                         <tr key={_id}>
                                             <td>{name}</td>
                                             <td className='text-primary'>
-                                                {sizes
-                                                    .map((s) => s.size)
-                                                    .join(", ")}
+                                                {sizes.map((s, i) => (
+                                                    <span
+                                                        key={i}
+                                                        className='size-box'>
+                                                        {s.size.length >= 3
+                                                            ? s.size
+                                                                  .charAt(0)
+                                                                  .toUpperCase()
+                                                            : s.size.toUpperCase()}
+                                                    </span>
+                                                ))}
                                             </td>
+
                                             <td>₹{basePrice}</td>
                                             <td>{category.name}</td>
                                             <td className='text-primary'>
                                                 {sizes
                                                     .map((s) => s.stock)
-                                                    .join(", ")}
+                                                    .reduce(
+                                                        (acc, curr) =>
+                                                            acc + curr,
+                                                        0
+                                                    )}
                                             </td>
                                             <td>
                                                 {new Date(

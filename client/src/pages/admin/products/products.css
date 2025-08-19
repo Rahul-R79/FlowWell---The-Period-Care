@@ -64,3 +64,18 @@
     color: #8495eb !important;
     opacity: 1;
 }
+
+.size-box {
+    padding: 4px 8px;
+    margin: 2px;
+    border: 1px solid #007bff !important;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #007bff !important;
+    background-color: #f8f9fa !important; 
+}
+.size-box:hover {
+    background-color: #007bff !important;
+    color: #fff !important;
+}

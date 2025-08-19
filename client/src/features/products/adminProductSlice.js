@@ -64,6 +64,9 @@ const adminProductSlice = createSlice({
         },
         setCurrentPage: (state, action) => {
             state.currentPage = action.payload;
+        },
+        clearEditProductError: (state)=>{
+            state.errorByAction.updateProduct = null
         }
     },
     extraReducers: (builder)=>{
@@ -156,5 +159,5 @@ const adminProductSlice = createSlice({
     }
 })
 
-export const {clearAddProductError, setCurrentPage} = adminProductSlice.actions;
+export const {clearAddProductError, setCurrentPage, clearEditProductError} = adminProductSlice.actions;
 export default adminProductSlice.reducer;

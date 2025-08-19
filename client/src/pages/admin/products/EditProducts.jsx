@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
     getProductById,
     updateProduct,
-    clearAddProductError,
+    clearEditProductError,
 } from "../../../features/products/adminProductSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -181,7 +181,7 @@ const EditProducts = () => {
     };
 
     useEffect(() => {
-        dispatch(clearAddProductError());
+        dispatch(clearEditProductError());
         dispatch(getCategory({ limit: 100 }));
     }, [dispatch]);
 
