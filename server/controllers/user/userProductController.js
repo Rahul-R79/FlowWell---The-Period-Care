@@ -8,7 +8,7 @@ export const getAllProducts = async(req, res)=>{
         page = parseInt(page);
         limit = parseInt(limit);
 
-        let filter = {};
+        let filter = {isActive: true};
 
         //size filter
         if(size){
@@ -106,11 +106,12 @@ export const getAllProducts = async(req, res)=>{
 export const getProductById = async(req, res)=>{
     const {id} = req.params;
     try{
-        const product = await Product.findById(id).lean();
+        const product = await Product.findById({_id: id, isActive: true}).lean();
 
         const similarProduct = await Product.find({
             category: product.category,
-            _id: {$ne: id}
+            _id: {$ne: id},
+            isActive: true
         }).limit(4).lean();
 
         if(!product){
@@ -118,7 +119,7 @@ export const getProductById = async(req, res)=>{
         }
 
         return res.status(200).json({product, similarProduct});
-    }catch(err){
+    }catch(err){        
         return res.status(500).json({message: 'internal server error'});
     }
 }

@@ -29,10 +29,29 @@ export const productToggleStatus = createAsyncThunk('/products/productToggleStat
     }
 });
 
+export const getProductById = createAsyncThunk('/products/getProductById', async (id, {rejectWithValue}) => {
+    try{
+        const response = await instance.get(`/admin/products/${id}`);
+        return response.data.product
+    }catch(err) {
+        return rejectWithValue(err.response.data);
+    }
+});
+
+export const updateProduct = createAsyncThunk('/products/updateProduct', async({ id, formData }, {rejectWithValue}) => {
+    try {
+        const response = await instance.patch(`/admin/products/${id}`, formData);
+        return response.data.product;
+    }catch(err) {
+        return rejectWithValue(err.response.data.errors);
+    }
+});
+
 const adminProductSlice = createSlice({
     name: 'adminProducts',
     initialState: {
         products: [],
+        currentProduct: null,  
         errorByAction: {},
         loadingByAction: {},
         currentPage: 1,
@@ -99,6 +118,41 @@ const adminProductSlice = createSlice({
             state.loadingByAction.productToggleStatus = false;
             state.errorByAction.productToggleStatus = action.payload;
         })
+
+        //getproductbyId
+        .addCase(getProductById.pending, (state) => {
+            state.loadingByAction.getProductById = true;
+            state.errorByAction.getProductById = null;
+        })
+        .addCase(getProductById.fulfilled, (state, action) => {
+            state.loadingByAction.getProductById = false;
+            state.errorByAction.getProductById = null;
+            state.currentProduct = action.payload; 
+        })
+        .addCase(getProductById.rejected, (state, action) => {
+            state.loadingByAction.getProductById = false;
+            state.errorByAction.getProductById = action.payload;
+        })
+
+        //updateProduct
+        .addCase(updateProduct.pending, (state) => {
+            state.loadingByAction.updateProduct = true;
+            state.errorByAction.updateProduct = null;
+        })
+        .addCase(updateProduct.fulfilled, (state, action) => {
+            state.loadingByAction.updateProduct = false;
+            state.errorByAction.updateProduct = null;
+
+            const index = state.products.findIndex((product) => product._id === action.payload._id);
+            if (index !== -1) {
+                state.products[index] = action.payload;
+            }
+            state.currentProduct = action.payload;
+        })
+        .addCase(updateProduct.rejected, (state, action) => {
+            state.loadingByAction.updateProduct = false;
+            state.errorByAction.updateProduct = action.payload;
+        });
     }
 })
 

@@ -2,27 +2,34 @@ import { body } from "express-validator";
 
 export const parseFormData = (req, res, next) => {
     try {
+        // Parse sizes if string
         if (req.body.sizes && typeof req.body.sizes === "string") {
             req.body.sizes = JSON.parse(req.body.sizes);
         }
 
+        // Parse prices to numbers
         if (req.body.basePrice)
             req.body.basePrice = parseFloat(req.body.basePrice);
 
         if (req.body.discountPrice)
             req.body.discountPrice = parseFloat(req.body.discountPrice);
 
+        // sizes are integers
         if (req.body.sizes && Array.isArray(req.body.sizes)) {
             req.body.sizes = req.body.sizes.map((item) => ({
                 size: item.size,
-                stock:
-                    item.stock !== undefined
-                        ? parseInt(item.stock)
-                        : item.stock,
+                stock: item.stock !== undefined ? parseInt(item.stock) : 0,
             }));
         }
 
-        req.body.images = req.files && req.files.length > 0 ? "hasFiles" : "";
+        // Combine new uploaded images + existing images from frontend
+        const existingImages = req.body.existingImages
+            ? JSON.parse(req.body.existingImages)
+            : [];
+
+        const newFiles = req.files && req.files.length > 0 ? req.files : [];
+
+        req.body.images = [...newFiles, ...existingImages]; 
 
         next();
     } catch (err) {
@@ -34,6 +41,7 @@ export const parseFormData = (req, res, next) => {
     }
 };
 
+// Validator for product fields
 export const validateProduct = [
     body("name")
         .notEmpty()
@@ -63,9 +71,7 @@ export const validateProduct = [
     body("discountPrice")
         .optional({ checkFalsy: true })
         .isFloat({ min: 0 })
-        .withMessage(
-            "Discount price must be a number greater than or equal to 0"
-        )
+        .withMessage("Discount price must be a number greater than or equal to 0")
         .custom((value, { req }) => {
             if (value > req.body.basePrice) {
                 throw new Error("Discount price cannot exceed base price");

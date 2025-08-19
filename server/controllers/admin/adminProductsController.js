@@ -94,3 +94,57 @@ export const productStatus = async(req, res)=>{
         return res.status(500).json({message: 'internal server error'});
     }
 }
+
+export const getSingleProductById = async (req, res) => {
+    const { id } = req.params;
+    try{
+        const product = await Product.findById(id).populate("category", "name");
+        if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+        }
+        res.status(200).json({ product });
+    }catch(err) {
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+export const updateProductById = async (req, res) => {
+    const { id } = req.params;
+    const { name, description, basePrice, discountPrice, category, sizes, offer } = req.body;
+
+    try {
+        const product = await Product.findById(id);
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        let imageUrls = product.images;
+            if (req.files && req.files.length > 0) {
+                imageUrls = await Promise.all(
+                    req.files.map(file => new Promise((resolve, reject) => {
+                    const uploadStream = cloudinary.uploader.upload_stream(
+                        { folder: "products" },
+                        (err, result) => err ? reject(err) : resolve(result.secure_url)
+                    );
+                        uploadStream.end(file.buffer);
+                    }))
+                );
+            }
+
+        product.name = name;
+        product.description = description;
+        product.basePrice = basePrice;
+        product.discountPrice = discountPrice;
+        product.category = category;
+        product.sizes = sizes;
+        product.offer = offer;
+        product.images = imageUrls;
+
+        await product.save();
+
+        res.status(200).json({ product });
+        
+    }catch(err) {        
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
