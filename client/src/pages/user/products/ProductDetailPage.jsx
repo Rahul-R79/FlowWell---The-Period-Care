@@ -77,15 +77,15 @@ function ProductDetailPage() {
                                             },
                                             lensStyle: {
                                                 backgroundColor:
-                                                    "rgba(0,0,0,.2)", 
+                                                    "rgba(0,0,0,.2)",
                                                 border: "1px solid #000",
                                             },
                                             enlargedImageContainerStyle: {
                                                 zIndex: 9999,
                                             },
-                                            enlargedImagePosition: "over", 
-                                            isHintEnabled: true, 
-                                            shouldUsePositiveSpaceLens: true, 
+                                            enlargedImagePosition: "over",
+                                            isHintEnabled: true,
+                                            shouldUsePositiveSpaceLens: true,
                                         }}
                                     />
                                 )}
@@ -106,7 +106,7 @@ function ProductDetailPage() {
                             <h4 className='text-success fw-bold'>
                                 ₹
                                 {productDetail?.basePrice -
-                                    productDetail?.discountPrice}
+                                    (productDetail?.discountPrice || 0)}
                             </h4>
 
                             {/* Description */}
@@ -132,31 +132,45 @@ function ProductDetailPage() {
 
                             {/* Quantity & Add to cart */}
                             <div className='d-flex align-items-center mb-3'>
-                                <div className='quantity-selector d-flex align-items-center me-3'>
-                                    <button
-                                        className='qty-btn'
-                                        onClick={() => handleQuantity("dec")}>
-                                        -
-                                    </button>
-                                    <input
-                                        type='text'
-                                        value={quantity}
-                                        readOnly
-                                        className='qty-input text-center'
-                                    />
-                                    <button
-                                        className='qty-btn'
-                                        onClick={() => handleQuantity("inc")}>
-                                        +
-                                    </button>
-                                </div>
+                                {productDetail?.sizes.some(
+                                    (s) => s.stock > 0
+                                ) ? (
+                                    <>
+                                        <div className='quantity-selector d-flex align-items-center me-3'>
+                                            <button
+                                                className='qty-btn'
+                                                onClick={() =>
+                                                    handleQuantity("dec")
+                                                }>
+                                                -
+                                            </button>
+                                            <input
+                                                type='text'
+                                                value={quantity}
+                                                readOnly
+                                                className='qty-input text-center'
+                                            />
+                                            <button
+                                                className='qty-btn'
+                                                onClick={() =>
+                                                    handleQuantity("inc")
+                                                }>
+                                                +
+                                            </button>
+                                        </div>
 
-                                <Button variant='dark' className='me-2'>
-                                    Add to cart
-                                </Button>
-                                <Button variant='outline-secondary'>
-                                    ♥ Add to wishlist
-                                </Button>
+                                        <Button variant='dark' className='me-2'>
+                                            Add to cart
+                                        </Button>
+                                        <Button variant='outline-secondary'>
+                                            ♥ Add to wishlist
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <h5 className='text-danger fw-bold'>
+                                        Out of Stock
+                                    </h5>
+                                )}
                             </div>
 
                             {/* Tabs */}
@@ -261,8 +275,9 @@ function ProductDetailPage() {
                                             <div className='similar-priceOg'>
                                                 <span>
                                                     ₹
-                                                    {product.basePrice -
-                                                        product.discountPrice}
+                                                    {product?.basePrice -
+                                                        (product?.discountPrice ||
+                                                            0)}
                                                 </span>
                                             </div>
                                         </div>

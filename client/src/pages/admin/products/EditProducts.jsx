@@ -56,7 +56,10 @@ const EditProducts = () => {
                 discountPrice: currentProduct.discountPrice || "",
                 category: currentProduct.category?._id || "",
                 sizes: currentProduct.sizes.length
-                    ? currentProduct.sizes
+                    ? currentProduct.sizes.map((s) => ({
+                          size: s.size || "",
+                          stock: s.stock !== undefined ? String(s.stock) : "", 
+                      }))
                     : [{ stock: "", size: "" }],
                 offer: currentProduct.offer || "",
             });
@@ -70,7 +73,7 @@ const EditProducts = () => {
         }
     }, [currentProduct]);
 
-        const handleData = (e) => {
+    const handleData = (e) => {
         const { name, value, type, checked } = e.target;
 
         if (type === "checkbox") {
@@ -90,8 +93,11 @@ const EditProducts = () => {
 
     const handleSizeChange = (index, field, value) => {
         const newSizes = [...formData.sizes];
-        newSizes[index][field] = value;
-        setFormData({ ...formData, sizes: newSizes });
+        newSizes[index] = {
+            ...newSizes[index],
+            [field]: value,
+        };
+        setFormData((prev) => ({ ...prev, sizes: newSizes }));
     };
 
     const addSizeVarient = () => {
@@ -280,6 +286,11 @@ const EditProducts = () => {
                                     </Col>
                                 ))}
                             </Row>
+                            {getFieldError("images") && (
+                                <small className='text-danger'>
+                                    {getFieldError("images")}
+                                </small>
+                            )}
                         </Form.Group>
 
                         {/* Price, Discount, Category */}
@@ -294,6 +305,11 @@ const EditProducts = () => {
                                         value={formData.basePrice}
                                         onChange={handleData}
                                     />
+                                    {getFieldError("basePrice") && (
+                                        <small className='text-danger'>
+                                            {getFieldError("basePrice")}
+                                        </small>
+                                    )}
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -306,6 +322,11 @@ const EditProducts = () => {
                                         value={formData.discountPrice}
                                         onChange={handleData}
                                     />
+                                    {getFieldError("discountPrice") && (
+                                        <small className='text-danger'>
+                                            {getFieldError("discountPrice")}
+                                        </small>
+                                    )}
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -330,6 +351,11 @@ const EditProducts = () => {
                                                 </option>
                                             ))}
                                     </Form.Select>
+                                    {getFieldError("category") && (
+                                        <small className='text-danger'>
+                                            {getFieldError("category")}
+                                        </small>
+                                    )}
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -352,6 +378,15 @@ const EditProducts = () => {
                                                 )
                                             }
                                         />
+                                        {getFieldError(
+                                            `sizes.${index}.stock`
+                                        ) && (
+                                            <small className='text-danger'>
+                                                {getFieldError(
+                                                    `sizes.${index}.stock`
+                                                )}
+                                            </small>
+                                        )}
                                     </Form.Group>
                                 </Col>
                                 <Col>
@@ -379,6 +414,15 @@ const EditProducts = () => {
                                                 Regular
                                             </option>
                                         </Form.Select>
+                                        {getFieldError(
+                                            `sizes.${index}.size`
+                                        ) && (
+                                            <small className='text-danger'>
+                                                {getFieldError(
+                                                    `sizes.${index}.size`
+                                                )}
+                                            </small>
+                                        )}
                                         {index !== 0 && (
                                             <Button
                                                 variant='danger'
@@ -421,6 +465,11 @@ const EditProducts = () => {
                                             onChange={handleData}
                                         />
                                     </div>
+                                    {getFieldError("offer") && (
+                                        <small className='text-danger'>
+                                            {getFieldError("offer")}
+                                        </small>
+                                    )}
                                 </Form.Group>
                             </Col>
                             <Col>
