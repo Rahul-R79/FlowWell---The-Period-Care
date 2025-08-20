@@ -118,7 +118,7 @@ const CustomersPage = () => {
                                     <tr key={_id}>
                                         <td className="d-flex align-items-center">
                                             <Image
-                                                src={avatar || 'images/hero/default-avatar.webp'}
+                                                src={avatar || '/images/hero/default-avatar.webp'}
                                                 roundedCircle
                                                 width={36}
                                                 height={36}

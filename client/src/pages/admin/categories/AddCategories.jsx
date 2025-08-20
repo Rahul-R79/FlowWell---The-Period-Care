@@ -28,7 +28,7 @@ const AddCategories = () => {
         e.preventDefault();
         try{
             await dispatch(addCategory(formData)).unwrap();
-            navigate('/categories');
+            navigate('/admin/categories');
         }catch(err){
             console.log('add category error', err);
         }
@@ -87,7 +87,7 @@ const AddCategories = () => {
                             {/* Buttons */}
                             <Row className='justify-content-center'>
                                 <Col xs='auto'>
-                                    <Button onClick={() => navigate('/categories')}
+                                    <Button onClick={() => navigate('/admin/categories')}
                                         variant='outline-dark'
                                         className='px-5 py-2 rounded mb-3'>
                                         Cancel

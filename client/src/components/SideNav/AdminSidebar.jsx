@@ -9,13 +9,13 @@ import { MdAdminPanelSettings } from "react-icons/md";
 import LoadingSpinner from '../LoadingSpinner';
 
 const sidebarItems = [
-    { icon: <BsGraphUp size={20} />, text: 'Dashboard', path: '/dashboard'},
+    { icon: <BsGraphUp size={20} />, text: 'Dashboard', path: '/admin/dashboard'},
     { icon: <BsBag size={20} />, text: 'Order' },
-    { icon: <BsCardList size={20} />, text: 'Products', path: '/products'},
+    { icon: <BsCardList size={20} />, text: 'Products', path: '/admin/products'},
     { icon: <BsBarChart size={20} />, text: 'Sales report' },
-    { icon: <BsPeople size={20} />, text: 'Customer', path: '/customers'},
+    { icon: <BsPeople size={20} />, text: 'Customer', path: '/admin/customers'},
     { icon: <BsTicket size={20} />, text: 'Coupon' },
-    { icon: <BsGrid size={20} />, text: 'Category', path: '/categories'},
+    { icon: <BsGrid size={20} />, text: 'Category', path: '/admin/categories'},
     { icon: <BsArrowRepeat size={20} />, text: 'Refund/Return' },
     { icon: <BsCollection size={20} />, text: 'Banners' },
     { icon: <BsPersonPlus size={20} />, text: 'Referrals' },
@@ -61,7 +61,7 @@ export default function Sidebar() {
         e.preventDefault();
         try {
             await dispatch(adminLogout()).unwrap();
-            navigate('/adminsignin');
+            navigate('/admin/signin');
         }catch(err) {
             console.error('adminLogout error:', err);
         }

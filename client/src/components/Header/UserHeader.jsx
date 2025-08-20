@@ -106,7 +106,7 @@ export default function UserHeader() {
                                                 />
                                             )}
                                         </Form>
-                                        
+
                                         {search &&
                                             searchResults &&
                                             searchResults.length > 0 && (
@@ -146,7 +146,7 @@ export default function UserHeader() {
                                         xs={12}
                                         lg='auto'
                                         className='d-flex justify-content-lg-end justify-content-center align-items-center gap-3'>
-                                        <Link to={"/userprofile"}>
+                                        <Link to={"/user/profile"}>
                                             <CgProfile
                                                 size={28}
                                                 className='text-dark'

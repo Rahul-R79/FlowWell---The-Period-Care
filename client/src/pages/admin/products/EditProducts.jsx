@@ -174,7 +174,7 @@ const EditProducts = () => {
 
         try {
             await dispatch(updateProduct({ id, formData: data })).unwrap();
-            navigate("/products");
+            navigate("/admin/products");
         } catch (err) {
             console.log("product update error", err);
         }
@@ -489,7 +489,7 @@ const EditProducts = () => {
                             <Button
                                 variant='light'
                                 className='px-4'
-                                onClick={() => navigate("/products")}>
+                                onClick={() => navigate("/admin/products")}>
                                 Cancel
                             </Button>
                             <Button
