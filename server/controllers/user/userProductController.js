@@ -124,3 +124,21 @@ export const getProductById = async(req, res)=>{
     }
 }
 
+export const searchProduct = async(req, res)=>{
+    const {q} = req.query;
+    
+    try{
+        if(!q || q.trim() === ''){
+            return res.status(200).json({products: []});
+        }
+
+        const products = await Product.find({
+            name: {$regex: q, $options: 'i'},
+            isActive: true
+        }).select('_id name images').limit(5)
+
+        return res.status(200).json({products});
+    }catch(err){        
+        return res.status(500).json({message: 'internal server error'});
+    }
+}

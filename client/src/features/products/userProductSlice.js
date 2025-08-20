@@ -29,11 +29,24 @@ export const getUserProductById = createAsyncThunk(
     }
 );
 
+export const searchProducts = createAsyncThunk(
+    "user/searchProducts", 
+    async({ q = ""}, {rejectWithValue})=>{
+        try{
+            const response = await instance.get(`/user/product/search?q=${q}`);
+            return response.data.products;
+        }catch(err){
+            return rejectWithValue(err.response.data);
+        }
+    }
+)
+
 const initialState = {
     products: [],
     productDetail: null,
     similarProducts: [],
     newArrivals: [],
+    searchResults: [],
     menstrualKits: [],
     homepageSections: {
         newArrivals: [],
@@ -122,7 +135,23 @@ const userProductSlice = createSlice({
             .addCase(getUserProductById.rejected, (state, action) => {
                 state.loadingByAction.getUserProductById = false;
                 state.errorByAction.getUserProductById = action.payload;
-            });
+            })
+
+            //search produts
+            .addCase(searchProducts.pending, (state)=>{
+                state.loadingByAction.searchProducts = true;
+                state.errorByAction.searchProducts = null;
+            })
+            .addCase(searchProducts.fulfilled, (state, action)=>{
+                state.loadingByAction.searchProducts = false;
+                state.errorByAction.searchProducts = null;
+                state.searchResults = action.payload;
+            })
+            .addCase(searchProducts.rejected, (state, action)=>{
+                state.loadingByAction.searchProducts = false;
+                state.errorByAction.searchProducts = action.payload;                
+                state.searchResults = [];
+            })
     },
 });
 

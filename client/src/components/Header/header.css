@@ -14,3 +14,29 @@
     font-size: 0.9rem;
     color: #6c757d;
 }
+
+.search-results{
+    width: auto;
+    z-index: 1;
+}
+
+.search-text{
+    text-decoration: none;
+    border-bottom: 1px solid #cde6fc;
+}
+
+.search-close {
+    position: absolute;
+    right: 22px;   
+    top: 50%;      
+    transform: translateY(-50%);
+    color: #ff5252;
+    cursor: pointer;
+}
+
+.search-product-img{
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+}

@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import passport from './config/passport.js';
+import notFound from './middlewares/pageNotFound.js';
 
 dotenv.config();
 const app = express();
@@ -29,6 +30,8 @@ app.use(passport.initialize());
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/user', userRoutes);
+
+app.use(notFound);
 
 app.listen(3000, ()=>{
     console.log('http://localhost:3000');
