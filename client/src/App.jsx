@@ -62,8 +62,6 @@ function App(){
                 </Route>
                 <Route element={<ProtectedRoute isAllowed={isLoggedInUser} redirectPath="/signup"/>}>
                     <Route path="/userprofile" element={<UserProfile/>}/>
-                    <Route path="/user/product" element={<ProductPage/>}/>
-                    <Route path="/user/productdetail/:id" element={<ProductDetailPage/>}/>
                 </Route>
             
                 <Route element={<ProtectedRoute isAllowed={isLoggedInAdmin} redirectPath="/adminsignin"/>}>
@@ -78,6 +76,8 @@ function App(){
                 </Route>
                 
                 <Route path="/" element={<Home/>}/>
+                <Route path="/user/product" element={<ProductPage/>}/>
+                <Route path="/user/productdetail/:id" element={<ProductDetailPage/>}/>
                 <Route path="/adminsignin" element={<AdminSignIn/>}/>
                 
             </Routes>

@@ -185,9 +185,10 @@ const EditProducts = () => {
         dispatch(getCategory({ limit: 100 }));
     }, [dispatch]);
 
-    if (loadingByAction.getProductById) return <LoadingSpinner />;
 
     return (
+        <>
+        {loadingByAction.updateProduct && <LoadingSpinner/>}
         <div className='d-flex flex-column flex-lg-row min-vh-100'>
             <Sidebar />
             <div className='flex-grow-1 d-flex flex-column main-content'>
@@ -503,6 +504,7 @@ const EditProducts = () => {
                 <AdminFooter />
             </div>
         </div>
+        </>
     );
 };
 

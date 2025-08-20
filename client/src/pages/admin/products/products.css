@@ -65,7 +65,7 @@
     opacity: 1;
 }
 
-.size-box {
+.product-size {
     padding: 4px 8px;
     margin: 2px;
     border: 1px solid #007bff !important;
@@ -75,7 +75,7 @@
     color: #007bff !important;
     background-color: #f8f9fa !important; 
 }
-.size-box:hover {
+.product-size:hover {
     background-color: #007bff !important;
     color: #fff !important;
 }

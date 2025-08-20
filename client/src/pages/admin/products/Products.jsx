@@ -126,7 +126,7 @@ const ProductsPage = () => {
                                                 {sizes.map((s, i) => (
                                                     <span
                                                         key={i}
-                                                        className='size-box'>
+                                                        className='product-size'>
                                                         {s.size.length >= 3
                                                             ? s.size
                                                                   .charAt(0)

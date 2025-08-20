@@ -5,6 +5,6 @@ import { getAllProducts, getProductById } from '../controllers/user/userProductC
 const router = express.Router();
 
 router.get('/products', getAllProducts);
-router.get('/product/:id', userProtectedRoute, getProductById);
+router.get('/product/:id', getProductById);
 
 export default router;
