@@ -21,7 +21,9 @@ function UserProfile(){
     return(
         <>
         {isLoggingOut && <LoadingSpinner/>}
-        <h1>User Profile Page</h1>
+        <div>
+            <h1>User Profile Page</h1>
+        </div>
         <button onClick={handleLogout} disabled={isLoggingOut}>Logout</button>
         </>
     )
