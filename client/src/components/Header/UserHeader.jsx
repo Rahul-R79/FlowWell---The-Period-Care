@@ -146,7 +146,7 @@ export default function UserHeader() {
                                         xs={12}
                                         lg='auto'
                                         className='d-flex justify-content-lg-end justify-content-center align-items-center gap-3'>
-                                        <Link to={"/user/profile"}>
+                                        <Link to={"/profile"}>
                                             <CgProfile
                                                 size={28}
                                                 className='text-dark'

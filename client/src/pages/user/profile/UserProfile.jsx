@@ -103,7 +103,7 @@ function UserProfile() {
                                 {!user?.googleId && (
                                     <div className='mb-3'>
                                         <Link
-                                            to={"/forgotPassword"}
+                                            to={"/changepassword"}
                                             className='text-info text-decoration-none'>
                                             Change password
                                         </Link>

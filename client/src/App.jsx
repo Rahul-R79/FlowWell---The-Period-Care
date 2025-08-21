@@ -28,6 +28,7 @@ import ProductDetailPage from "./pages/user/products/ProductDetailPage";
 import UserPageNotFound from "./pages/user/notFound/UserPageNotFound";
 import AdminPageNotFound from "./pages/admin/notFound/AdminPageNotFound";
 import ProfileNav from "./components/UserProfileSideNav/ProfileNav";
+import ChangePassword from "./pages/user/auth/ChangePassword";
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -77,15 +78,6 @@ function App() {
                     />
                 </Route>
 
-                {/* Public Routes accessible for everyone*/}
-                <Route path='/' element={<Home />} />
-                <Route path='/user/product' element={<ProductPage />} />
-                <Route
-                    path='/user/productdetail/:id'
-                    element={<ProductDetailPage />}
-                />
-                <Route path='/admin/signin' element={<AdminSignIn />} />
-
                 {/* Admin Protected Routes */}
                 <Route
                     element={
@@ -128,11 +120,16 @@ function App() {
                             redirectPath='/signup'
                         />
                     }>
-                    <Route path='/user/profile' element={<UserProfile />} />
+                    <Route path='/profile' element={<UserProfile />} />
+                    <Route path="/changepassword" element={<ChangePassword/>} />
                 </Route>
 
+                {/* Public Routes accessible for everyone*/}
+                <Route path='/' element={<Home />} />
+                <Route path='/user/product' element={<ProductPage />} />
+                <Route path='/user/productdetail/:id' element={<ProductDetailPage />} />
                 <Route path='*' element={<UserPageNotFound />} />
-                <Route path='/profile/nav' element={<ProfileNav/>} />
+                <Route path='/admin/signin' element={<AdminSignIn />} />
             </Routes>
         </BrowserRouter>
     );
