@@ -1,8 +1,8 @@
 import './auth.css';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { signupUser } from '../../../features/auth/authUserSlice';
-import { useState } from 'react';
+import { clearErrors, signupUser } from '../../../features/auth/authUserSlice';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import LoadingSpinner from '../../../components/LoadingSpinner';
 
@@ -41,6 +41,10 @@ function SignUp() {
 			console.log('signup error', err);
 		}
 	}
+	
+	useEffect(()=>{
+		dispatch(clearErrors())
+	}, [dispatch]);
 
 	const getFieldError = (fieldName) => {
 		return errorByAction.signupUser?.find(e => e.field === fieldName)?.message;

@@ -1,0 +1,30 @@
+.profile-content {
+    background: url("/images/user_profile_bg.jpg") no-repeat center center;
+    background-size: cover;
+    border-radius: 20px;
+    color: white;
+}
+
+.profile-content .form-control {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+}
+
+.profile-content .form-control:focus {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    box-shadow: none;
+}
+
+.profile-content .input-group-text {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+}
+
+.userProfileAvatar {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}

@@ -5,7 +5,6 @@ import OtpVerification from "./components/OtpVerification";
 import ForgotPassword from "./pages/user/auth/ForgotPassword";
 import ForgotPassword2 from "./pages/user/auth/ForgotPassword2";
 import Home from "./pages/user/home/Home";
-import ClearErrorOnRouteChange from "./components/clearErrors";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UserProfile from "./pages/user/profile/UserProfile";
@@ -28,6 +27,7 @@ import ProductPage from "./pages/user/products/ProductPage";
 import ProductDetailPage from "./pages/user/products/ProductDetailPage";
 import UserPageNotFound from "./pages/user/notFound/UserPageNotFound";
 import AdminPageNotFound from "./pages/admin/notFound/AdminPageNotFound";
+import ProfileNav from "./components/UserProfileSideNav/ProfileNav";
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -51,20 +51,16 @@ function App() {
 
     return (
         <BrowserRouter>
-            <ClearErrorOnRouteChange />
             <Routes>
                 {/* Public Routes - accessible when not logged in */}
                 <Route element={<PublicRoute />}>
                     <Route path='/signup' element={<SignUp />} />
                     <Route path='/signin' element={<SignIn />} />
                     <Route
-                        path='/forgotpassword'
-                        element={<ForgotPassword />}
-                    />
-                    <Route
                         path='/otpverification'
                         element={<OtpVerification />}
                     />
+                    <Route path='/forgotpassword' element={<ForgotPassword />}/>
                 </Route>
 
                 {/* Forgot Password */}
@@ -136,6 +132,7 @@ function App() {
                 </Route>
 
                 <Route path='*' element={<UserPageNotFound />} />
+                <Route path='/profile/nav' element={<ProfileNav/>} />
             </Routes>
         </BrowserRouter>
     );
