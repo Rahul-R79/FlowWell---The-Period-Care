@@ -2,6 +2,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { changePassword } from "../../../features/auth/authUserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
+import { clearErrors } from "../../../features/auth/authUserSlice";
+import { useEffect } from "react";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 
 function ChangePassword() {
@@ -40,6 +42,9 @@ function ChangePassword() {
             ?.message;
     };
 
+    useEffect(() => {
+        dispatch(clearErrors());
+    }, [dispatch]);
     return (
         <>
             {loadingByAction.changePassword && <LoadingSpinner />}
