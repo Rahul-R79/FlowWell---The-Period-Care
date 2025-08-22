@@ -112,6 +112,9 @@ const authUserSlice = createSlice({
     reducers: {
         clearErrors: (state)=>{
             state.errorByAction = {};
+        },
+        setCurrentUser: (state, action)=>{
+            state.user = action.payload;
         }
     },
     extraReducers: builder => {
@@ -269,5 +272,5 @@ const authUserSlice = createSlice({
     }
 })
 
-export const {clearErrors} = authUserSlice.actions;
+export const {clearErrors, setCurrentUser} = authUserSlice.actions;
 export default authUserSlice.reducer;
