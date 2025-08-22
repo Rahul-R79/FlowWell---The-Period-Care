@@ -22,7 +22,7 @@ function AdminSignIn() {
         e.preventDefault();
         try{
             await dispatch(adminSignin(formData)).unwrap();
-            navigate('/dashboard', {replace: true});
+            navigate('/admin/dashboard', {replace: true});
         }catch(err){
             console.log('admin login error', err);
         }

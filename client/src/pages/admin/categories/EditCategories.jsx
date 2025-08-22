@@ -37,7 +37,7 @@ const EditCategories = () => {
         e.preventDefault();
         try{
             await dispatch(editCategory({id, formData})).unwrap();
-            navigate('/categories')
+            navigate('/admin/categories')
         }catch(err){
             console.log('edit category error', err);
         }
@@ -99,7 +99,7 @@ const EditCategories = () => {
                                     <Button
                                         variant='outline-dark'
                                         className='px-5 py-2 rounded mb-3' 
-                                        onClick={()=> navigate('/categories')}>
+                                        onClick={()=> navigate('/admin/categories')}>
                                         Cancel
                                     </Button>
                                 </Col>

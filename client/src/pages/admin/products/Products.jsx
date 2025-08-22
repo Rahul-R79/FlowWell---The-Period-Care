@@ -87,7 +87,7 @@ const ProductsPage = () => {
                                     />
                                     <FaSearch className='search-icon position-absolute top-50 start-0 translate-middle-y ms-3 text-muted' />
                                 </div>
-                                <Link to='/products/add'>
+                                <Link to='/admin/products/add'>
                                     <Button className='add-btn' variant='dark'>
                                         Add Product
                                     </Button>
@@ -169,7 +169,7 @@ const ProductsPage = () => {
                                             </td>
                                             <td>
                                                 <Link
-                                                    to={`/products/edit/${_id}`}
+                                                    to={`/admin/products/edit/${_id}`}
                                                     style={{
                                                         color: "inherit",
                                                         textDecoration: "none",

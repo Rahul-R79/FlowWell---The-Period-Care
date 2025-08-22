@@ -85,7 +85,7 @@ const CategoriesPage = () => {
                                 </div>
 
                                 {/*add button */}
-                                <Link to='/addcategories'>
+                                <Link to='/admin/addcategories'>
                                     <Button className='add-btn' variant='dark'>
                                         Add Category
                                     </Button>
@@ -113,7 +113,7 @@ const CategoriesPage = () => {
                                             </Button>
                                         </td>
                                         <td>
-                                            <Link to={`/editcategories/${_id}`} style={{ color: "inherit", textDecoration: "none" }}>
+                                            <Link to={`/admin/editcategories/${_id}`} style={{ color: "inherit", textDecoration: "none" }}>
                                                 <MdOutlineModeEdit className='me-3'style={{ cursor: "pointer" }}/>
                                             </Link>
                                             <button onClick={()=> handleStatusClick(_id, status)} style={{ background: "none", border: "none", padding: 0 }}>

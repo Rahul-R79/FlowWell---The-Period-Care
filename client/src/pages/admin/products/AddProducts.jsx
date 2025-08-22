@@ -115,7 +115,7 @@ const AddProducts = () => {
 
         try {
             await dispatch(addProduct(data)).unwrap();
-            navigate("/products");
+            navigate("/admin/products");
         } catch (err) {
             console.log("product add error", err);
         }
@@ -455,7 +455,7 @@ const AddProducts = () => {
 
                             {/* Buttons */}
                             <div className='d-flex justify-content-center gap-2'>
-                                <Button variant='light' className='px-4' onClick={()=> navigate('/products')}>
+                                <Button variant='light' className='px-4' onClick={()=> navigate('/admin/products')}>
                                     Cancel
                                 </Button>
                                 <Button

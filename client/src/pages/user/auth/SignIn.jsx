@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import './auth.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { signinUser } from '../../../features/auth/authUserSlice';
-import { useState } from 'react';
+import { clearErrors, signinUser } from '../../../features/auth/authUserSlice';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 
@@ -35,6 +35,10 @@ function SignIn() {
 			console.log('signin error', err);
 		}
 	}
+
+	useEffect(()=>{
+		dispatch(clearErrors());
+	}, [dispatch]);
 
 	const getFieldError = (fieldName)=>{
 		return errorByAction.signinUser?.find(e => e.field === fieldName)?.message;

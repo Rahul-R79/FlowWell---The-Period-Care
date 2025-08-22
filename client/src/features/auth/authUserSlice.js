@@ -74,6 +74,15 @@ export const resetForgotPassword = createAsyncThunk('auth/resetForgotPassword', 
    
 });
 
+export const changePassword = createAsyncThunk('/auth/changePassword', async(formData, {rejectWithValue})=>{
+    try{
+        const response = await instance.post('/auth/change-password', formData);
+        return response.data;
+    }catch(err){
+        return rejectWithValue(err.response.data.errors);
+    }
+})
+
 export const getCurrentUser = createAsyncThunk('/auth/getCurrentUser', async(_, {rejectWithValue})=>{
     try{
         const response = await instance.get('/auth/userauthme');
@@ -213,6 +222,19 @@ const authUserSlice = createSlice({
         .addCase(resetForgotPassword.rejected, (state, action)=>{
             state.loadingByAction.resetForgotPassword = false;
             state.errorByAction.resetForgotPassword = action.payload;
+        })
+        //changePassword
+        .addCase(changePassword.pending, state=>{
+            state.loadingByAction.changePassword = true;
+            state.errorByAction.changePassword = null;
+        })
+        .addCase(changePassword.fulfilled, state=>{
+            state.loadingByAction.changePassword = false;
+            state.errorByAction.changePassword = null;
+        })
+        .addCase(changePassword.rejected, (state, action)=>{
+            state.loadingByAction.changePassword = false;
+            state.errorByAction.changePassword = action.payload;
         })
         //getcurrentuser
         .addCase(getCurrentUser.pending, state=>{

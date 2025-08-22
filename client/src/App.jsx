@@ -5,7 +5,6 @@ import OtpVerification from "./components/OtpVerification";
 import ForgotPassword from "./pages/user/auth/ForgotPassword";
 import ForgotPassword2 from "./pages/user/auth/ForgotPassword2";
 import Home from "./pages/user/home/Home";
-import ClearErrorOnRouteChange from "./components/clearErrors";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UserProfile from "./pages/user/profile/UserProfile";
@@ -26,63 +25,114 @@ import EditProducts from "./pages/admin/products/EditProducts";
 import Products from "./pages/admin/products/Products";
 import ProductPage from "./pages/user/products/ProductPage";
 import ProductDetailPage from "./pages/user/products/ProductDetailPage";
+import UserPageNotFound from "./pages/user/notFound/UserPageNotFound";
+import AdminPageNotFound from "./pages/admin/notFound/AdminPageNotFound";
+import ProfileNav from "./components/UserProfileSideNav/ProfileNav";
+import ChangePassword from "./pages/user/auth/ChangePassword";
 
-function App(){
-    const {user, forgotPasswordEmaiVerify, loadingByAction} = useSelector(state => state.auth);
-    const {admin} = useSelector(state => state.adminAuth);
+function App() {
+    const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
+        (state) => state.auth
+    );
+    const { admin } = useSelector((state) => state.adminAuth);
     const isLoggedInUser = Boolean(user);
     const isLoggedInAdmin = Boolean(admin);
     const getUserLoading = loadingByAction?.getCurrentUser;
     const getAdminLoading = loadingByAction?.getCurrentAdmin;
     const dispatch = useDispatch();
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(getCurrentAdmin());
         dispatch(getCurrentUser());
     }, [dispatch]);
 
-    if (getUserLoading || getAdminLoading){
-        return <LoadingSpinner/>
+    if (getUserLoading || getAdminLoading) {
+        return <LoadingSpinner />;
     }
 
-    return(
+    return (
         <BrowserRouter>
-            <ClearErrorOnRouteChange/>
             <Routes>
-
-                <Route element={<PublicRoute/>}>
-                    <Route path="/signup" element={<SignUp/>}/>
-                    <Route path="/signin" element={<SignIn/>}/>
-                    <Route path="/forgotpassword" element={<ForgotPassword/>}/>
-                    <Route path="/otpverification" element={<OtpVerification />} />
+                {/* Public Routes - accessible when not logged in */}
+                <Route element={<PublicRoute />}>
+                    <Route path='/signup' element={<SignUp />} />
+                    <Route path='/signin' element={<SignIn />} />
+                    <Route
+                        path='/otpverification'
+                        element={<OtpVerification />}
+                    />
+                    <Route path='/forgotpassword' element={<ForgotPassword />}/>
                 </Route>
 
-                <Route element={<ProtectedRoute isAllowed={forgotPasswordEmaiVerify} redirectPath="/forgotpassword"/>}>
-                    <Route path="/forgotpassword2" element={<ForgotPassword2 />} />
+                {/* Forgot Password */}
+                <Route
+                    element={
+                        <ProtectedRoute
+                            isAllowed={forgotPasswordEmaiVerify}
+                            redirectPath='/forgotpassword'
+                        />
+                    }>
+                    <Route
+                        path='/forgotpassword2'
+                        element={<ForgotPassword2 />}
+                    />
                 </Route>
-                <Route element={<ProtectedRoute isAllowed={isLoggedInUser} redirectPath="/signup"/>}>
-                    <Route path="/userprofile" element={<UserProfile/>}/>
+
+                {/* Admin Protected Routes */}
+                <Route
+                    element={
+                        <ProtectedRoute
+                            isAllowed={isLoggedInAdmin}
+                            redirectPath='/admin/signin'
+                        />
+                    }>
+                    <Route path='/admin/dashboard' element={<DashBoard />} />
+                    <Route path='/admin/customers' element={<Customers />} />
+                    <Route
+                        path='/admin/categories'
+                        element={<CategoriesPage />}
+                    />
+                    <Route
+                        path='/admin/editcategories/:id'
+                        element={<EditCategories />}
+                    />
+                    <Route
+                        path='/admin/addcategories'
+                        element={<AddCategories />}
+                    />
+                    <Route path='/admin/products' element={<Products />} />
+                    <Route
+                        path='/admin/products/add'
+                        element={<AddProducts />}
+                    />
+                    <Route
+                        path='/admin/products/edit/:id'
+                        element={<EditProducts />}
+                    />
+                    <Route path='/admin/*' element={<AdminPageNotFound />} />
                 </Route>
-            
-                <Route element={<ProtectedRoute isAllowed={isLoggedInAdmin} redirectPath="/adminsignin"/>}>
-                    <Route path="/dashboard" element={<DashBoard/>} />
-                    <Route path="/customers" element={<Customers/>}/>
-                    <Route path="/categories" element={<CategoriesPage/>}/>
-                    <Route path="/editcategories/:id" element={<EditCategories/>}/>
-                    <Route path="/addcategories" element={<AddCategories/>}/>
-                    <Route path="/products" element={<Products/>}/>
-                    <Route path="/products/add" element={<AddProducts/>}/>
-                    <Route path="/products/edit/:id" element={<EditProducts/>}/>
+
+                {/* User Protected Routes */}
+                <Route
+                    element={
+                        <ProtectedRoute
+                            isAllowed={isLoggedInUser}
+                            redirectPath='/signup'
+                        />
+                    }>
+                    <Route path='/profile' element={<UserProfile />} />
+                    <Route path="/changepassword" element={<ChangePassword/>} />
                 </Route>
-                
-                <Route path="/" element={<Home/>}/>
-                <Route path="/user/product" element={<ProductPage/>}/>
-                <Route path="/user/productdetail/:id" element={<ProductDetailPage/>}/>
-                <Route path="/adminsignin" element={<AdminSignIn/>}/>
-                
+
+                {/* Public Routes accessible for everyone*/}
+                <Route path='/' element={<Home />} />
+                <Route path='/user/product' element={<ProductPage />} />
+                <Route path='/user/productdetail/:id' element={<ProductDetailPage />} />
+                <Route path='*' element={<UserPageNotFound />} />
+                <Route path='/admin/signin' element={<AdminSignIn />} />
             </Routes>
         </BrowserRouter>
-    )
+    );
 }
 
 export default App;

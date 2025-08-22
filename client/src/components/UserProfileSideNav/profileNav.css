@@ -1,0 +1,32 @@
+.profile-cell {
+    background-color: #fff;
+    font-size: 15px;
+    color: #333;
+    transition: all 0.2s;
+    border: 1px solid #cacaca;
+}
+
+.profile-cell:hover {
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-decoration: none;
+}
+
+.profile-cell .icon {
+    color: #555;
+}
+
+.profile-nav{
+    margin-bottom: 50px;
+}
+
+.user-nav-img{
+    width: 50px;
+    height: 50px;
+}
+
+@media (max-width: 1000px){
+    .profile-nav{
+        margin-bottom: 0;
+    }
+}
