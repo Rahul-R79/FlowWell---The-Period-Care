@@ -3,6 +3,7 @@ import {
     adminauthMe,
     adminLogout,
     adminSignin,
+    changePassword,
     forgotPassword, 
     forgotResetPassword, 
     googleAuthCallback, 
@@ -16,6 +17,7 @@ import {
 } from '../controllers/authController.js';
 import { 
     validateAdminSignIn,
+    validateChangePassword,
     validateEmail, 
     validateforResetPass, 
     validateSignIn, 
@@ -36,6 +38,7 @@ router.post('/forgot-password', validateEmail, handleValidation, forgotPassword)
 router.post('/forgot-verify', handleValidation, verifyForgotOTP);
 router.post('/forgot-resend', handleValidation, resendForgotOTP);
 router.post('/reset-forgot-password', validateforResetPass, handleValidation, forgotResetPassword);
+router.post('/change-password', userProtectedRoute, validateChangePassword, handleValidation, changePassword);
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}));
 router.get('/google/callback', passport.authenticate('google', {failureRedirect: '/signin', session: false}), googleAuthCallback);
 router.get('/userauthme', userProtectedRoute, noCacheMiddleware, userauthMe);
