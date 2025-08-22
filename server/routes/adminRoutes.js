@@ -35,9 +35,9 @@ router.patch('/category/status/:id', adminProtectedRoute, categoryStatus);
 
 
 router.get('/products', adminProtectedRoute, getProduct);
-router.post('/products/add', upload.array('images', 4), parseFormData, validateProduct, handleValidation, adminProtectedRoute, addProduct);
+router.post('/products/add', adminProtectedRoute, upload.array('images', 4), parseFormData, validateProduct, handleValidation, addProduct);
 router.patch('/products/status/:id', adminProtectedRoute, productStatus);
 router.get('/products/:id', adminProtectedRoute, getSingleProductById);
-router.patch('/products/:id', upload.array('images', 4), parseFormData, validateProduct, handleValidation, adminProtectedRoute, updateProductById);
+router.patch('/products/:id', adminProtectedRoute, upload.array('images', 4), parseFormData, validateProduct, handleValidation, updateProductById);
 
 export default router;

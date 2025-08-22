@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
         required: function() { return !this.googleId; },
         trim: true,
     },
+    phone: {
+        type: String
+    },
     googleId: { 
         type: String, 
         sparse: true
