@@ -6,6 +6,7 @@ import categorySliceReducer from '../features/categorySlice'
 import adminProductSliceReducer from '../features/products/adminProductSlice';
 import userProductSliceReducer from '../features/products/userProductSlice';
 import profileSliceReducer from '../features/profileSlice';
+import addressSliceReducer from '../features/addressSlice';
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
     category: categorySliceReducer,
     adminProducts: adminProductSliceReducer,
     userProducts: userProductSliceReducer,
-    profile: profileSliceReducer
+    profile: profileSliceReducer,
+    address: addressSliceReducer
 })
 
 const persistConfig = {

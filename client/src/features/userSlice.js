@@ -73,7 +73,7 @@ const userSlice = createSlice({
             state.loadingByAction.getAllUsers = false;
             state.errorByAction.getAllUsers = action.payload;
         })
-        //delete all users
+        //delete users
         .addCase(deleteUsers.pending, state=>{
             state.loadingByAction.deleteUsers = true;
             state.errorByAction.deleteUsers = null;

@@ -27,8 +27,10 @@ import ProductPage from "./pages/user/products/ProductPage";
 import ProductDetailPage from "./pages/user/products/ProductDetailPage";
 import UserPageNotFound from "./pages/user/notFound/UserPageNotFound";
 import AdminPageNotFound from "./pages/admin/notFound/AdminPageNotFound";
-import ProfileNav from "./components/UserProfileSideNav/ProfileNav";
 import ChangePassword from "./pages/user/auth/ChangePassword";
+import AddAddress from "./pages/user/address/AddAddress";
+import Address from "./pages/user/address/Address";
+import EditAddress from "./pages/user/address/EditAddress";
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -122,6 +124,9 @@ function App() {
                     }>
                     <Route path='/profile' element={<UserProfile />} />
                     <Route path="/changepassword" element={<ChangePassword/>} />
+                    <Route path='/address/add' element={<AddAddress />} />
+                    <Route path='/address' element={<Address />} />
+                    <Route path="/address/:id/edit" element={<EditAddress/>} />
                 </Route>
 
                 {/* Public Routes accessible for everyone*/}
