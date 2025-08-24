@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../../features/auth/authUserSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./profileNav.css";
 
 function ProfileNav() {
@@ -40,7 +40,7 @@ function ProfileNav() {
                 </div>
 
                 <Nav className='flex-column'>
-                    <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'>
+                    <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm' as={Link} to='/profile'>
                         <FaUser className='me-3 icon' /> Profile
                     </Nav.Link>
                     <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'>
@@ -49,7 +49,7 @@ function ProfileNav() {
                     <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'>
                         <FaWallet className='me-3 icon' /> Wallet
                     </Nav.Link>
-                    <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'>
+                    <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm' as={Link} to='/address'>
                         <FaMapMarkerAlt className='me-3 icon' /> Address
                     </Nav.Link>
                     <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'>
