@@ -15,13 +15,14 @@ import { searchProducts } from "../../features/products/userProductSlice";
 import { FaRegHeart } from "react-icons/fa";
 import { BsCart3 } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
-
 import "./header.css";
 import { useEffect, useState } from "react";
+import { getWishlist } from "../../features/wishlistSlice";
 
 export default function UserHeader() {
     const { user } = useSelector((state) => state.auth);
     const { searchResults } = useSelector((state) => state.userProducts);
+    const { wishlist, totalWishlist } = useSelector((state) => state.wishlist);
 
     const [search, setSearch] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -40,6 +41,10 @@ export default function UserHeader() {
             dispatch(searchProducts({ q: query }));
         }
     }, [dispatch, debouncedSearch]);
+
+    useEffect(()=>{
+        dispatch(getWishlist({page: 1, limit: 3}))
+    }, [dispatch]);
 
     return (
         <header className='container'>
@@ -154,11 +159,24 @@ export default function UserHeader() {
                                         </Link>
                                         {user ? (
                                             <>
-                                                <FaRegHeart
-                                                    size={24}
-                                                    className='text-danger'
-                                                    title='Wishlist'
-                                                />
+                                                <Link to='/wishlist' className="position-relative">
+                                                    <FaRegHeart
+                                                        size={24}
+                                                        className='text-danger'
+                                                        title='Wishlist'
+                                                    />
+                                                    {totalWishlist >
+                                                        0 && (
+                                                        <span
+                                                            className='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'
+                                                            style={{
+                                                                fontSize:
+                                                                    "0.65rem",
+                                                            }}>
+                                                            {totalWishlist}
+                                                        </span>
+                                                    )}
+                                                </Link>
                                                 <BsCart3
                                                     size={24}
                                                     className='text-dark'

@@ -18,13 +18,23 @@ import { useParams } from "react-router-dom";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import ReactImageMagnify from "react-image-magnify";
+import { addToWishlist, removeFromWishlist } from "../../../features/wishlistSlice";
+import ToastNotification, {showErrorToast, showSuccessToast} from "../../../components/ToastNotification";
+import { getWishlist } from "../../../features/wishlistSlice";
 
 function ProductDetailPage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { id } = useParams();
-    const { productDetail, loadingByAction, similarProducts } = useSelector(
+    const [selectedSize, setSelectedSize] = useState(null);
+    const [quantity, setQuantity] = useState(1);
+
+    const {productDetail, loadingByAction: productLoading , similarProducts} = useSelector(
         (state) => state.userProducts
+    );
+
+    const {wishlist, loadingByAction: wishlistLoading} = useSelector(
+        (state) => state.wishlist
     );
 
     useEffect(() => {
@@ -32,7 +42,29 @@ function ProductDetailPage() {
         window.scrollTo(0, 0);
     }, [dispatch, id]);
 
-    const [quantity, setQuantity] = useState(1);
+    useEffect(() => {
+        if (productDetail?.sizes?.length > 0) {
+            setSelectedSize(productDetail.sizes[0].size);
+        }
+    }, [productDetail]);
+
+
+    const isInWishlist = productDetail?._id ? wishlist.products?.some((item) => item.product._id === productDetail._id) : false;
+
+    const handleWishlistToggle = async () => {
+        try {
+            if(!isInWishlist){
+                await dispatch(addToWishlist({ productId: productDetail._id, selectedSize })).unwrap();
+                showSuccessToast("Added to wishlist!"); 
+            }else{
+                await dispatch(removeFromWishlist(productDetail._id)).unwrap();
+                showErrorToast("Removed from wishlist!")
+            }
+            dispatch(getWishlist({ page: 1, limit: 3 }));
+        } catch (err) {
+            console.log("add to wishlist error", err);
+        }
+    };
 
     const handleQuantity = (type) => {
         if (type === "inc") setQuantity((prev) => prev + 1);
@@ -41,10 +73,11 @@ function ProductDetailPage() {
 
     return (
         <>
-            {loadingByAction.getUserProductById && <LoadingSpinner />}
+            {productLoading.getUserProductById || wishlistLoading.addToWishlist && <LoadingSpinner />}
             <UserHeader />
             <section className='product-detail'>
                 <Container className=' py-5'>
+                    <ToastNotification />
                     <Row>
                         {/* Left side - Product Images */}
                         <Col md={6} className='d-flex'>
@@ -120,9 +153,14 @@ function ProductDetailPage() {
                                 {productDetail?.sizes.map((s, index) => (
                                     <Button
                                         key={index}
-                                        variant='outline-dark'
+                                        variant={
+                                            selectedSize === s.size
+                                                ? "dark"
+                                                : "outline-dark"
+                                        }
                                         size='lg'
-                                        className='me-2'>
+                                        className='me-2'
+                                        onClick={() => setSelectedSize(s.size)}>
                                         {s.size.length <= 3
                                             ? s.size.toUpperCase()
                                             : s.size.charAt(0).toUpperCase()}
@@ -162,8 +200,10 @@ function ProductDetailPage() {
                                         <Button variant='dark' className='me-2'>
                                             Add to cart
                                         </Button>
-                                        <Button variant='outline-secondary'>
-                                            ♥ Add to wishlist
+                                        <Button
+                                            variant={isInWishlist ? "danger" : "outline-secondary"}
+                                            onClick={handleWishlistToggle}>
+                                            {isInWishlist ? "Remove from wishlist" : "♥ Add to wishlist"}
                                         </Button>
                                     </>
                                 ) : (

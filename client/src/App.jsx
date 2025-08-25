@@ -31,6 +31,7 @@ import ChangePassword from "./pages/user/auth/ChangePassword";
 import AddAddress from "./pages/user/address/AddAddress";
 import Address from "./pages/user/address/Address";
 import EditAddress from "./pages/user/address/EditAddress";
+import Wishlist from "./pages/user/wishlist/Wishlist";
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -127,6 +128,7 @@ function App() {
                     <Route path='/address/add' element={<AddAddress />} />
                     <Route path='/address' element={<Address />} />
                     <Route path="/address/:id/edit" element={<EditAddress/>} />
+                    <Route path="/wishlist" element={<Wishlist/>} />
                 </Route>
 
                 {/* Public Routes accessible for everyone*/}
