@@ -7,6 +7,7 @@ import adminProductSliceReducer from '../features/products/adminProductSlice';
 import userProductSliceReducer from '../features/products/userProductSlice';
 import profileSliceReducer from '../features/profileSlice';
 import addressSliceReducer from '../features/addressSlice';
+import wishlistSliceReducer from '../features/wishlistSlice';
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
     adminProducts: adminProductSliceReducer,
     userProducts: userProductSliceReducer,
     profile: profileSliceReducer,
-    address: addressSliceReducer
+    address: addressSliceReducer,
+    wishlist: wishlistSliceReducer
 })
 
 const persistConfig = {

@@ -31,6 +31,7 @@
     "react-router-dom": "^7.7.1",
     "react-select": "^5.10.2",
     "react-slick": "^0.31.0",
+    "react-toastify": "^11.0.5",
     "redux-persist": "^6.0.0",
     "sweetalert2": "^11.22.3",
     "sweetalert2-react-content": "^5.1.0",

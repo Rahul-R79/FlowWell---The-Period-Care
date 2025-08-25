@@ -199,7 +199,7 @@ const AddProducts = () => {
                                                         imagePreviews[
                                                             num - 1
                                                         ] ||
-                                                        "../images/add-img.webp"
+                                                        "/images/add-img.webp"
                                                     }
                                                     alt='product-image'
                                                     className='mb-2 upload-icon'

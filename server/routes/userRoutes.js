@@ -8,6 +8,7 @@ import { validateProfile } from '../middlewares/validators/profileValidator.js';
 import { handleValidation } from '../middlewares/validators/handleValidation.js';
 import { addAddress, deleteAddress, editAddress, getAllAddresses, getSingleAddress } from '../controllers/user/addressController.js';
 import { validateAddress } from '../middlewares/validators/addressValidator.js';
+import { addToWishlist, getWishlist, removeFromWishlist } from '../controllers/user/wishlistController.js';
 
 const router = express.Router();
 
@@ -22,5 +23,9 @@ router.get('/address', userProtectedRoute, getAllAddresses);
 router.get('/address/:id', userProtectedRoute, getSingleAddress);
 router.patch('/address/edit/:id', userProtectedRoute, validateAddress, handleValidation, editAddress);
 router.delete('/address/delete/:id', userProtectedRoute, deleteAddress);
+
+router.post('/wishlist/add', userProtectedRoute, addToWishlist);
+router.get('/wishlist', userProtectedRoute, getWishlist);
+router.delete('/wishlist/:productId', userProtectedRoute, removeFromWishlist);
 
 export default router;
