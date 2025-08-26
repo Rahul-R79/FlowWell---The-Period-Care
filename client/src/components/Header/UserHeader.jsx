@@ -18,11 +18,13 @@ import { IoMdClose } from "react-icons/io";
 import "./header.css";
 import { useEffect, useState } from "react";
 import { getWishlist } from "../../features/wishlistSlice";
+import { getCart } from "../../features/cartSlice";
 
 export default function UserHeader() {
     const { user } = useSelector((state) => state.auth);
     const { searchResults } = useSelector((state) => state.userProducts);
-    const { wishlist, totalWishlist } = useSelector((state) => state.wishlist);
+    const { totalWishlist } = useSelector((state) => state.wishlist);
+    const { cart } = useSelector((state) => state.cart);
 
     const [search, setSearch] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -42,8 +44,9 @@ export default function UserHeader() {
         }
     }, [dispatch, debouncedSearch]);
 
-    useEffect(()=>{
-        dispatch(getWishlist({page: 1, limit: 3}))
+    useEffect(() => {
+        dispatch(getWishlist({ page: 1, limit: 3 }));
+        dispatch(getCart());
     }, [dispatch]);
 
     return (
@@ -159,14 +162,15 @@ export default function UserHeader() {
                                         </Link>
                                         {user ? (
                                             <>
-                                                <Link to='/wishlist' className="position-relative">
+                                                <Link
+                                                    to='/wishlist'
+                                                    className='position-relative'>
                                                     <FaRegHeart
                                                         size={24}
                                                         className='text-danger'
                                                         title='Wishlist'
                                                     />
-                                                    {totalWishlist >
-                                                        0 && (
+                                                    {totalWishlist > 0 && (
                                                         <span
                                                             className='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'
                                                             style={{
@@ -177,11 +181,26 @@ export default function UserHeader() {
                                                         </span>
                                                     )}
                                                 </Link>
-                                                <BsCart3
-                                                    size={24}
-                                                    className='text-dark'
-                                                    title='Cart'
-                                                />
+                                                <Link
+                                                    to='/cart'
+                                                    className='position-relative'>
+                                                    <BsCart3
+                                                        size={24}
+                                                        className='text-dark'
+                                                        title='Cart'
+                                                    />
+                                                    {cart.products?.length >
+                                                        0 && (
+                                                        <span
+                                                            className='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'
+                                                            style={{
+                                                                fontSize:
+                                                                    "0.65rem",
+                                                            }}>
+                                                            {cart.products?.length}
+                                                        </span>
+                                                    )}
+                                                </Link>
                                             </>
                                         ) : (
                                             <Link

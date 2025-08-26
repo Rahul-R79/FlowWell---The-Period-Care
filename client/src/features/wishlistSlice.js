@@ -20,9 +20,9 @@ export const getWishlist = createAsyncThunk('/wishlist/getWishlist', async({page
     }
 });
 
-export const removeFromWishlist = createAsyncThunk('/wishlist/removeFromWishlist', async(productId, {rejectWithValue})=>{
+export const removeFromWishlist = createAsyncThunk('/wishlist/removeFromWishlist', async({productId, page = 1, limit = 3}, {rejectWithValue})=>{
     try{
-        const response = await instance.delete(`/user/wishlist/${productId}`);
+        const response = await instance.delete(`/user/wishlist/${productId}?page=${page}&limit=${limit}`);
         return response.data;
     }catch(err){
         return rejectWithValue(err.response.data);

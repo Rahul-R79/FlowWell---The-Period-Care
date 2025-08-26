@@ -18,24 +18,37 @@ import { useParams } from "react-router-dom";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import ReactImageMagnify from "react-image-magnify";
-import { addToWishlist, removeFromWishlist } from "../../../features/wishlistSlice";
-import ToastNotification, {showErrorToast, showSuccessToast} from "../../../components/ToastNotification";
+import {
+    addToWishlist,
+    removeFromWishlist,
+} from "../../../features/wishlistSlice";
+import ToastNotification, {
+    showErrorToast,
+    showSuccessToast,
+} from "../../../components/ToastNotification";
 import { getWishlist } from "../../../features/wishlistSlice";
+import { addToCart } from "../../../features/cartSlice";
 
 function ProductDetailPage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const { id } = useParams();
+
     const [selectedSize, setSelectedSize] = useState(null);
     const [quantity, setQuantity] = useState(1);
 
-    const {productDetail, loadingByAction: productLoading , similarProducts} = useSelector(
-        (state) => state.userProducts
-    );
+    const {
+        productDetail,
+        loadingByAction: productLoading,
+        similarProducts,
+    } = useSelector((state) => state.userProducts);
 
-    const {wishlist, loadingByAction: wishlistLoading} = useSelector(
+    const { wishlist, loadingByAction: wishlistLoading } = useSelector(
         (state) => state.wishlist
     );
+
+    const { loadingByAction: cartLoading } = useSelector((state) => state.cart);
 
     useEffect(() => {
         dispatch(getUserProductById(id));
@@ -48,32 +61,72 @@ function ProductDetailPage() {
         }
     }, [productDetail]);
 
-
-    const isInWishlist = productDetail?._id ? wishlist.products?.some((item) => item.product._id === productDetail._id) : false;
+    const isInWishlist = productDetail?._id
+        ? wishlist.products?.some(
+              (item) => item.product._id === productDetail._id
+          )
+        : false;
 
     const handleWishlistToggle = async () => {
         try {
-            if(!isInWishlist){
-                await dispatch(addToWishlist({ productId: productDetail._id, selectedSize })).unwrap();
-                showSuccessToast("Added to wishlist!"); 
-            }else{
-                await dispatch(removeFromWishlist(productDetail._id)).unwrap();
-                showErrorToast("Removed from wishlist!")
+            if (!isInWishlist) {
+                await dispatch(
+                    addToWishlist({
+                        productId: productDetail._id,
+                        selectedSize,
+                    })
+                ).unwrap();
+                showSuccessToast("Added to wishlist!");
+            } else {
+                await dispatch(
+                    removeFromWishlist({
+                        productId: productDetail._id,
+                        page: 1,
+                        limit: 3,
+                    })
+                ).unwrap();
+                showErrorToast("Removed from wishlist!");
             }
-            dispatch(getWishlist({ page: 1, limit: 3 }));
+            await dispatch(getWishlist({ page: 1, limit: 3 })).unwrap();
         } catch (err) {
             console.log("add to wishlist error", err);
         }
     };
 
+    const handleAddToCart = async () => {
+        try {
+            await dispatch(
+                addToCart({
+                    productId: productDetail._id,
+                    quantity,
+                    selectedSize,
+                })
+            ).unwrap();
+            showSuccessToast("Product added to cart!");
+            setTimeout(() => {
+                navigate("/cart");
+            }, 400);
+        } catch (err) {
+            console.log("add to cart error", err);
+        }
+    };
+
     const handleQuantity = (type) => {
-        if (type === "inc") setQuantity((prev) => prev + 1);
+        if (type === "inc") {
+            if (quantity < 5) {
+                setQuantity((prev) => prev + 1);
+            } else {
+                showErrorToast("Maximum 5 quantity allowed per product!");
+            }
+        }
         if (type === "dec" && quantity > 1) setQuantity((prev) => prev - 1);
     };
 
     return (
         <>
-            {productLoading.getUserProductById || wishlistLoading.addToWishlist && <LoadingSpinner />}
+            {productLoading.getUserProductById ||
+                wishlistLoading.addToWishlist ||
+                (cartLoading.addToCart && <LoadingSpinner />)}
             <UserHeader />
             <section className='product-detail'>
                 <Container className=' py-5'>
@@ -138,8 +191,10 @@ function ProductDetailPage() {
                             {/* Price */}
                             <h4 className='text-success fw-bold'>
                                 ₹
-                                {productDetail?.basePrice -
-                                    (productDetail?.discountPrice || 0)}
+                                {productDetail?.offer === "FLAT"
+                                    ? productDetail.basePrice / 2
+                                    : productDetail?.basePrice -
+                                      (productDetail?.discountPrice || 0)}
                             </h4>
 
                             {/* Description */}
@@ -197,13 +252,23 @@ function ProductDetailPage() {
                                             </button>
                                         </div>
 
-                                        <Button variant='dark' className='me-2'>
+                                        <Button
+                                            variant='dark'
+                                            className='me-2'
+                                            onClick={handleAddToCart}
+                                            disabled={cartLoading.addToCart}>
                                             Add to cart
                                         </Button>
                                         <Button
-                                            variant={isInWishlist ? "danger" : "outline-secondary"}
+                                            variant={
+                                                isInWishlist
+                                                    ? "danger"
+                                                    : "outline-secondary"
+                                            }
                                             onClick={handleWishlistToggle}>
-                                            {isInWishlist ? "Remove from wishlist" : "♥ Add to wishlist"}
+                                            {isInWishlist
+                                                ? "Remove from wishlist"
+                                                : "♥ Add to wishlist"}
                                         </Button>
                                     </>
                                 ) : (

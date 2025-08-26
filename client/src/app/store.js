@@ -8,6 +8,7 @@ import userProductSliceReducer from '../features/products/userProductSlice';
 import profileSliceReducer from '../features/profileSlice';
 import addressSliceReducer from '../features/addressSlice';
 import wishlistSliceReducer from '../features/wishlistSlice';
+import cartSliceReducer from '../features/cartSlice';
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
     userProducts: userProductSliceReducer,
     profile: profileSliceReducer,
     address: addressSliceReducer,
-    wishlist: wishlistSliceReducer
+    wishlist: wishlistSliceReducer,
+    cart: cartSliceReducer
 })
 
 const persistConfig = {
