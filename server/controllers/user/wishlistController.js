@@ -21,7 +21,7 @@ export const addToWishlist = async (req, res) => {
             }
         }
 
-        res.status(200).json({wishlist});
+        res.status(200).json({ wishlist });
     } catch (err) {
         return res.status(500).json({ message: "internal server error" });
     }
@@ -29,7 +29,7 @@ export const addToWishlist = async (req, res) => {
 
 export const getWishlist = async (req, res) => {
     try {
-        let {page = 1, limit = 3} = req.query;
+        let { page = 1, limit = 3 } = req.query;
         page = parseInt(page);
         limit = parseInt(limit);
 
@@ -44,41 +44,66 @@ export const getWishlist = async (req, res) => {
         }
 
         if (!wishlist) {
-            return res.status(404).json({ message: "No wishlist found" });
+            return res.status(200).json({ wishlist: { products: [] } });
         }
 
-        const totalWishlist = wishlist.products.length
-        const totalPages = Math.ceil(totalWishlist/limit);
+        const totalWishlist = wishlist.products.length;
+        const totalPages = Math.ceil(totalWishlist / limit);
 
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
         const paginatedProducts = wishlist.products.slice(startIndex, endIndex);
 
-        res.status(200).json({ wishlist: {_id: wishlist._id, user: wishlist.user, products: paginatedProducts}, totalWishlist, totalPages, currentPage: page });
+        res.status(200).json({
+            wishlist: {
+                _id: wishlist._id,
+                user: wishlist.user,
+                products: paginatedProducts,
+            },
+            totalWishlist,
+            totalPages,
+            currentPage: page,
+        });
     } catch (err) {
         return res.status(500).json({ message: "internal server error" });
     }
 };
 
-export const removeFromWishlist = async(req, res)=>{
-    const {productId} = req.params;
+export const removeFromWishlist = async (req, res) => {
+    const { productId } = req.params;
+    let { page = 1, limit = 3 } = req.query;
+    page = parseInt(page);
+    limit = parseInt(limit);
 
-    try{
-        const wishlist = await Wishlist.findOne({user: req.user.id});
-
-        if(!wishlist){
-            return res.status(404).json({message: 'Wishlist not found'});
+    try {
+        const wishlist = await Wishlist.findOne({ user: req.user.id });
+        if (!wishlist) {
+            return res.status(404).json({ message: "Wishlist not found" });
         }
 
-        wishlist.products = wishlist.products.filter((item)=>
-            !(item.product.toString() === productId)
+        wishlist.products = wishlist.products.filter(
+            (item) => !(item.product.toString() === productId)
         );
-
         await wishlist.save();
         await wishlist.populate("products.product");
 
-        res.status(200).json({wishlist, totalWishlist: wishlist.products.length,});
-    }catch(err){
-        return res.status(500).json({message: 'internal server error'});
+        const totalWishlist = wishlist.products.length;
+        const totalPages = Math.ceil(totalWishlist / limit);
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+        const paginatedProducts = wishlist.products.slice(startIndex, endIndex);
+
+        res.status(200).json({
+            wishlist: {
+                _id: wishlist._id,
+                user: wishlist.user,
+                products: paginatedProducts,
+            },
+            totalWishlist,
+            totalPages,
+            currentPage: page,
+        });
+    } catch (err) {
+        return res.status(500).json({ message: "internal server error" });
     }
-}
+};

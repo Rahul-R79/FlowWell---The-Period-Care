@@ -13,11 +13,15 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 import { useEffect } from "react";
 import ToastNotification, {
     showErrorToast,
+    showSuccessToast,
 } from "../../../components/ToastNotification";
 import { confirmAlert } from "../../../utils/confirmAlert";
+import { useNavigate } from "react-router-dom";
+import { addToCart } from "../../../features/cartSlice";
 
 function Wishlist() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { loadingByAction, wishlist, currentPage, totalPages } = useSelector(
         (state) => state.wishlist
     );
@@ -28,7 +32,13 @@ function Wishlist() {
 
     const handleRemoveFromWishlist = async (id) => {
         try {
-            await dispatch(removeFromWishlist(id)).unwrap();
+            await dispatch(
+                removeFromWishlist({
+                    productId: id,
+                    page: currentPage,
+                    limit: 3,
+                })
+            ).unwrap();
             showErrorToast("Removed from wishlist!");
         } catch (err) {
             console.log("remove from dispatch error", err);
@@ -45,6 +55,30 @@ function Wishlist() {
 
         if (confirmed) {
             handleRemoveFromWishlist(id);
+        }
+    };
+
+    const handleAddToCart = async (item) => {
+        try {
+            const { product, selectedSize } = item;
+            const quantity = 1;
+            await dispatch(
+                addToCart({ productId: product._id, quantity, selectedSize })
+            ).unwrap();
+
+            await dispatch(
+                removeFromWishlist({
+                    productId: product._id,
+                    page: currentPage,
+                    limit: 3,
+                })
+            ).unwrap();
+            showSuccessToast('Added to cart!')
+            setTimeout(() => {
+                navigate("/cart");
+            }, 500);
+        } catch (err) {
+            console.log("add to cart failed", err);
         }
     };
 
@@ -120,14 +154,13 @@ function Wishlist() {
                                     className='me-3'
                                     disabled={item.product.sizes.some(
                                         (s) => s.stock <= 0
-                                    )}>
+                                    )}
+                                    onClick={() => handleAddToCart(item)}>
                                     Add to Cart
                                 </Button>
                                 <Button
                                     onClick={() =>
-                                        handleDeleteClick(
-                                            item.product._id
-                                        )
+                                        handleDeleteClick(item.product._id)
                                     }
                                     variant='link'
                                     className='text-danger fs-5'>
