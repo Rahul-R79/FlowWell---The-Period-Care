@@ -7,11 +7,12 @@ import "./userProfile.css";
 import { useSelector, useDispatch } from "react-redux";
 import { updateProfile } from "../../../features/profileSlice";
 import { setCurrentUser } from "../../../features/auth/authUserSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import ImageCropper from "../../../components/ImageCropper";
 import { resetProfileState } from "../../../features/profileSlice";
+import { confirmAlert } from "../../../utils/confirmAlert";
 
 function UserProfile() {
     const [cropImageSrc, setCropImageSrc] = useState(null);
@@ -19,6 +20,7 @@ function UserProfile() {
 
     const { user: authUser } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const {
         user: profileUser,
         loadingByAction,
@@ -98,6 +100,19 @@ function UserProfile() {
     const getFieldError = (fieldName) => {
         return errorByAction.updateProfile?.find((e) => e.field === fieldName)
             ?.message;
+    };
+
+    const handleChangePassword = async () => {
+        const confirmed = await confirmAlert(
+            "Change Password?",
+            "Are you sure you want to change the password",
+            "Confirm",
+            "Cancel"
+        );
+
+        if (confirmed) {
+            navigate("/changepassword");
+        }
     };
 
     return (
@@ -205,11 +220,12 @@ function UserProfile() {
 
                                 {!authUser?.googleId && (
                                     <div className='mb-3'>
-                                        <Link
-                                            to={"/changepassword"}
+                                        <Button
+                                            variant='link'
+                                            onClick={handleChangePassword}
                                             className='text-info text-decoration-none'>
                                             Change password
-                                        </Link>
+                                        </Button>
                                     </div>
                                 )}
 
