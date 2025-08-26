@@ -112,14 +112,25 @@ function ProductDetailPage() {
     };
 
     const handleQuantity = (type) => {
+        const selectedSizeObj = productDetail.sizes.find(
+            (s) => s.size === selectedSize
+        );
+        const stockAvailable = selectedSizeObj?.stock || 0;
+
         if (type === "inc") {
-            if (quantity < 5) {
+            if (quantity < 5 && quantity < stockAvailable) {
                 setQuantity((prev) => prev + 1);
+            } else if (quantity >= stockAvailable) {
+                showErrorToast(
+                    `Only ${stockAvailable} items available in stock!`
+                );
             } else {
                 showErrorToast("Maximum 5 quantity allowed per product!");
             }
         }
-        if (type === "dec" && quantity > 1) setQuantity((prev) => prev - 1);
+        if (type === "dec" && quantity > 1) {
+            setQuantity((prev) => prev - 1);
+        }
     };
 
     return (

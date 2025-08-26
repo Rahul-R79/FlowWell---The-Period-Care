@@ -82,7 +82,7 @@ function EditAddress() {
                     <div className='col-xl-9 col-lg-8 col-md-7 col-sm-12 mt-4 mb-5'>
                         <div className='p-4 shadow rounded bg-white'>
                             <h3 className='text-center mb-4'>
-                                ADD NEW ADDRESS
+                                Edit ADDRESS
                             </h3>
 
                             <Form onSubmit={handleSubmit}>

@@ -12,32 +12,41 @@ import {
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import ToastNotification, {
     showErrorToast,
+    showSuccessToast,
 } from "../../../components/ToastNotification";
 import { confirmAlert } from "../../../utils/confirmAlert";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { cart, loadingByAction } = useSelector((state) => state.cart);
 
     useEffect(() => {
         dispatch(getCart());
     }, [dispatch]);
 
-    const handleQtyChange = (productId, selectedSize, delta) => {
-        const item = cart.products.find(
-            (p) =>
-                p.product._id === productId && p.selectedSize === selectedSize
-        );
+    const handleQtyChange = async (productId, selectedSize, delta) => {
+    const item = cart.products.find(
+        (p) => p.product._id === productId && p.selectedSize === selectedSize
+    );
 
-        const newQuantity = item.quantity + delta;
-        if (newQuantity < 1) return;
-        if (newQuantity > 5) {
-            showErrorToast("Maximum 5 quantity allowed per product!");
-            return;
-        }
+    const newQuantity = item.quantity + delta;
+    if (newQuantity < 1) return;
+    if (newQuantity > 5) {
+        showErrorToast("Maximum 5 quantity allowed per product!");
+        return;
+    }
 
-        dispatch(addToCart({ productId, selectedSize, quantity: delta }));
-    };
+    try {
+        await dispatch(
+            addToCart({ productId, selectedSize, quantity: delta })
+        ).unwrap();
+    } catch (err) {
+        showErrorToast(err?.message);
+    }
+};
+
 
     const subtotal = cart.products?.reduce(
         (acc, item) =>
@@ -68,6 +77,7 @@ const Cart = () => {
             await dispatch(
                 removeFromCart({ productId, selectedSize })
             ).unwrap();
+            showSuccessToast('Successfully removed from cart')
         } catch (err) {
             showErrorToast("Remove from Cart error");
         }
@@ -198,7 +208,7 @@ const Cart = () => {
                                 <span>Total</span>
                                 <span>₹{total}</span>
                             </div>
-                            <Button variant='dark' className='w-100'>
+                            <Button variant='dark' className='w-100' onClick={()=> navigate('/checkout/address')}>
                                 Go to Checkout
                             </Button>
                         </div>
