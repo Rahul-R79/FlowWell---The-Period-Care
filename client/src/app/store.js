@@ -9,6 +9,7 @@ import profileSliceReducer from '../features/profileSlice';
 import addressSliceReducer from '../features/addressSlice';
 import wishlistSliceReducer from '../features/wishlistSlice';
 import cartSliceReducer from '../features/cartSlice';
+import orderSliceReducer from '../features/orderSlice';
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
     profile: profileSliceReducer,
     address: addressSliceReducer,
     wishlist: wishlistSliceReducer,
-    cart: cartSliceReducer
+    cart: cartSliceReducer,
+    order: orderSliceReducer
 })
 
 const persistConfig = {

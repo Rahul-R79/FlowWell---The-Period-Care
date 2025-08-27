@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Row, Col, Button, Image, Form } from "react-bootstrap";
+import { Row, Col, Button, Image } from "react-bootstrap";
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import "./cart.css";
@@ -20,64 +20,42 @@ import { useNavigate } from "react-router-dom";
 const Cart = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { cart, loadingByAction } = useSelector((state) => state.cart);
+    const { cart, totals, loadingByAction } = useSelector(
+        (state) => state.cart
+    );
 
     useEffect(() => {
         dispatch(getCart());
     }, [dispatch]);
 
     const handleQtyChange = async (productId, selectedSize, delta) => {
-    const item = cart.products.find(
-        (p) => p.product._id === productId && p.selectedSize === selectedSize
-    );
+        const item = cart.products.find(
+            (p) =>
+                p.product._id === productId && p.selectedSize === selectedSize
+        );
 
-    const newQuantity = item.quantity + delta;
-    if (newQuantity < 1) return;
-    if (newQuantity > 5) {
-        showErrorToast("Maximum 5 quantity allowed per product!");
-        return;
-    }
-
-    try {
-        await dispatch(
-            addToCart({ productId, selectedSize, quantity: delta })
-        ).unwrap();
-    } catch (err) {
-        showErrorToast(err?.message);
-    }
-};
-
-
-    const subtotal = cart.products?.reduce(
-        (acc, item) =>
-            acc + (Number(item.product.basePrice) || 0) * (item.quantity || 0),
-        0
-    );
-
-    const discount = cart.products?.reduce((acc, item) => {
-        const { product, quantity } = item;
-
-        let itemDiscount = 0;
-
-        if (product.offer === "FLAT") {
-            itemDiscount = (product.basePrice / 2) * quantity;
-        } else {
-            itemDiscount = (product.discountPrice || 0) * quantity;
+        const newQuantity = item.quantity + delta;
+        if (newQuantity < 1) return;
+        if (newQuantity > 5) {
+            showErrorToast("Maximum 5 quantity allowed per product!");
+            return;
         }
 
-        return acc + itemDiscount;
-    }, 0);
-
-    const deliveryFee = subtotal > 0 && subtotal < 500 ? 99 : 0;
-
-    const total = subtotal + deliveryFee - discount;
+        try {
+            await dispatch(
+                addToCart({ productId, selectedSize, quantity: delta })
+            ).unwrap();
+        } catch (err) {
+            showErrorToast(err?.message);
+        }
+    };
 
     const handleRemoveFromCart = async (productId, selectedSize) => {
         try {
             await dispatch(
                 removeFromCart({ productId, selectedSize })
             ).unwrap();
-            showSuccessToast('Successfully removed from cart')
+            showSuccessToast("Successfully removed from cart");
         } catch (err) {
             showErrorToast("Remove from Cart error");
         }
@@ -98,7 +76,9 @@ const Cart = () => {
 
     return (
         <>
-            {loadingByAction.getCart && <LoadingSpinner />}
+            {(loadingByAction.getCart ||
+                loadingByAction.addToCart ||
+                loadingByAction.removeFromCart) && <LoadingSpinner />}
             <UserHeader />
             <ToastNotification />
             <section className='cart container'>
@@ -108,7 +88,7 @@ const Cart = () => {
                     <Col lg={8} md={12}>
                         <div className='cart-items p-3 border rounded'>
                             {cart.products?.length > 0 ? (
-                                cart.products?.map((item) => (
+                                cart.products.map((item) => (
                                     <div
                                         key={`${item.product._id}-${item.selectedSize}`}
                                         className='d-flex align-items-center mb-3'>
@@ -134,15 +114,18 @@ const Cart = () => {
                                                 ₹
                                                 {item.product?.offer === "FLAT"
                                                     ? item.product.basePrice / 2
-                                                    : item.product?.basePrice -
+                                                    : item.product.basePrice -
                                                       (item.product
-                                                          ?.discountPrice || 0)}
+                                                          .discountPrice || 0)}
                                             </p>
                                         </div>
                                         <div className='d-flex align-items-center'>
                                             <Button
                                                 variant='light'
                                                 size='sm'
+                                                disabled={
+                                                    loadingByAction.addToCart
+                                                }
                                                 onClick={() =>
                                                     handleQtyChange(
                                                         item.product._id,
@@ -158,6 +141,9 @@ const Cart = () => {
                                             <Button
                                                 variant='light'
                                                 size='sm'
+                                                disabled={
+                                                    loadingByAction.addToCart
+                                                }
                                                 onClick={() =>
                                                     handleQtyChange(
                                                         item.product._id,
@@ -176,7 +162,10 @@ const Cart = () => {
                                                 )
                                             }
                                             variant='light'
-                                            className='ms-3 text-danger'>
+                                            className='ms-3 text-danger'
+                                            disabled={
+                                                loadingByAction.removeFromCart
+                                            }>
                                             <i className='bi bi-trash'></i>
                                         </Button>
                                     </div>
@@ -193,22 +182,25 @@ const Cart = () => {
                             <h5 className='mb-3 fw-bold'>Order Summary</h5>
                             <div className='d-flex justify-content-between mb-2'>
                                 <span>Subtotal</span>
-                                <span>₹{subtotal}</span>
+                                <span>₹{totals.subtotal}</span>
                             </div>
                             <div className='d-flex justify-content-between mb-2 text-danger'>
                                 <span>Discount</span>
-                                <span>-₹{discount}</span>
+                                <span>-₹{totals.discount}</span>
                             </div>
                             <div className='d-flex justify-content-between mb-2'>
                                 <span>Delivery Fee</span>
-                                <span>₹{deliveryFee}</span>
+                                <span>₹{totals.deliveryFee}</span>
                             </div>
                             <hr />
                             <div className='d-flex justify-content-between fw-bold mb-3'>
                                 <span>Total</span>
-                                <span>₹{total}</span>
+                                <span>₹{totals.total}</span>
                             </div>
-                            <Button variant='dark' className='w-100' onClick={()=> navigate('/checkout/address')}>
+                            <Button
+                                variant='dark'
+                                className='w-100'
+                                onClick={() => navigate("/checkout/address")}>
                                 Go to Checkout
                             </Button>
                         </div>
