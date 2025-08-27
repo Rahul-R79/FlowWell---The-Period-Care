@@ -10,6 +10,7 @@ import { addAddress, deleteAddress, editAddress, getAllAddresses, getSingleAddre
 import { validateAddress } from '../middlewares/validators/addressValidator.js';
 import { addToWishlist, getWishlist, removeFromWishlist } from '../controllers/user/wishlistController.js';
 import { addToCart, getCartItems, removeFromCart } from '../controllers/user/cartController.js';
+import { createOrder } from '../controllers/user/orderController.js';
 
 const router = express.Router();
 
@@ -32,5 +33,7 @@ router.delete('/wishlist/:productId', userProtectedRoute, removeFromWishlist);
 router.post('/cart/add', userProtectedRoute, addToCart);
 router.get('/cart', userProtectedRoute, getCartItems);
 router.delete('/cart/:productId/:selectedSize', userProtectedRoute, removeFromCart);
+
+router.post('/payment', userProtectedRoute, createOrder);
 
 export default router;

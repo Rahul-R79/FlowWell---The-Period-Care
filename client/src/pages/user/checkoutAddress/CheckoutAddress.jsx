@@ -5,20 +5,22 @@ import "./checkoutAddress.css";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllAddresses, deleteAddress } from "../../../features/addressSlice";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { confirmAlert } from "../../../utils/confirmAlert";
 import ToastNotification, {
     showSuccessToast,
 } from "../../../components/ToastNotification";
+import { setSelectedAddress } from "../../../features/addressSlice";
 
 const CheckoutAddress = () => {
     const dispatch = useDispatch();
-    const { addresses, loadingByAction } = useSelector(
+    const navigate = useNavigate();
+    const { addresses, loadingByAction, selectedAddress } = useSelector(
         (state) => state.address
     );
 
-    const { cart } = useSelector((state) => state.cart);
+    const { totals } = useSelector((state) => state.cart);
 
     useEffect(() => {
         dispatch(getAllAddresses());
@@ -33,6 +35,10 @@ const CheckoutAddress = () => {
         }
     };
 
+    const handleSelectedAddress = (id)=>{
+        dispatch(setSelectedAddress(id));
+    }
+
     const handleDeleteClick = async (id) => {
         const confirmed = await confirmAlert(
             "Delete Address?",
@@ -46,37 +52,13 @@ const CheckoutAddress = () => {
         }
     };
 
-    const subtotal = cart.products?.reduce(
-        (acc, item) =>
-            acc + (Number(item.product.basePrice) || 0) * (item.quantity || 0),
-        0
-    );
-
-    const discount = cart.products?.reduce((acc, item) => {
-        const { product, quantity } = item;
-
-        let itemDiscount = 0;
-
-        if (product.offer === "FLAT") {
-            itemDiscount = (product.basePrice / 2) * quantity;
-        } else {
-            itemDiscount = (product.discountPrice || 0) * quantity;
-        }
-
-        return acc + itemDiscount;
-    }, 0);
-
-    const deliveryFee = subtotal > 0 && subtotal < 500 ? 99 : 0;
-
-    const total = subtotal + deliveryFee - discount;
-
     return (
         <>
             {loadingByAction.getAllAddresses && <LoadingSpinner />}
             <UserHeader />
             <ToastNotification />
             <section className='checkout-address container'>
-                <h3 className='mb-4 fw-bold'>Select your Address</h3>
+                <h3 className='mb-4 fw-bold'>Select Your Address</h3>
                 <Row>
                     <Col lg={8} md={12}>
                         <div className='address-conatainer p-3 border rounded'>
@@ -88,8 +70,9 @@ const CheckoutAddress = () => {
                                         <Form.Check
                                             type='radio'
                                             name='selectedAddress'
-                                            defaultChecked={index === 0}
+                                            checked={selectedAddress === address._id}
                                             id={`address-${address._id}`}
+                                            onChange={()=> handleSelectedAddress(address._id)}
                                             label={
                                                 <div className='address-label'>
                                                     <strong>
@@ -141,22 +124,22 @@ const CheckoutAddress = () => {
                             <h5 className='mb-3 fw-bold'>Order Summary</h5>
                             <div className='d-flex justify-content-between mb-2'>
                                 <span>Subtotal</span>
-                                <span>₹{subtotal}</span>
+                                <span>₹{totals.subtotal}</span>
                             </div>
                             <div className='d-flex justify-content-between mb-2 text-danger'>
                                 <span>Discount</span>
-                                <span>-₹{discount}</span>
+                                <span>-₹{totals.discount}</span>
                             </div>
                             <div className='d-flex justify-content-between mb-2'>
                                 <span>Delivery Fee</span>
-                                <span>₹{deliveryFee}</span>
+                                <span>₹{totals.deliveryFee}</span>
                             </div>
                             <hr />
                             <div className='d-flex justify-content-between fw-bold mb-3'>
                                 <span>Total</span>
-                                <span>₹{total}</span>
+                                <span>₹{totals.total}</span>
                             </div>
-                            <Button variant='dark' className='w-100'>
+                            <Button variant='dark' className='w-100' onClick={()=> navigate('/payment')}>
                                 Go to Checkout
                             </Button>
                         </div>

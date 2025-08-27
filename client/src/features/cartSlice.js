@@ -5,7 +5,7 @@ import instance from "../utils/axios";
 export const addToCart = createAsyncThunk('/cart/addToCart', async({productId, quantity, selectedSize}, {rejectWithValue})=>{
     try{
         const response = await instance.post('/user/cart/add', {productId, quantity, selectedSize});
-        return response.data.cart;
+        return response.data;
     }catch(err){
         return rejectWithValue(err.response.data);
     }
@@ -14,7 +14,7 @@ export const addToCart = createAsyncThunk('/cart/addToCart', async({productId, q
 export const getCart = createAsyncThunk('/cart/getCart', async(_, {rejectWithValue})=>{
     try{
         const response = await instance.get('/user/cart');
-        return response.data.cart;
+        return response.data;
     }catch(err){
         return rejectWithValue(err.response.data);
     }
@@ -23,7 +23,7 @@ export const getCart = createAsyncThunk('/cart/getCart', async(_, {rejectWithVal
 export const removeFromCart = createAsyncThunk('/cart/removeFromCart', async({productId, selectedSize}, {rejectWithValue})=>{
     try{
         const response = await instance.delete(`/user/cart/${productId}/${selectedSize}`);
-        return response.data.cart;
+        return response.data;
     }catch(err){
         return rejectWithValue(err.response.data);
     }
@@ -33,6 +33,7 @@ const cartSlice = createSlice({
     name: 'cart',
     initialState: {
         cart: {},
+        totals: { subtotal: 0, discount: 0, deliveryFee: 0, total: 0 },
         loadingByAction: {},
         errorByAction: {},
     },
@@ -47,7 +48,8 @@ const cartSlice = createSlice({
         .addCase(addToCart.fulfilled, (state, action)=>{
             state.loadingByAction.addToCart = false;
             state.errorByAction.addToCart = null;
-            state.cart = action.payload;
+            state.cart = action.payload.cart;
+            state.totals = action.payload.totals;
         })
         .addCase(addToCart.rejected, (state, action)=>{
             state.loadingByAction.addToCart = false;
@@ -62,7 +64,8 @@ const cartSlice = createSlice({
         .addCase(getCart.fulfilled, (state, action)=>{
             state.loadingByAction.getCart = false;
             state.errorByAction.getCart = null;
-            state.cart = action.payload;
+            state.cart = action.payload.cart;
+            state.totals = action.payload.totals;
         })
         .addCase(getCart.rejected, (state, action)=>{
             state.loadingByAction.getCart = false;
@@ -77,7 +80,8 @@ const cartSlice = createSlice({
         .addCase(removeFromCart.fulfilled, (state, action)=>{
             state.loadingByAction.removeFromCart = false;
             state.errorByAction.removeFromCart = null;
-            state.cart = action.payload;
+            state.cart = action.payload.cart;
+            state.totals = action.payload.totals;
         })
         .addCase(removeFromCart.rejected, (state, action)=>{
             state.loadingByAction.removeFromCart = false;

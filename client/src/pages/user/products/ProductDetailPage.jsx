@@ -288,6 +288,18 @@ function ProductDetailPage() {
                                     </h5>
                                 )}
                             </div>
+                            {productDetail?.sizes
+                                .filter(
+                                    (s) =>
+                                        s.size === selectedSize &&
+                                        s.stock <= 2 &&
+                                        s.stock > 0
+                                )
+                                .map((s) => (
+                                    <h5 key={s.size} className='text-danger'>
+                                        Hurry up, only {s.stock} left !
+                                    </h5>
+                                ))}
 
                             {/* Tabs */}
                             <Tabs

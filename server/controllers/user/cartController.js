@@ -1,6 +1,24 @@
 import Cart from "../../models/Cart.js";
 import Product from "../../models/Product.js";
 
+const calculateTotals = (cart) => {
+    let subtotal = 0;
+    let discount = 0;
+
+    cart.products.forEach(({ product, quantity }) => {
+        const price = product.basePrice || 0;
+        let itemDiscount =
+            product.offer === "FLAT" ? price / 2 : product.discountPrice || 0;
+        subtotal += price * quantity;
+        discount += itemDiscount * quantity;
+    });
+
+    const deliveryFee = subtotal > 0 && subtotal < 500 ? 99 : 0;
+    const total = subtotal + deliveryFee - discount;
+
+    return { subtotal, discount, deliveryFee, total };
+};
+
 export const addToCart = async (req, res) => {
     const { productId, quantity, selectedSize } = req.body;
 
@@ -75,7 +93,8 @@ export const addToCart = async (req, res) => {
         }
 
         await cart.populate("products.product");
-        res.status(200).json({ cart });
+        const totals = calculateTotals(cart);
+        res.status(200).json({ cart, totals });
     } catch (err) {
         console.log(err);
         res.status(500).json({ message: "internal server error" });
@@ -89,10 +108,11 @@ export const getCartItems = async (req, res) => {
         );
 
         if (!cart) {
-            return res.status(200).json({ cart: { products: [] } });
+            return res.status(200).json({ cart: { products: [], subtotal: 0, discount: 0, deliveryFee: 0, total: 0 } });
         }
+        const totals = calculateTotals(cart);
 
-        return res.status(200).json({ cart });
+        return res.status(200).json({ cart, totals });
     } catch (err) {
         return res.status(500).json({ message: "internal server error" });
     }
@@ -117,7 +137,8 @@ export const removeFromCart = async (req, res) => {
 
         await cart.save();
         await cart.populate("products.product");
-        return res.status(200).json({ cart });
+        const totals = calculateTotals(cart)
+        return res.status(200).json({ cart, totals });
     } catch (err) {
         console.log(err.message);
 

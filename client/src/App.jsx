@@ -36,6 +36,8 @@ import Cart from "./pages/user/cart/Cart";
 import CheckoutAddress from "./pages/user/checkoutAddress/CheckoutAddress";
 import AddCheckoutAddress from "./pages/user/checkoutAddress/AddCheckoutAddress";
 import EditCheckoutAddress from "./pages/user/checkoutAddress/EditCheckoutAddres";
+import Payment from "./pages/user/payment/Payment";
+import PaymentSuccess from "./pages/user/payment/PaymentSuccess";
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -137,6 +139,8 @@ function App() {
                     <Route path="/checkout/address" element={<CheckoutAddress/>}/>
                     <Route path="/checkout/add/address" element={<AddCheckoutAddress/>}/>
                     <Route path="/checkout/address/:id/edit" element={<EditCheckoutAddress/>}/>
+                    <Route path="/payment" element={<Payment/>} />
+                    <Route path="/payment/success" element={<PaymentSuccess/>} />
                 </Route>
 
                 {/* Public Routes accessible for everyone*/}
