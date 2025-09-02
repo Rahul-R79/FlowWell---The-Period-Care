@@ -139,7 +139,7 @@ const CheckoutAddress = () => {
                                 <span>Total</span>
                                 <span>₹{totals.total}</span>
                             </div>
-                            <Button variant='dark' className='w-100' onClick={()=> navigate('/payment')}>
+                            <Button variant='dark' className='w-100' onClick={()=> navigate('/payment', {replace: true})}>
                                 Go to Checkout
                             </Button>
                         </div>

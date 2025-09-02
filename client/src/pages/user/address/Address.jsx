@@ -14,7 +14,7 @@ function Address() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { addresses, loadingByAction, errorByAction } = useSelector(
+    const { addresses, loadingByAction } = useSelector(
         (state) => state.address
     );
 

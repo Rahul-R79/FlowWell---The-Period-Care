@@ -200,7 +200,7 @@ const Cart = () => {
                             <Button
                                 variant='dark'
                                 className='w-100'
-                                onClick={() => navigate("/checkout/address")}>
+                                onClick={() => navigate("/checkout/address", {replace: true})}>
                                 Go to Checkout
                             </Button>
                         </div>

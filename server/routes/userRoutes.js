@@ -10,7 +10,7 @@ import { addAddress, deleteAddress, editAddress, getAllAddresses, getSingleAddre
 import { validateAddress } from '../middlewares/validators/addressValidator.js';
 import { addToWishlist, getWishlist, removeFromWishlist } from '../controllers/user/wishlistController.js';
 import { addToCart, getCartItems, removeFromCart } from '../controllers/user/cartController.js';
-import { createOrder } from '../controllers/user/orderController.js';
+import { cancelOrder, createOrder, getInvoice, getOrderItem, getOrders, ReturnOrder } from '../controllers/user/orderController.js';
 
 const router = express.Router();
 
@@ -35,5 +35,12 @@ router.get('/cart', userProtectedRoute, getCartItems);
 router.delete('/cart/:productId/:selectedSize', userProtectedRoute, removeFromCart);
 
 router.post('/payment', userProtectedRoute, createOrder);
+
+router.get('/orders', userProtectedRoute, getOrders);
+router.get('/order/detail/:orderId/:productId', userProtectedRoute, getOrderItem);
+router.patch('/order/cancel/:orderId/:productId', userProtectedRoute, cancelOrder);
+router.patch('/order/return/:orderId/:productId', userProtectedRoute, ReturnOrder);
+router.get("/orders/:id/invoice", userProtectedRoute, getInvoice);
+
 
 export default router;

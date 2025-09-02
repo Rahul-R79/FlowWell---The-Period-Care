@@ -4,7 +4,7 @@ import { Row, Col, Button, Form } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { GoTag } from "react-icons/go";
 import "./payment.css";
-import { createOrder } from "../../../features/orderSlice";
+import { createOrder } from "../../../features/orders/orderSlice";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../../components/LoadingSpinner";

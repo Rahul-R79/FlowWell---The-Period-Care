@@ -1,0 +1,223 @@
+.order-item {
+    background-color: #fff;
+    transition: box-shadow 0.3s ease;
+}
+
+.order-item:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.order-img {
+    width: 180px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.orders {
+    margin-bottom: 150px;
+    margin-top: 80px;
+}
+
+@media (max-width: 1000px) {
+    .orders {
+        margin-bottom: 60px;
+        margin-top: 50px;
+    }
+}
+
+.view-link {
+    color: #b0b0b0;
+    border-bottom: 1px solid #b7b3b3;
+}
+
+.view-link:hover {
+    color: rgb(171, 191, 255);
+    border-bottom: 1px solid #2231ff;
+}
+
+.order-status {
+    font-family: "Times New Roman", Times, serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.order-status.outfordelivery {
+    color: orange;
+}
+.order-status.delivered {
+    color: green;
+}
+.order-status.cancelled {
+    color: red;
+}
+
+.viewOrder, .cancel-order, .order-detail {
+    margin-bottom: 100px;
+    margin-top: 60px;
+}
+
+@media (max-width: 1000px) {
+    .viewOrder, .cancel-order, .order-detail {
+        margin-bottom: 30px;
+        margin-top: 30px;
+    }
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 35px;
+}
+
+.timeline-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ccc;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+}
+
+/* Pulse animation for active orders only (not delivered) */
+.timeline-dot.active {
+    background: green;
+    animation: pulse 1.5s infinite;
+}
+
+/* Delivered orders (static green) */
+.timeline-dot.delivered {
+    background: green;
+    animation: none;
+}
+
+/* Completed orders */
+.timeline-dot.completed {
+    background: green;
+}
+
+/* Cancelled / Returned / Refunded orders */
+.timeline-dot.cancelled,
+.timeline-dot.returned,
+.timeline-dot.refunded {
+    background: red;
+}
+
+/* Pending orders */
+.timeline-dot.pending {
+    background: rgb(236, 236, 236);
+}
+
+.timeline-line {
+    position: absolute;
+    left: 6px;
+    top: 14px;
+    width: 2px;
+    height: calc(100% + 20px);
+    background: #ededed;
+    z-index: 1;
+}
+
+.timeline-line.completed,
+.timeline-line.active {
+    background: green;
+}
+
+.timeline-line.cancelled,
+.timeline-line.returned,
+.timeline-line.refunded {
+    background: red;
+}
+
+.timeline-line.pending {
+    background: #ddd;
+}
+
+.timeline-item:last-child .timeline-line {
+    display: none;
+}
+
+.timeline-content {
+    margin-left: 35px;
+}
+
+.timeline-content h6 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.timeline-content small {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 128, 0, 0.6);
+    }
+    70% {
+        transform: scale(1.2);
+        box-shadow: 0 0 0 10px rgba(0, 128, 0, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 128, 0, 0);
+    }
+}
+
+/* Order card styles */
+.cancel-order-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+}
+
+.order-card {
+    cursor: pointer;
+}
+
+/* Reason list */
+.reason-list .list-group-item {
+    border: 1px solid #e5e5e5;
+    margin-bottom: 10px;
+    border-radius: 8px !important;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.reason-list .list-group-item.active {
+    background-color: #fff;
+    border: 2px solid #000;
+    color: #000;
+    font-weight: 500;
+}
+
+/* Form styling */
+form textarea {
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 12px;
+}
+
+button.btn-dark {
+    background-color: #000;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+button.btn-outline-dark {
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+textarea::placeholder {
+    color: #6c757d !important; 
+    font-size: 14px !important; 
+    font-style: italic !important;
+    opacity: 1 !important; 
+}

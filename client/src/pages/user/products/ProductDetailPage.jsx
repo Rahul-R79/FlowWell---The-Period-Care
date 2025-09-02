@@ -40,11 +40,11 @@ function ProductDetailPage() {
 
     const {
         productDetail,
-        loadingByAction: productLoading,
+        loadingByAction,
         similarProducts,
     } = useSelector((state) => state.userProducts);
 
-    const { wishlist, loadingByAction: wishlistLoading } = useSelector(
+    const { wishlist } = useSelector(
         (state) => state.wishlist
     );
 
@@ -57,7 +57,12 @@ function ProductDetailPage() {
 
     useEffect(() => {
         if (productDetail?.sizes?.length > 0) {
-            setSelectedSize(productDetail.sizes[0].size);
+            const firstAvailableSize = productDetail.sizes.find(
+                (s) => s.stock > 0
+            );
+            setSelectedSize(
+                firstAvailableSize ? firstAvailableSize.size : null
+            );
         }
     }, [productDetail]);
 
@@ -135,12 +140,10 @@ function ProductDetailPage() {
 
     return (
         <>
-            {productLoading.getUserProductById ||
-                wishlistLoading.addToWishlist ||
-                (cartLoading.addToCart && <LoadingSpinner />)}
+            {loadingByAction.getUserProductById && <LoadingSpinner />}
             <UserHeader />
             <section className='product-detail'>
-                <Container className=' py-5'>
+                <Container className='py-5'>
                     <ToastNotification />
                     <Row>
                         {/* Left side - Product Images */}
@@ -225,11 +228,37 @@ function ProductDetailPage() {
                                                 : "outline-dark"
                                         }
                                         size='lg'
-                                        className='me-2'
-                                        onClick={() => setSelectedSize(s.size)}>
+                                        className='me-2 position-relative'
+                                        onClick={() =>
+                                            s.stock > 0 &&
+                                            setSelectedSize(s.size)
+                                        }
+                                        disabled={s.stock === 0}
+                                        style={{
+                                            textDecoration:
+                                                s.stock === 0
+                                                    ? "line-through"
+                                                    : "none",
+                                        }}>
                                         {s.size.length <= 3
                                             ? s.size.toUpperCase()
                                             : s.size.charAt(0).toUpperCase()}
+
+                                        {s.stock === 0 && (
+                                            <span
+                                                style={{
+                                                    position: "absolute",
+                                                    top: "-8px",
+                                                    right: "-8px",
+                                                    background: "red",
+                                                    color: "#fff",
+                                                    fontSize: "10px",
+                                                    padding: "2px 4px",
+                                                    borderRadius: "4px",
+                                                }}>
+                                                Out
+                                            </span>
+                                        )}
                                     </Button>
                                 ))}
                             </div>
@@ -315,7 +344,7 @@ function ProductDetailPage() {
                                             protection.
                                         </p>
 
-                                        {/*Accordion Section */}
+                                        {/* Accordion Section */}
                                         <Accordion alwaysOpen={false} flush>
                                             <Accordion.Item eventKey='0'>
                                                 <Accordion.Header>
@@ -356,6 +385,7 @@ function ProductDetailPage() {
                                 </Tab>
                             </Tabs>
                         </Col>
+
                         {/* Similar Products */}
                         <div className='mt-5'>
                             <h5 className='mb-5'>
