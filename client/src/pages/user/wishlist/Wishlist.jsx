@@ -73,7 +73,7 @@ function Wishlist() {
                     limit: 3,
                 })
             ).unwrap();
-            showSuccessToast('Added to cart!')
+            showSuccessToast("Added to cart!");
             setTimeout(() => {
                 navigate("/cart");
             }, 500);
@@ -88,8 +88,8 @@ function Wishlist() {
 
     return (
         <>
-            {loadingByAction.getWishlist ||
-                (loadingByAction.removeFromWishlist && <LoadingSpinner />)}
+            {(loadingByAction.getWishlist ||
+                loadingByAction.removeFromWishlist) && <LoadingSpinner />}
             <UserHeader />
             <ToastNotification />
             <section className='wishlist container my-5'>
@@ -129,14 +129,20 @@ function Wishlist() {
                                 </p>
                                 <p
                                     className={`fw-bold ${
-                                        item.product.sizes.some(
-                                            (size) => size.stock > 0
+                                        item.product.sizes.find(
+                                            (s) =>
+                                                s.size ===
+                                                    item.selectedSize &&
+                                                s.stock > 0
                                         )
                                             ? "text-success"
                                             : "text-danger"
                                     }`}>
-                                    {item.product.sizes.some(
-                                        (size) => size.stock > 0
+                                    {item.product.sizes.find(
+                                        (s) =>
+                                            s.size ===
+                                                item.selectedSize &&
+                                            s.stock > 0
                                     )
                                         ? "In Stock"
                                         : "Out of Stock"}
@@ -152,9 +158,13 @@ function Wishlist() {
                                     variant='dark'
                                     size='sm'
                                     className='me-3'
-                                    disabled={item.product.sizes.some(
-                                        (s) => s.stock <= 0
-                                    )}
+                                    disabled={
+                                        !item.product.sizes.find(
+                                            (s) =>
+                                                s.size === item.selectedSize &&
+                                                s.stock > 0
+                                        )
+                                    }
                                     onClick={() => handleAddToCart(item)}>
                                     Add to Cart
                                 </Button>

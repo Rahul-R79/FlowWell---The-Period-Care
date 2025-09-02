@@ -38,6 +38,13 @@ import AddCheckoutAddress from "./pages/user/checkoutAddress/AddCheckoutAddress"
 import EditCheckoutAddress from "./pages/user/checkoutAddress/EditCheckoutAddres";
 import Payment from "./pages/user/payment/Payment";
 import PaymentSuccess from "./pages/user/payment/PaymentSuccess";
+import AllOrders from "./pages/user/orders/AllOrders";
+import ViewDetail from "./pages/user/orders/ViewOrderDetail";
+import CancelOrders from "./pages/user/orders/CancelOrder";
+import OrderDetail from "./pages/user/orders/OrderDetail";
+import AdminOrders from "./pages/admin/orders/AdminOrders";
+import AdminOrdersDetail from "./pages/admin/orders/AdminOrderDetail";
+import ReturnOrders from "./pages/user/orders/ReturnOrder";
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -119,6 +126,8 @@ function App() {
                         element={<EditProducts />}
                     />
                     <Route path='/admin/*' element={<AdminPageNotFound />} />
+                    <Route path="/admin/orders" element={<AdminOrders/>} />
+                    <Route path="/admin/order/detail/:orderId" element={<AdminOrdersDetail/>} />
                 </Route>
 
                 {/* User Protected Routes */}
@@ -141,6 +150,12 @@ function App() {
                     <Route path="/checkout/address/:id/edit" element={<EditCheckoutAddress/>}/>
                     <Route path="/payment" element={<Payment/>} />
                     <Route path="/payment/success" element={<PaymentSuccess/>} />
+
+                    <Route path="/orders" element={<AllOrders/>} />
+                    <Route path="/view/order" element={<ViewDetail/>} />
+                    <Route path="/cancel/order/:orderId/:productId" element={<CancelOrders/>} />
+                    <Route path="/return/order/:orderId/:productId" element={<ReturnOrders/>} />
+                    <Route path="/order/detail/:orderId/:productId" element={<OrderDetail/>} />
                 </Route>
 
                 {/* Public Routes accessible for everyone*/}

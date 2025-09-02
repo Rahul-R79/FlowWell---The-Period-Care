@@ -18,6 +18,7 @@ import {
 import { addProduct, getProduct, getSingleProductById, productStatus, updateProductById } from '../controllers/admin/adminProductsController.js';
 import { parseFormData, validateProduct } from '../middlewares/validators/productValidator.js';
 import upload from '../middlewares/multer.js';
+import { adminGetOrderDetail, adminGetOrders, adminUpdateOrderStatus } from '../controllers/admin/adminOrderController.js';
 
 const router = express.Router();
 
@@ -39,5 +40,9 @@ router.post('/products/add', adminProtectedRoute, upload.array('images', 4), par
 router.patch('/products/status/:id', adminProtectedRoute, productStatus);
 router.get('/products/:id', adminProtectedRoute, getSingleProductById);
 router.patch('/products/:id', adminProtectedRoute, upload.array('images', 4), parseFormData, validateProduct, handleValidation, updateProductById);
+
+router.get('/orders', adminProtectedRoute, adminGetOrders);
+router.get('/order/detail/:orderId', adminProtectedRoute, adminGetOrderDetail);
+router.patch('/order/:orderId/product', adminProtectedRoute, adminUpdateOrderStatus);
 
 export default router;

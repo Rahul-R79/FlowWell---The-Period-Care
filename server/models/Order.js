@@ -7,6 +7,7 @@ const orderSchema = new mongoose.Schema(
             ref: "User",
             required: true,
         },
+        orderNumber: { type: String, unique: true, required: true },
 
         cartItems: [
             {
@@ -15,10 +16,42 @@ const orderSchema = new mongoose.Schema(
                     ref: "Product",
                     required: true,
                 },
-                name: { type: String }, 
-                price: { type: Number}, 
+                name: String,
+                price: Number,
                 quantity: { type: Number, default: 1 },
-                selectedSize: { type: String },
+                selectedSize: String,
+                image: String,
+
+                status: {
+                    type: String,
+                    enum: ["PLACED", "SHIPPED", "OUT FOR DELIVERY", "CANCELLED", "DELIVERED", "RETURNED", "REFUNDED"],
+                    default: "PLACED",
+                },
+
+                cancelReason: String,
+                cancelledAt: Date,
+
+                returnReason: String,
+                returnedAt: Date,
+
+                statusHistory: [
+                    {
+                        status: {
+                            type: String,
+                            enum: [
+                                "PLACED",
+                                "SHIPPED",
+                                "OUT FOR DELIVERY",
+                                "DELIVERED",
+                                "CANCELLED",
+                                "RETURNED",
+                                "REFUNDED"
+                            ],
+                        },
+                        date: { type: Date, default: Date.now },
+                        reason: String,
+                    },
+                ],
             },
         ],
 
@@ -36,7 +69,7 @@ const orderSchema = new mongoose.Schema(
         paymentMethod: {
             type: String,
             enum: ["COD", "RAZORPAY", "SIMPL", "CARD", "UPI", "WALLET"],
-            required: true
+            required: true,
         },
         paymentStatus: {
             type: String,
@@ -46,9 +79,20 @@ const orderSchema = new mongoose.Schema(
 
         orderStatus: {
             type: String,
-            enum: ["PLACED", "CONFIRMED", "SHIPPED", "DELIVERED", "CANCELLED"],
+            enum: [
+                "PLACED",
+                "SHIPPED",
+                "DELIVERED",
+                "OUT FOR DELIVERY",
+                "CANCELLED",
+                "RETURNED",
+                "REFUNDED"
+            ],
             default: "PLACED",
         },
+
+        expectedDelivery: Date,
+        deliveredAt: Date,
     },
     { timestamps: true }
 );

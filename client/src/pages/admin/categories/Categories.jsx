@@ -18,7 +18,7 @@ import { confirmAlert } from "../../../utils/confirmAlert";
 
 const CategoriesPage = () => {
     const dispatch = useDispatch();
-    const {category, loadingByAction, errorByAction, currentPage, totalPages} = useSelector(state => state.category);
+    const {category, loadingByAction, currentPage, totalPages} = useSelector(state => state.category);
 
     const [search, setSearch] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState('');

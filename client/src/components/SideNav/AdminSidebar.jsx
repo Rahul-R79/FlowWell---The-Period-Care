@@ -10,13 +10,12 @@ import LoadingSpinner from '../LoadingSpinner';
 
 const sidebarItems = [
     { icon: <BsGraphUp size={20} />, text: 'Dashboard', path: '/admin/dashboard'},
-    { icon: <BsBag size={20} />, text: 'Order' },
+    { icon: <BsBag size={20} />, text: 'Order', path: '/admin/orders'},
     { icon: <BsCardList size={20} />, text: 'Products', path: '/admin/products'},
     { icon: <BsBarChart size={20} />, text: 'Sales report' },
     { icon: <BsPeople size={20} />, text: 'Customer', path: '/admin/customers'},
     { icon: <BsTicket size={20} />, text: 'Coupon' },
     { icon: <BsGrid size={20} />, text: 'Category', path: '/admin/categories'},
-    { icon: <BsArrowRepeat size={20} />, text: 'Refund/Return' },
     { icon: <BsCollection size={20} />, text: 'Banners' },
     { icon: <BsPersonPlus size={20} />, text: 'Referrals' },
 ];
