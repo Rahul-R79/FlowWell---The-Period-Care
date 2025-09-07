@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(cors({
     origin: [
         'http://localhost:5173',           
-        'https://your-ngrok-url.ngrok-free.app' 
+        'https://18549c3e30f5.ngrok-free.app'
     ],
     credentials: true
 }));

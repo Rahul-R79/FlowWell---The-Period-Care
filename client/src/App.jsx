@@ -45,6 +45,7 @@ import OrderDetail from "./pages/user/orders/OrderDetail";
 import AdminOrders from "./pages/admin/orders/AdminOrders";
 import AdminOrdersDetail from "./pages/admin/orders/AdminOrderDetail";
 import ReturnOrders from "./pages/user/orders/ReturnOrder";
+import PaymentFailed from "./pages/user/payment/PaymentFailed";
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -150,6 +151,7 @@ function App() {
                     <Route path="/checkout/address/:id/edit" element={<EditCheckoutAddress/>}/>
                     <Route path="/payment" element={<Payment/>} />
                     <Route path="/payment/success" element={<PaymentSuccess/>} />
+                    <Route path="/payment/failed" element={<PaymentFailed/>} />
 
                     <Route path="/orders" element={<AllOrders/>} />
                     <Route path="/view/order" element={<ViewDetail/>} />
