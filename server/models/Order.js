@@ -24,7 +24,15 @@ const orderSchema = new mongoose.Schema(
 
                 status: {
                     type: String,
-                    enum: ["PLACED", "SHIPPED", "OUT FOR DELIVERY", "CANCELLED", "DELIVERED", "RETURNED", "REFUNDED"],
+                    enum: [
+                        "PLACED",
+                        "SHIPPED",
+                        "OUT FOR DELIVERY",
+                        "CANCELLED",
+                        "DELIVERED",
+                        "RETURNED",
+                        "REFUNDED",
+                    ],
                     default: "PLACED",
                 },
 
@@ -45,7 +53,7 @@ const orderSchema = new mongoose.Schema(
                                 "DELIVERED",
                                 "CANCELLED",
                                 "RETURNED",
-                                "REFUNDED"
+                                "REFUNDED",
                             ],
                         },
                         date: { type: Date, default: Date.now },
@@ -86,9 +94,14 @@ const orderSchema = new mongoose.Schema(
                 "OUT FOR DELIVERY",
                 "CANCELLED",
                 "RETURNED",
-                "REFUNDED"
+                "REFUNDED",
             ],
             default: "PLACED",
+        },
+
+        appliedCoupon: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Coupon",
         },
 
         expectedDelivery: Date,

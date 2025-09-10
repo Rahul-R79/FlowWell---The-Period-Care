@@ -19,6 +19,8 @@ import { addProduct, getProduct, getSingleProductById, productStatus, updateProd
 import { parseFormData, validateProduct } from '../middlewares/validators/productValidator.js';
 import upload from '../middlewares/multer.js';
 import { adminGetOrderDetail, adminGetOrders, adminUpdateOrderStatus } from '../controllers/admin/adminOrderController.js';
+import { validateCoupon } from '../middlewares/validators/couponValidator.js';
+import { addCoupon, couponStatus, editCoupon, getCoupons, getSingleCoupon } from '../controllers/admin/adminCouponController.js';
 
 const router = express.Router();
 
@@ -44,5 +46,11 @@ router.patch('/products/:id', adminProtectedRoute, upload.array('images', 4), pa
 router.get('/orders', adminProtectedRoute, adminGetOrders);
 router.get('/order/detail/:orderId', adminProtectedRoute, adminGetOrderDetail);
 router.patch('/order/:orderId/product', adminProtectedRoute, adminUpdateOrderStatus);
+
+router.post('/coupon/add', adminProtectedRoute, validateCoupon, handleValidation, addCoupon);
+router.get('/coupon', adminProtectedRoute, getCoupons);
+router.get('/coupon/:id', adminProtectedRoute, getSingleCoupon);
+router.patch('/coupon/:id', adminProtectedRoute, validateCoupon, handleValidation, editCoupon);
+router.patch('/coupon/status/:id', adminProtectedRoute, couponStatus);
 
 export default router;

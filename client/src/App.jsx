@@ -45,6 +45,11 @@ import OrderDetail from "./pages/user/orders/OrderDetail";
 import AdminOrders from "./pages/admin/orders/AdminOrders";
 import AdminOrdersDetail from "./pages/admin/orders/AdminOrderDetail";
 import ReturnOrders from "./pages/user/orders/ReturnOrder";
+import PaymentFailed from "./pages/user/payment/PaymentFailed";
+import Coupons from "./pages/user/coupons/Coupons";
+import AddCoupon from "./pages/admin/coupons/AddCoupon";
+import AdminCoupons from "./pages/admin/coupons/AdminCoupons";
+import EditCoupon from "./pages/admin/coupons/EditCoupon";
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -128,6 +133,10 @@ function App() {
                     <Route path='/admin/*' element={<AdminPageNotFound />} />
                     <Route path="/admin/orders" element={<AdminOrders/>} />
                     <Route path="/admin/order/detail/:orderId" element={<AdminOrdersDetail/>} />
+
+                    <Route path="/admin/coupons" element={<AdminCoupons/>} />
+                    <Route path="/admin/add/coupon" element={<AddCoupon/>} />
+                    <Route path="/admin/edit/coupon/:id" element={<EditCoupon/>} />
                 </Route>
 
                 {/* User Protected Routes */}
@@ -148,8 +157,11 @@ function App() {
                     <Route path="/checkout/address" element={<CheckoutAddress/>}/>
                     <Route path="/checkout/add/address" element={<AddCheckoutAddress/>}/>
                     <Route path="/checkout/address/:id/edit" element={<EditCheckoutAddress/>}/>
+
+                    <Route path="/coupons" element={<Coupons/>}/>
                     <Route path="/payment" element={<Payment/>} />
                     <Route path="/payment/success" element={<PaymentSuccess/>} />
+                    <Route path="/payment/failed" element={<PaymentFailed/>} />
 
                     <Route path="/orders" element={<AllOrders/>} />
                     <Route path="/view/order" element={<ViewDetail/>} />

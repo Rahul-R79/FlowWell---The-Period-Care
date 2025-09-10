@@ -6,42 +6,118 @@ import { GoTag } from "react-icons/go";
 import "./payment.css";
 import { createOrder } from "../../../features/orders/orderSlice";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import confetti from "canvas-confetti";
+import axios from "axios";
 
 const Payment = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { totals } = useSelector((state) => state.cart);
+    const { totals, cart } = useSelector((state) => state.cart);
     const { selectedAddress } = useSelector((state) => state.address);
     const { loadingByAction } = useSelector((state) => state.order);
+    const { appliedCoupon } = useSelector((state) => state.coupon);
 
-    const [paymentMethod, setPaymentMethod] = useState("COD");
+    const [paymentMethod, setPaymentMethod] = useState("RAZORPAY");
 
     const handlePaymentChange = (e) => {
         setPaymentMethod(e.target.value);
     };
 
+    const calculateTotal = {
+        ...totals,
+        discount: totals.discount + (appliedCoupon?.discountAmount || 0),
+        total: totals.total - (appliedCoupon?.discountAmount || 0),
+    };
+
     const handlePlaceOrder = async () => {
-        try {
-            await dispatch(
-                createOrder({
-                    paymentMethod,
-                    shippingAddressId: selectedAddress,
-                })
-            ).unwrap();
+        if (paymentMethod === "RAZORPAY") {
+            try {
+                const response = await axios.post(
+                    "http://localhost:3000/api/user/order/razorpay",
+                    { amount: totals.total },
+                    { withCredentials: true }
+                );
 
-            confetti({
-                particleCount: 200,
-                spread: 70,
-                origin: { y: 0.6 },
-            });
+                const data = response.data;
 
-            navigate("/payment/success", {replace: true});
-        } catch (err) {
-            console.log("payment error", err);
+                const options = {
+                    key: data.key,
+                    amount: data.amount,
+                    currency: data.currency,
+                    name: "FlowWell",
+                    description: "Order Payment",
+                    order_id: data.orderId,
+                    handler: async function (res) {
+                        try {
+                            const verifyResponse = await axios.post(
+                                "http://localhost:3000/api/user/order/razorpay/verify",
+                                {
+                                    razorpay_order_id: res.razorpay_order_id,
+                                    razorpay_payment_id:
+                                        res.razorpay_payment_id,
+                                    razorpay_signature: res.razorpay_signature,
+                                    orderData: {
+                                        cart,
+                                        subtotal: totals.subtotal,
+                                        discount: totals.discount,
+                                        deliveryFee: totals.deliveryFee,
+                                        total: totals.total,
+                                        shippingAddress: selectedAddress,
+                                        paymentMethod: "RAZORPAY",
+                                    },
+                                },
+                                { withCredentials: true }
+                            );
+
+                            if (verifyResponse.data.order) {
+                                confetti({
+                                    particleCount: 200,
+                                    spread: 70,
+                                    origin: { y: 0.6 },
+                                });
+                                navigate("/payment/success", { replace: true });
+                            } else {
+                                navigate("/payment/failed", { replace: true });
+                            }
+                        } catch (err) {
+                            navigate("/payment/failed", { replace: true });
+                        }
+                    },
+                    modal: {
+                        ondismiss: () => {
+                            navigate("/payment/failed", { replace: true });
+                        },
+                    },
+                    theme: { color: "#3399cc" },
+                };
+
+                const razorpay = new window.Razorpay(options);
+                razorpay.open();
+            } catch (err) {
+                alert("Payment initialization failed. Please try again.");
+            }
+        } else {
+            try {                
+                await dispatch(
+                    createOrder({
+                        paymentMethod,
+                        shippingAddressId: selectedAddress,
+                        appliedCouponId: appliedCoupon?._id
+                    })
+                ).unwrap();
+
+                confetti({
+                    particleCount: 200,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                });
+                navigate("/payment/success", { replace: true });
+            } catch (err) {
+                navigate("/payment/failed", { replace: true });
+            }
         }
     };
 
@@ -56,7 +132,12 @@ const Payment = () => {
                         <div className='payment-conatainer p-3 border rounded'>
                             <Form>
                                 {/* Razorpay */}
-                                <div className='payment-option mb-3 p-3 border rounded'>
+                                <label
+                                    className={`payment-option mb-3 p-3 border rounded d-flex align-items-center cursor-pointer ${
+                                        paymentMethod === "RAZORPAY"
+                                            ? "border-primary"
+                                            : ""
+                                    }`}>
                                     <Form.Check
                                         type='radio'
                                         name='paymentMethod'
@@ -64,22 +145,24 @@ const Payment = () => {
                                         value='RAZORPAY'
                                         checked={paymentMethod === "RAZORPAY"}
                                         onChange={handlePaymentChange}
-                                        label={
-                                            <div className='d-flex align-items-center'>
-                                                <img
-                                                    src='/images/icons/razorpay-icon.webp'
-                                                    alt='Razorpay'
-                                                    className='me-2'
-                                                    style={{ height: "50px" }}
-                                                />
-                                                <span>Razorpay</span>
-                                            </div>
-                                        }
+                                        className='me-2'
                                     />
-                                </div>
+                                    <img
+                                        src='/images/icons/razorpay-icon.webp'
+                                        alt='Razorpay'
+                                        className='me-2'
+                                        style={{ height: "50px" }}
+                                    />
+                                    <span>Razorpay</span>
+                                </label>
 
-                                {/* GPay */}
-                                <div className='payment-option mb-3 p-3 border rounded'>
+                                {/* GPay / UPI */}
+                                <label
+                                    className={`payment-option mb-3 p-3 border rounded d-flex align-items-center cursor-pointer ${
+                                        paymentMethod === "UPI"
+                                            ? "border-primary"
+                                            : ""
+                                    }`}>
                                     <Form.Check
                                         type='radio'
                                         name='paymentMethod'
@@ -87,27 +170,29 @@ const Payment = () => {
                                         value='UPI'
                                         checked={paymentMethod === "UPI"}
                                         onChange={handlePaymentChange}
-                                        label={
-                                            <div className='d-flex align-items-center'>
-                                                <img
-                                                    src='/images/icons/google-pay.webp'
-                                                    alt='Google Pay'
-                                                    className='me-2'
-                                                    style={{ height: "30px" }}
-                                                />
-                                                <div>
-                                                    <span>UPI Payment</span>
-                                                    <div className='text-muted small'>
-                                                        Pay by any UPI app
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
+                                        className='me-2'
                                     />
-                                </div>
+                                    <img
+                                        src='/images/icons/google-pay.webp'
+                                        alt='Google Pay'
+                                        className='me-2'
+                                        style={{ height: "30px" }}
+                                    />
+                                    <div>
+                                        <span>UPI Payment</span>
+                                        <div className='text-muted small'>
+                                            Pay by any UPI app
+                                        </div>
+                                    </div>
+                                </label>
 
                                 {/* Simpl Pay Later */}
-                                <div className='payment-option mb-3 p-3 border rounded'>
+                                <label
+                                    className={`payment-option mb-3 p-3 border rounded d-flex align-items-center cursor-pointer ${
+                                        paymentMethod === "SIMPL"
+                                            ? "border-primary"
+                                            : ""
+                                    }`}>
                                     <Form.Check
                                         type='radio'
                                         name='paymentMethod'
@@ -115,30 +200,29 @@ const Payment = () => {
                                         value='SIMPL'
                                         checked={paymentMethod === "SIMPL"}
                                         onChange={handlePaymentChange}
-                                        label={
-                                            <div className='d-flex align-items-center'>
-                                                <img
-                                                    src='/images/icons/simpl_icon.webp'
-                                                    alt='Simpl'
-                                                    className='me-2'
-                                                    style={{ height: "50px" }}
-                                                />
-                                                <div>
-                                                    <span>
-                                                        Pay Later with Simpl
-                                                    </span>
-                                                    <div className='text-muted small'>
-                                                        Buy now, pay after 15/30
-                                                        days
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
+                                        className='me-2'
                                     />
-                                </div>
+                                    <img
+                                        src='/images/icons/simpl_icon.webp'
+                                        alt='Simpl'
+                                        className='me-2'
+                                        style={{ height: "50px" }}
+                                    />
+                                    <div>
+                                        <span>Pay Later with Simpl</span>
+                                        <div className='text-muted small'>
+                                            Buy now, pay after 15/30 days
+                                        </div>
+                                    </div>
+                                </label>
 
                                 {/* Credit / Debit Card */}
-                                <div className='payment-option mb-3 p-3 border rounded'>
+                                <label
+                                    className={`payment-option mb-3 p-3 border rounded d-flex align-items-center cursor-pointer ${
+                                        paymentMethod === "CARD"
+                                            ? "border-primary"
+                                            : ""
+                                    }`}>
                                     <Form.Check
                                         type='radio'
                                         name='paymentMethod'
@@ -146,22 +230,24 @@ const Payment = () => {
                                         value='CARD'
                                         checked={paymentMethod === "CARD"}
                                         onChange={handlePaymentChange}
-                                        label={
-                                            <div>
-                                                <span>
-                                                    Credit/Debit/ATM Card
-                                                </span>
-                                                <div className='text-muted small'>
-                                                    Add any secure card by RBI
-                                                    guidelines
-                                                </div>
-                                            </div>
-                                        }
+                                        className='me-2'
                                     />
-                                </div>
+                                    <div>
+                                        <span>Credit/Debit/ATM Card</span>
+                                        <div className='text-muted small'>
+                                            Add any secure card by RBI
+                                            guidelines
+                                        </div>
+                                    </div>
+                                </label>
 
                                 {/* Wallet */}
-                                <div className='payment-option mb-3 p-3 border rounded'>
+                                <label
+                                    className={`payment-option mb-3 p-3 border rounded d-flex align-items-center cursor-pointer ${
+                                        paymentMethod === "WALLET"
+                                            ? "border-primary"
+                                            : ""
+                                    }`}>
                                     <Form.Check
                                         type='radio'
                                         name='paymentMethod'
@@ -169,20 +255,24 @@ const Payment = () => {
                                         value='WALLET'
                                         checked={paymentMethod === "WALLET"}
                                         onChange={handlePaymentChange}
-                                        label={
-                                            <div>
-                                                <span>Wallets</span>
-                                                <div className='text-muted small'>
-                                                    Pay using Paytm, PhonePe,
-                                                    Amazon Pay, etc.
-                                                </div>
-                                            </div>
-                                        }
+                                        className='me-2'
                                     />
-                                </div>
+                                    <div>
+                                        <span>Wallets</span>
+                                        <div className='text-muted small'>
+                                            Pay using Paytm, PhonePe, Amazon
+                                            Pay, etc.
+                                        </div>
+                                    </div>
+                                </label>
 
                                 {/* Cash on Delivery */}
-                                <div className='payment-option mb-3 p-3 border rounded'>
+                                <label
+                                    className={`payment-option mb-3 p-3 border rounded d-flex align-items-center cursor-pointer ${
+                                        paymentMethod === "COD"
+                                            ? "border-primary"
+                                            : ""
+                                    }`}>
                                     <Form.Check
                                         type='radio'
                                         name='paymentMethod'
@@ -190,9 +280,10 @@ const Payment = () => {
                                         value='COD'
                                         checked={paymentMethod === "COD"}
                                         onChange={handlePaymentChange}
-                                        label={<span>Cash on Delivery</span>}
+                                        className='me-2'
                                     />
-                                </div>
+                                    <span>Cash on Delivery</span>
+                                </label>
                             </Form>
                         </div>
                     </Col>
@@ -207,7 +298,7 @@ const Payment = () => {
                             </div>
                             <div className='d-flex justify-content-between mb-2 text-danger'>
                                 <span>Discount</span>
-                                <span>-₹{totals.discount}</span>
+                                <span>-₹{calculateTotal.discount}</span>
                             </div>
                             <div className='d-flex justify-content-between mb-2'>
                                 <span>Delivery Fee</span>
@@ -216,7 +307,7 @@ const Payment = () => {
                             <hr />
                             <div className='d-flex justify-content-between fw-bold mb-3'>
                                 <span>Total</span>
-                                <span>₹{totals.total}</span>
+                                <span>₹{calculateTotal.total}</span>
                             </div>
 
                             {/* Coupon Input */}
@@ -227,9 +318,17 @@ const Payment = () => {
                                         type='text'
                                         placeholder='Apply Coupon'
                                         className='coupon-input'
+                                        value={
+                                            appliedCoupon
+                                                ? appliedCoupon.couponCode
+                                                : ""
+                                        }
+                                        readOnly
                                     />
                                 </div>
-                                <Button className='coupon-btn'>Apply</Button>
+                                <Link to='/coupons' className='coupon-btn'>
+                                    Apply
+                                </Link>
                             </div>
 
                             <Button

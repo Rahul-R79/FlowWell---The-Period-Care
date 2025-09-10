@@ -11,6 +11,8 @@ import wishlistSliceReducer from '../features/wishlistSlice';
 import cartSliceReducer from '../features/cartSlice';
 import orderSliceReducer from '../features/orders/orderSlice';
 import adminOrderReducer from '../features/orders/adminOrderSlice';
+import adminCouponReducer from '../features/coupons/adminCouponSlice';
+import couponReducer from '../features/coupons/couponSlice';
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 
@@ -26,7 +28,9 @@ const rootReducer = combineReducers({
     wishlist: wishlistSliceReducer,
     cart: cartSliceReducer,
     order: orderSliceReducer,
-    adminOrder: adminOrderReducer
+    adminOrder: adminOrderReducer,
+    adminCoupon: adminCouponReducer,
+    coupon: couponReducer
 })
 
 const persistConfig = {

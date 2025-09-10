@@ -1,0 +1,40 @@
+.coupons {
+    max-width: 1000px;
+    margin-bottom: 150px;
+    margin-top: 100px;
+}
+
+@media (max-width: 1000px) {
+	.coupons{
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+}
+
+.coupon-item {
+    cursor: pointer;
+}
+
+.coupon-item.active {
+    background-color: #e6ffed;
+}
+
+.coupon-item.inactive {
+    background-color: #f4f4f4;
+    cursor: not-allowed;
+}
+
+.coupon-toggle {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.coupon-toggle.disabled {
+    color: #999;
+}
+
+.coupon-item.selected {
+    border: 2px solid darkgreen;
+}
+
+

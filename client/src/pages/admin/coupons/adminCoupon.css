@@ -1,0 +1,36 @@
+.add-coupon-form-container form{
+    max-width: 820px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    border:  1px solid rgb(180, 180, 180);
+}
+
+.add-coupon-form-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-coupon-form-container form input {
+    border: 1px solid #ccc;
+    padding: 10px 10px;
+}
+
+.add-coupon-form input::placeholder {
+    color: rgb(199, 199, 199) !important;
+    font-style: italic;
+    font-weight: 100;
+    opacity: 1; 
+}
+
+.coupon-code {
+    background-color: #9beda7; 
+    color: #008767; 
+    padding: 2px 4px;
+    border-radius: 5px;
+    width: 150px;
+    border: 1px solid #008767;
+    font-weight: bold;
+    display: inline-block;
+    font-family: monospace;
+    text-align: center;
+}

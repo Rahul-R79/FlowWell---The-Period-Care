@@ -10,7 +10,8 @@ import { addAddress, deleteAddress, editAddress, getAllAddresses, getSingleAddre
 import { validateAddress } from '../middlewares/validators/addressValidator.js';
 import { addToWishlist, getWishlist, removeFromWishlist } from '../controllers/user/wishlistController.js';
 import { addToCart, getCartItems, removeFromCart } from '../controllers/user/cartController.js';
-import { cancelOrder, createOrder, getInvoice, getOrderItem, getOrders, ReturnOrder } from '../controllers/user/orderController.js';
+import { cancelOrder, createOrder, createRazorpayOrder, getInvoice, getOrderItem, getOrders, ReturnOrder, verifyPayment } from '../controllers/user/orderController.js';
+import { applyCoupon, getUserCoupon } from '../controllers/user/couponController.js';
 
 const router = express.Router();
 
@@ -41,6 +42,10 @@ router.get('/order/detail/:orderId/:productId', userProtectedRoute, getOrderItem
 router.patch('/order/cancel/:orderId/:productId', userProtectedRoute, cancelOrder);
 router.patch('/order/return/:orderId/:productId', userProtectedRoute, ReturnOrder);
 router.get("/orders/:id/invoice", userProtectedRoute, getInvoice);
+router.post('/order/razorpay', userProtectedRoute, createRazorpayOrder);
+router.post('/order/razorpay/verify', userProtectedRoute, verifyPayment);
 
+router.get('/coupon', userProtectedRoute, getUserCoupon);
+router.post('/coupon/apply', userProtectedRoute, applyCoupon);
 
 export default router;

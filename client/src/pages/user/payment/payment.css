@@ -76,6 +76,7 @@
     padding: 10px 18px;
     border: none;
     transition: all 0.3s ease;
+    text-decoration: none;
 }
 
 .coupon-btn:hover {
@@ -119,10 +120,6 @@
     font-weight: bold;
     color: #000;
 }
-
-/* .d-flex.gap-3 {
-    gap: 15px;
-} */
 
 .payment-success-section{
     margin-bottom: 180px;

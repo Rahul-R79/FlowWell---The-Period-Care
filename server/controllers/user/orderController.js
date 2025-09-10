@@ -4,6 +4,8 @@ import Order from "../../models/Order.js";
 import Product from "../../models/Product.js";
 import crypto from "crypto";
 import PDFDocument from "pdfkit";
+import { razorpayInstance } from "../../config/razorpay.js";
+import Coupon from "../../models/Coupon.js";
 
 const calculateTotals = (cart) => {
     let subtotal = 0;
@@ -24,7 +26,7 @@ const calculateTotals = (cart) => {
 };
 
 export const createOrder = async (req, res) => {
-    const { paymentMethod, shippingAddressId } = req.body;
+    const { paymentMethod, shippingAddressId, appliedCouponId } = req.body;
 
     try {
         const cart = await Cart.findOne({ user: req.user.id }).populate(
@@ -38,6 +40,7 @@ export const createOrder = async (req, res) => {
             _id: shippingAddressId,
             user: req.user.id,
         });
+        
         if (!address) {
             return res
                 .status(400)
@@ -81,7 +84,12 @@ export const createOrder = async (req, res) => {
             paymentStatus: paymentMethod === "COD" ? "PENDING" : "PAID",
             orderStatus: "PLACED",
             expectedDelivery,
+            appliedCoupon: appliedCouponId || null
         });
+
+        if(appliedCouponId){
+            await Coupon.findByIdAndUpdate(appliedCouponId, {$inc: {usageLimit: -1}})
+        }
 
         for (const item of cart.products) {
             await Product.updateOne(
@@ -320,5 +328,92 @@ export const getInvoice = async (req, res) => {
         doc.end();
     } catch (err) {
         res.status(500).json({ message: "error on generating invoice" });
+    }
+};
+
+export const createRazorpayOrder = async (req, res) => {
+    const { amount } = req.body;
+
+    try {
+        const options = {
+            amount: amount * 100, 
+            currency: "INR",
+            receipt: `receipt_${Date.now()}`,
+        };
+
+        const razorpayOrder = await razorpayInstance.orders.create(options);
+
+        res.status(200).json({
+            success: true,
+            orderId: razorpayOrder.id,
+            amount: razorpayOrder.amount,
+            currency: razorpayOrder.currency,
+            key: process.env.RAZORPAY_API_KEY,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+};
+
+
+export const verifyPayment = async (req, res) => {
+    try {
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderData } = req.body;
+
+        const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_API_SECRET);
+        hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
+        const generatedSignature = hmac.digest("hex");
+
+        if (generatedSignature !== razorpay_signature) {
+            return res.status(400).json({ success: false, message: "Payment verification failed" });
+        }
+
+        const orderNumber = `ORD-${crypto.randomBytes(4).toString("hex").toUpperCase()}`;
+        const expectedDelivery = new Date();
+        expectedDelivery.setDate(expectedDelivery.getDate() + 5);
+
+        const cartItems = orderData.cart.products.map((item) => ({
+            productId: item.product._id,
+            name: item.product.name,
+            price: item.product.basePrice,
+            image: item.product.images[0],
+            quantity: item.quantity,
+            selectedSize: item.selectedSize,
+            status: "PLACED",
+            statusHistory: [
+                { status: "PLACED", date: new Date() }
+            ]
+        }));
+
+        const order = await Order.create({
+            user: req.user.id,
+            orderNumber,
+            cartItems,
+            subtotal: orderData.subtotal,
+            discount: orderData.discount,
+            deliveryFee: orderData.deliveryFee,
+            total: orderData.total,
+            shippingAddress: orderData.shippingAddress,
+            paymentMethod: "RAZORPAY",
+            paymentStatus: "PAID",
+            orderStatus: "PLACED",
+            expectedDelivery,
+        });
+
+        for (let item of cartItems) {
+            await Product.updateOne(
+                { _id: item.productId, "sizes.size": item.selectedSize },
+                { $inc: { "sizes.$[elem].stock": -item.quantity } },
+                { arrayFilters: [{ "elem.size": item.selectedSize }] }
+            );
+        }
+
+        await Cart.findOneAndUpdate({ user: req.user.id }, { products: [] });
+
+        res.status(200).json({ order });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
