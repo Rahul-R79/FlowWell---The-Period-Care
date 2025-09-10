@@ -5,6 +5,7 @@ import Product from "../../models/Product.js";
 import crypto from "crypto";
 import PDFDocument from "pdfkit";
 import { razorpayInstance } from "../../config/razorpay.js";
+import Coupon from "../../models/Coupon.js";
 
 const calculateTotals = (cart) => {
     let subtotal = 0;
@@ -25,7 +26,7 @@ const calculateTotals = (cart) => {
 };
 
 export const createOrder = async (req, res) => {
-    const { paymentMethod, shippingAddressId } = req.body;
+    const { paymentMethod, shippingAddressId, appliedCouponId } = req.body;
 
     try {
         const cart = await Cart.findOne({ user: req.user.id }).populate(
@@ -39,6 +40,7 @@ export const createOrder = async (req, res) => {
             _id: shippingAddressId,
             user: req.user.id,
         });
+        
         if (!address) {
             return res
                 .status(400)
@@ -82,7 +84,12 @@ export const createOrder = async (req, res) => {
             paymentStatus: paymentMethod === "COD" ? "PENDING" : "PAID",
             orderStatus: "PLACED",
             expectedDelivery,
+            appliedCoupon: appliedCouponId || null
         });
+
+        if(appliedCouponId){
+            await Coupon.findByIdAndUpdate(appliedCouponId, {$inc: {usageLimit: -1}})
+        }
 
         for (const item of cart.products) {
             await Product.updateOne(

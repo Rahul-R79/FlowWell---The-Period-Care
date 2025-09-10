@@ -6,7 +6,7 @@ import { GoTag } from "react-icons/go";
 import "./payment.css";
 import { createOrder } from "../../../features/orders/orderSlice";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import confetti from "canvas-confetti";
 import axios from "axios";
@@ -18,11 +18,18 @@ const Payment = () => {
     const { totals, cart } = useSelector((state) => state.cart);
     const { selectedAddress } = useSelector((state) => state.address);
     const { loadingByAction } = useSelector((state) => state.order);
+    const { appliedCoupon } = useSelector((state) => state.coupon);
 
     const [paymentMethod, setPaymentMethod] = useState("RAZORPAY");
 
     const handlePaymentChange = (e) => {
         setPaymentMethod(e.target.value);
+    };
+
+    const calculateTotal = {
+        ...totals,
+        discount: totals.discount + (appliedCoupon?.discountAmount || 0),
+        total: totals.total - (appliedCoupon?.discountAmount || 0),
     };
 
     const handlePlaceOrder = async () => {
@@ -93,11 +100,12 @@ const Payment = () => {
                 alert("Payment initialization failed. Please try again.");
             }
         } else {
-            try {
+            try {                
                 await dispatch(
                     createOrder({
                         paymentMethod,
                         shippingAddressId: selectedAddress,
+                        appliedCouponId: appliedCoupon?._id
                     })
                 ).unwrap();
 
@@ -290,7 +298,7 @@ const Payment = () => {
                             </div>
                             <div className='d-flex justify-content-between mb-2 text-danger'>
                                 <span>Discount</span>
-                                <span>-₹{totals.discount}</span>
+                                <span>-₹{calculateTotal.discount}</span>
                             </div>
                             <div className='d-flex justify-content-between mb-2'>
                                 <span>Delivery Fee</span>
@@ -299,7 +307,7 @@ const Payment = () => {
                             <hr />
                             <div className='d-flex justify-content-between fw-bold mb-3'>
                                 <span>Total</span>
-                                <span>₹{totals.total}</span>
+                                <span>₹{calculateTotal.total}</span>
                             </div>
 
                             {/* Coupon Input */}
@@ -310,9 +318,17 @@ const Payment = () => {
                                         type='text'
                                         placeholder='Apply Coupon'
                                         className='coupon-input'
+                                        value={
+                                            appliedCoupon
+                                                ? appliedCoupon.couponCode
+                                                : ""
+                                        }
+                                        readOnly
                                     />
                                 </div>
-                                <Button className='coupon-btn'>Apply</Button>
+                                <Link to='/coupons' className='coupon-btn'>
+                                    Apply
+                                </Link>
                             </div>
 
                             <Button

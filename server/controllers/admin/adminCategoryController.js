@@ -79,7 +79,6 @@ export const editCategory = async(req, res)=>{
 
         res.status(200).json({category});
     }catch(err){
-        console.log(err.message)
         return res.status(500).json({message: 'internal server error'});
     }
 }
