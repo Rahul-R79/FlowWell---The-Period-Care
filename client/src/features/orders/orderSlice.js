@@ -75,6 +75,22 @@ export const returnOrder = createAsyncThunk(
     }
 );
 
+export const payWithWallet = createAsyncThunk(
+    "/user/payWithWallet",
+    async ({ walletAmount, shippingAddressId, orderData }, { rejectWithValue }) => {
+        try {
+            const response = await instance.post("/user/wallet-payment", {
+                walletAmount,
+                shippingAddressId,
+                orderData,
+            });
+            return response.data.order;
+        } catch (err) {
+            return rejectWithValue(err.response.data);
+        }
+    }
+);
+
 const orderSlice = createSlice({
     name: "order",
     initialState: {
@@ -178,6 +194,20 @@ const orderSlice = createSlice({
             .addCase(returnOrder.rejected, (state, acion) => {
                 state.loadingByAction.returnOrder = false;
                 state.errorByAction.returnOrder = acion.payload;
+            })
+            //pay with wallet
+            .addCase(payWithWallet.pending, (state) => {
+                state.loadingByAction.payWithWallet = true;
+                state.errorByAction.payWithWallet = null;
+            })
+            .addCase(payWithWallet.fulfilled, (state, action) => {
+                state.loadingByAction.payWithWallet = false;
+                state.errorByAction.payWithWallet = null;
+                state.order = action.payload; 
+            })
+            .addCase(payWithWallet.rejected, (state, action) => {
+                state.loadingByAction.payWithWallet = false;
+                state.errorByAction.payWithWallet = action.payload;
             });
     },
 });

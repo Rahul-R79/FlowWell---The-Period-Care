@@ -50,6 +50,9 @@ import Coupons from "./pages/user/coupons/Coupons";
 import AddCoupon from "./pages/admin/coupons/AddCoupon";
 import AdminCoupons from "./pages/admin/coupons/AdminCoupons";
 import EditCoupon from "./pages/admin/coupons/EditCoupon";
+import Wallet from "./pages/user/wallet/Wallet";
+import AddMoneyToWallet from "./pages/user/wallet/AddMoneyToWallet";
+import WalletHistroy from "./pages/user/wallet/WalletHistory";
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -82,7 +85,10 @@ function App() {
                         path='/otpverification'
                         element={<OtpVerification />}
                     />
-                    <Route path='/forgotpassword' element={<ForgotPassword />}/>
+                    <Route
+                        path='/forgotpassword'
+                        element={<ForgotPassword />}
+                    />
                 </Route>
 
                 {/* Forgot Password */}
@@ -131,12 +137,18 @@ function App() {
                         element={<EditProducts />}
                     />
                     <Route path='/admin/*' element={<AdminPageNotFound />} />
-                    <Route path="/admin/orders" element={<AdminOrders/>} />
-                    <Route path="/admin/order/detail/:orderId" element={<AdminOrdersDetail/>} />
+                    <Route path='/admin/orders' element={<AdminOrders />} />
+                    <Route
+                        path='/admin/order/detail/:orderId'
+                        element={<AdminOrdersDetail />}
+                    />
 
-                    <Route path="/admin/coupons" element={<AdminCoupons/>} />
-                    <Route path="/admin/add/coupon" element={<AddCoupon/>} />
-                    <Route path="/admin/edit/coupon/:id" element={<EditCoupon/>} />
+                    <Route path='/admin/coupons' element={<AdminCoupons />} />
+                    <Route path='/admin/add/coupon' element={<AddCoupon />} />
+                    <Route
+                        path='/admin/edit/coupon/:id'
+                        element={<EditCoupon />}
+                    />
                 </Route>
 
                 {/* User Protected Routes */}
@@ -148,32 +160,72 @@ function App() {
                         />
                     }>
                     <Route path='/profile' element={<UserProfile />} />
-                    <Route path="/changepassword" element={<ChangePassword/>} />
+                    <Route
+                        path='/changepassword'
+                        element={<ChangePassword />}
+                    />
                     <Route path='/address/add' element={<AddAddress />} />
                     <Route path='/address' element={<Address />} />
-                    <Route path="/address/:id/edit" element={<EditAddress/>} />
-                    <Route path="/wishlist" element={<Wishlist/>} /> 
-                    <Route path="/cart" element={<Cart/>} />
-                    <Route path="/checkout/address" element={<CheckoutAddress/>}/>
-                    <Route path="/checkout/add/address" element={<AddCheckoutAddress/>}/>
-                    <Route path="/checkout/address/:id/edit" element={<EditCheckoutAddress/>}/>
+                    <Route path='/address/:id/edit' element={<EditAddress />} />
+                    <Route path='/wishlist' element={<Wishlist />} />
+                    <Route path='/cart' element={<Cart />} />
+                    <Route
+                        path='/checkout/address'
+                        element={<CheckoutAddress />}
+                    />
+                    <Route
+                        path='/checkout/add/address'
+                        element={<AddCheckoutAddress />}
+                    />
+                    <Route
+                        path='/checkout/address/:id/edit'
+                        element={<EditCheckoutAddress />}
+                    />
 
-                    <Route path="/coupons" element={<Coupons/>}/>
-                    <Route path="/payment" element={<Payment/>} />
-                    <Route path="/payment/success" element={<PaymentSuccess/>} />
-                    <Route path="/payment/failed" element={<PaymentFailed/>} />
+                    <Route path='/coupons' element={<Coupons />} />
+                    <Route path='/payment' element={<Payment />} />
+                    <Route
+                        path='/payment/success'
+                        element={<PaymentSuccess />}
+                    />
+                    <Route path='/payment/failed' element={<PaymentFailed />} />
 
-                    <Route path="/orders" element={<AllOrders/>} />
-                    <Route path="/view/order" element={<ViewDetail/>} />
-                    <Route path="/cancel/order/:orderId/:productId" element={<CancelOrders/>} />
-                    <Route path="/return/order/:orderId/:productId" element={<ReturnOrders/>} />
-                    <Route path="/order/detail/:orderId/:productId" element={<OrderDetail/>} />
+                    <Route path='/orders' element={<AllOrders />} />
+                    <Route path='/view/order' element={<ViewDetail />} />
+                    <Route
+                        path='/cancel/order/:orderId/:productId'
+                        element={<CancelOrders />}
+                    />
+                    <Route
+                        path='/return/order/:orderId/:productId'
+                        element={<ReturnOrders />}
+                    />
+                    <Route
+                        path='/order/detail/:orderId/:productId'
+                        element={<OrderDetail />}
+                    />
+
+                    <Route
+                        path='/wallet'
+                        element={<Wallet />}
+                    />
+                    <Route
+                        path='/wallet/add'
+                        element={<AddMoneyToWallet />}
+                    />
+                    <Route
+                        path='/wallet/transactions'
+                        element={<WalletHistroy />}
+                    />
                 </Route>
 
                 {/* Public Routes accessible for everyone*/}
                 <Route path='/' element={<Home />} />
                 <Route path='/user/product' element={<ProductPage />} />
-                <Route path='/user/productdetail/:id' element={<ProductDetailPage />} />
+                <Route
+                    path='/user/productdetail/:id'
+                    element={<ProductDetailPage />}
+                />
                 <Route path='*' element={<UserPageNotFound />} />
                 <Route path='/admin/signin' element={<AdminSignIn />} />
             </Routes>

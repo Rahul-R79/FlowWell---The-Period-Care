@@ -10,8 +10,9 @@ import { addAddress, deleteAddress, editAddress, getAllAddresses, getSingleAddre
 import { validateAddress } from '../middlewares/validators/addressValidator.js';
 import { addToWishlist, getWishlist, removeFromWishlist } from '../controllers/user/wishlistController.js';
 import { addToCart, getCartItems, removeFromCart } from '../controllers/user/cartController.js';
-import { cancelOrder, createOrder, createRazorpayOrder, getInvoice, getOrderItem, getOrders, ReturnOrder, verifyPayment } from '../controllers/user/orderController.js';
+import { cancelOrder, createOrder, createRazorpayOrder, getInvoice, getOrderItem, getOrders, processWalletPayment, ReturnOrder, verifyPayment } from '../controllers/user/orderController.js';
 import { applyCoupon, getUserCoupon } from '../controllers/user/couponController.js';
+import { addMoneyToWallet, getWalletAmount, getWalletTransactions, verifyWalletPayment } from '../controllers/user/walletController.js';
 
 const router = express.Router();
 
@@ -47,5 +48,11 @@ router.post('/order/razorpay/verify', userProtectedRoute, verifyPayment);
 
 router.get('/coupon', userProtectedRoute, getUserCoupon);
 router.post('/coupon/apply', userProtectedRoute, applyCoupon);
+
+router.post('/wallet/add', userProtectedRoute, addMoneyToWallet);
+router.post('/wallet/add/verify', userProtectedRoute, verifyWalletPayment);
+router.get('/wallet', userProtectedRoute, getWalletAmount);
+router.post('/wallet-payment', userProtectedRoute, processWalletPayment);
+router.get('/wallet/transaction', userProtectedRoute, getWalletTransactions);
 
 export default router;
