@@ -31,6 +31,7 @@ const AllOrders = () => {
         DELIVERED: "primary",
         CANCELLED: "danger",
         RETURNED: "danger",
+        REFUNDED: 'primary'
     };
 
     return (

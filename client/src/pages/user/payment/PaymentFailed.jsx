@@ -47,7 +47,7 @@ const PaymentFailed = () => {
                         <Button variant='outline-dark' className='px-4 py-2' onClick={()=> navigate('/orders', {replace: true})}>
                             VIEW ORDERS
                         </Button>
-                        <Button variant='outline-dark' className='px-4 py-2' onClick={()=> navigate('/payment', {replace: true})}>
+                        <Button variant='outline-dark' className='px-4 py-2' onClick={()=> navigate('/cart', {replace: true})}>
                             Try Again
                         </Button>
                     </motion.div>

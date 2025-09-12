@@ -6,6 +6,9 @@ import crypto from "crypto";
 import PDFDocument from "pdfkit";
 import { razorpayInstance } from "../../config/razorpay.js";
 import Coupon from "../../models/Coupon.js";
+import Wallet from "../../models/Wallet.js";
+import WalletTransaction from "../../models/WalletTransaction.js";
+import mongoose from "mongoose";
 
 const calculateTotals = (cart) => {
     let subtotal = 0;
@@ -40,7 +43,7 @@ export const createOrder = async (req, res) => {
             _id: shippingAddressId,
             user: req.user.id,
         });
-        
+
         if (!address) {
             return res
                 .status(400)
@@ -84,11 +87,13 @@ export const createOrder = async (req, res) => {
             paymentStatus: paymentMethod === "COD" ? "PENDING" : "PAID",
             orderStatus: "PLACED",
             expectedDelivery,
-            appliedCoupon: appliedCouponId || null
+            appliedCoupon: appliedCouponId || null,
         });
 
-        if(appliedCouponId){
-            await Coupon.findByIdAndUpdate(appliedCouponId, {$inc: {usageLimit: -1}})
+        if (appliedCouponId) {
+            await Coupon.findByIdAndUpdate(appliedCouponId, {
+                $inc: { usageLimit: -1 },
+            });
         }
 
         for (const item of cart.products) {
@@ -203,6 +208,32 @@ export const cancelOrder = async (req, res) => {
         );
         if (allCancelled) {
             order.orderStatus = "CANCELLED";
+        }
+
+        if(order.paymentMethod !== "COD" && order.paymentMethod !== 'SIMPL'){
+            const productSubtotal = productItem.price * productItem.quantity;
+            const refundableTotal = order.subtotal - order.discount;
+            const refundedAmount = (productSubtotal / order.subtotal) * refundableTotal;
+
+            let wallet = await Wallet.findOne({userId: order.user});
+
+            if(!wallet){
+                wallet = await Wallet.create({
+                    userId: order.user,
+                    balance: 0
+                })
+            }
+
+            wallet.balance += refundedAmount;
+            await wallet.save();
+
+            await WalletTransaction.create({
+                walletId: wallet._id,
+                type: 'credit',
+                amount: refundedAmount,
+                paymentMethod: 'wallet',
+                transactionFor: 'Refund Completed'
+            })
         }
 
         await order.save();
@@ -336,7 +367,7 @@ export const createRazorpayOrder = async (req, res) => {
 
     try {
         const options = {
-            amount: amount * 100, 
+            amount: amount * 100,
             currency: "INR",
             receipt: `receipt_${Date.now()}`,
         };
@@ -351,25 +382,40 @@ export const createRazorpayOrder = async (req, res) => {
             key: process.env.RAZORPAY_API_KEY,
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, message: "Internal server error" });
+        res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
     }
 };
 
-
 export const verifyPayment = async (req, res) => {
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderData } = req.body;
+        const {
+            razorpay_order_id,
+            razorpay_payment_id,
+            razorpay_signature,
+            orderData,
+        } = req.body;
 
-        const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_API_SECRET);
+        const hmac = crypto.createHmac(
+            "sha256",
+            process.env.RAZORPAY_API_SECRET
+        );
         hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
         const generatedSignature = hmac.digest("hex");
 
         if (generatedSignature !== razorpay_signature) {
-            return res.status(400).json({ success: false, message: "Payment verification failed" });
+            return res.status(400).json({
+                success: false,
+                message: "Payment verification failed",
+            });
         }
 
-        const orderNumber = `ORD-${crypto.randomBytes(4).toString("hex").toUpperCase()}`;
+        const orderNumber = `ORD-${crypto
+            .randomBytes(4)
+            .toString("hex")
+            .toUpperCase()}`;
         const expectedDelivery = new Date();
         expectedDelivery.setDate(expectedDelivery.getDate() + 5);
 
@@ -381,9 +427,7 @@ export const verifyPayment = async (req, res) => {
             quantity: item.quantity,
             selectedSize: item.selectedSize,
             status: "PLACED",
-            statusHistory: [
-                { status: "PLACED", date: new Date() }
-            ]
+            statusHistory: [{ status: "PLACED", date: new Date() }],
         }));
 
         const order = await Order.create({
@@ -414,6 +458,118 @@ export const verifyPayment = async (req, res) => {
         res.status(200).json({ order });
     } catch (err) {
         console.error(err);
-        return res.status(500).json({ success: false, message: "Internal server error" });
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+    }
+};
+
+export const processWalletPayment = async (req, res) => {
+    const { walletAmount, shippingAddressId, orderData } = req.body;
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const parsedAmount = Number(walletAmount);
+        const wallet = await Wallet.findOne({ userId: req.user.id }).session(
+            session
+        );
+
+        if (!wallet || wallet.balance < parsedAmount) {
+            await session.abortTransaction();
+            session.endSession();
+            return res
+                .status(400)
+                .json({ message: "Insufficient wallet balance" });
+        }
+
+        wallet.balance -= parsedAmount;
+        await wallet.save({ session });
+
+        await WalletTransaction.create(
+            [
+                {
+                    walletId: wallet._id,
+                    type: "debit",
+                    amount: parsedAmount,
+                    paymentMethod: "wallet",
+                    transactionFor: "Product Purchased"
+                },
+            ],
+            { session }
+        );
+
+        const address = await Address.findOne({
+            _id: shippingAddressId,
+            user: req.user.id,
+        });
+
+        if (!address) {
+            return res
+                .status(400)
+                .json({ message: "Invalid shipping address" });
+        }
+
+        const orderNumber = `ORD-${crypto
+            .randomBytes(4)
+            .toString("hex")
+            .toUpperCase()}`;
+        const expectedDelivery = new Date();
+        expectedDelivery.setDate(expectedDelivery.getDate() + 5);
+
+        const cartItems = orderData.cart.products.map((item) => ({
+            productId: item.product._id,
+            name: item.product.name,
+            price: item.product.basePrice,
+            image: item.product.images[0],
+            quantity: item.quantity,
+            selectedSize: item.selectedSize,
+            status: "PLACED",
+            statusHistory: [{ status: "PLACED", date: new Date() }],
+        }));
+
+        const order = await Order.create(
+            [
+                {
+                    user: req.user.id,
+                    orderNumber,
+                    cartItems,
+                    subtotal: orderData.subtotal,
+                    discount: orderData.discount,
+                    deliveryFee: orderData.deliveryFee,
+                    total: orderData.total,
+                    shippingAddress: address._id,
+                    paymentMethod: "WALLET",
+                    paymentStatus: "PAID",
+                    orderStatus: "PLACED",
+                    expectedDelivery,
+                },
+            ],
+            { session }
+        );
+
+        for (let item of cartItems) {
+            await Product.updateOne(
+                { _id: item.productId, "sizes.size": item.selectedSize },
+                { $inc: { "sizes.$[elem].stock": -item.quantity } },
+                { arrayFilters: [{ "elem.size": item.selectedSize }], session }
+            );
+        }
+
+        await Cart.findOneAndUpdate(
+            { user: req.user.id },
+            { products: [] },
+            { session }
+        );
+
+        await session.commitTransaction();
+        session.endSession();
+
+        return res.status(200).json({ order: order[0] });
+    } catch (err) {
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(500).json({ message: "Internal server error" });
     }
 };

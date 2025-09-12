@@ -1,7 +1,15 @@
 import Order from "../../models/Order.js";
+import Wallet from "../../models/Wallet.js";
+import WalletTransaction from "../../models/WalletTransaction.js";
 
 export const adminGetOrders = async (req, res) => {
-    let { page = 1, limit = 10, search = "", filterStatus = "", date = "" } = req.query;
+    let {
+        page = 1,
+        limit = 10,
+        search = "",
+        filterStatus = "",
+        date = "",
+    } = req.query;
 
     try {
         page = parseInt(page);
@@ -48,7 +56,6 @@ export const adminGetOrders = async (req, res) => {
     }
 };
 
-
 export const adminGetOrderDetail = async (req, res) => {
     const { orderId } = req.params;
 
@@ -92,14 +99,65 @@ export const adminUpdateOrderStatus = async (req, res) => {
         });
 
         if (newStatus === "DELIVERED") order.orderStatus = "DELIVERED";
-        if (newStatus === "CANCELLED") order.orderStatus = "CANCELLED";
+        if (newStatus === "CANCELLED") {
+            order.orderStatus = "CANCELLED";
+            if (order.paymentMethod !== "COD" && order.paymentMethod !== "SIMPL") {
+                const productSubtotal = product.price * product.quantity;
+                const refundableTotal = order.subtotal - order.discount;
+                const refundedAmount =
+                    (productSubtotal / order.subtotal) * refundableTotal;
+
+                let wallet = await Wallet.findOne({ userId: order.user });
+                if (!wallet) {
+                    wallet = await Wallet.create({
+                        userId: order.user,
+                        balance: 0,
+                    });
+                }
+                wallet.balance += refundedAmount;
+                await wallet.save();
+
+                await WalletTransaction.create({
+                    walletId: wallet._id,
+                    type: "credit",
+                    amount: refundedAmount,
+                    paymentMethod: "wallet",
+                    transactionFor: "Refund Completed",
+                });
+            }
+        }
         if (newStatus === "RETURNED") order.orderStatus = "RETURNED";
-        if (newStatus === "REFUNDED") order.orderStatus = "REFUNDED";
+        if (newStatus === "REFUNDED") {
+            order.orderStatus = "REFUNDED";
+            const productSubtotal = product.price * product.quantity;
+            const refundableTotal = order.subtotal - order.discount;
+            const refundedAmount =
+                (productSubtotal / order.subtotal) * refundableTotal;
+
+            let wallet = await Wallet.findOne({ userId: order.user });
+            if (!wallet) {
+                wallet = await Wallet.create({
+                    userId: order.user,
+                    balance: 0,
+                });
+            }
+            wallet.balance += refundedAmount;
+            await wallet.save();
+
+            await WalletTransaction.create({
+                walletId: wallet._id,
+                type: "credit",
+                amount: refundedAmount,
+                paymentMethod: "wallet",
+                transactionFor: "Refund Completed",
+            });
+        }
 
         await order.save();
         res.status(200).json({ order });
     } catch (err) {
+        console.log("return error", err);
+
         return res.status(500).json({ message: "internal server error" });
     }
 };
-

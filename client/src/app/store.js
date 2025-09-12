@@ -13,6 +13,7 @@ import orderSliceReducer from '../features/orders/orderSlice';
 import adminOrderReducer from '../features/orders/adminOrderSlice';
 import adminCouponReducer from '../features/coupons/adminCouponSlice';
 import couponReducer from '../features/coupons/couponSlice';
+import walletReducer from '../features/walletSlice';
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 
@@ -30,7 +31,8 @@ const rootReducer = combineReducers({
     order: orderSliceReducer,
     adminOrder: adminOrderReducer,
     adminCoupon: adminCouponReducer,
-    coupon: couponReducer
+    coupon: couponReducer,
+    wallet: walletReducer
 })
 
 const persistConfig = {

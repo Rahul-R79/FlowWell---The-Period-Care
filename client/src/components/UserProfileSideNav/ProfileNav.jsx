@@ -46,7 +46,7 @@ function ProfileNav() {
                     <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm' as={Link} to='/orders'>
                         <FaShoppingBag className='me-3 icon' /> My Orders
                     </Nav.Link>
-                    <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'>
+                    <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm' as={Link} to='/wallet'>
                         <FaWallet className='me-3 icon' /> Wallet
                     </Nav.Link>
                     <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm' as={Link} to='/address'>

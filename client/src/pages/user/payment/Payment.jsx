@@ -10,6 +10,9 @@ import { useNavigate, Link } from "react-router-dom";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import confetti from "canvas-confetti";
 import axios from "axios";
+import { payWithWallet } from "../../../features/orders/orderSlice";
+import { getWalletAmount } from "../../../features/walletSlice";
+import ToastNotification, {showErrorToast, showSuccessToast} from "../../../components/ToastNotification";
 
 const Payment = () => {
     const dispatch = useDispatch();
@@ -99,13 +102,42 @@ const Payment = () => {
             } catch (err) {
                 alert("Payment initialization failed. Please try again.");
             }
+        } else if (paymentMethod === "WALLET") {
+            try {
+                await dispatch(
+                    payWithWallet({
+                        walletAmount: calculateTotal.total,
+                        shippingAddressId: selectedAddress,
+                        orderData: {
+                            cart,
+                            subtotal: totals.subtotal,
+                            discount: calculateTotal.discount,
+                            deliveryFee: totals.deliveryFee,
+                            total: calculateTotal.total,
+                        },
+                    })
+                ).unwrap();
+
+                dispatch(getWalletAmount());
+                confetti({
+                    particleCount: 200,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                });
+                navigate("/payment/success", { replace: true });
+            } catch (err) {
+                showErrorToast(err.message);
+                setTimeout(() => {
+                    navigate("/payment/failed", { replace: true });
+                }, 1500);
+            }
         } else {
-            try {                
+            try {
                 await dispatch(
                     createOrder({
                         paymentMethod,
                         shippingAddressId: selectedAddress,
-                        appliedCouponId: appliedCoupon?._id
+                        appliedCouponId: appliedCoupon?._id,
                     })
                 ).unwrap();
 
@@ -125,6 +157,7 @@ const Payment = () => {
         <>
             {loadingByAction.createOrder && <LoadingSpinner />}
             <UserHeader />
+            <ToastNotification/>
             <section className='checkout-payment container'>
                 <h3 className='mb-4 fw-bold'>Select Payment Method</h3>
                 <Row>
@@ -156,36 +189,6 @@ const Payment = () => {
                                     <span>Razorpay</span>
                                 </label>
 
-                                {/* GPay / UPI */}
-                                <label
-                                    className={`payment-option mb-3 p-3 border rounded d-flex align-items-center cursor-pointer ${
-                                        paymentMethod === "UPI"
-                                            ? "border-primary"
-                                            : ""
-                                    }`}>
-                                    <Form.Check
-                                        type='radio'
-                                        name='paymentMethod'
-                                        id='gpay'
-                                        value='UPI'
-                                        checked={paymentMethod === "UPI"}
-                                        onChange={handlePaymentChange}
-                                        className='me-2'
-                                    />
-                                    <img
-                                        src='/images/icons/google-pay.webp'
-                                        alt='Google Pay'
-                                        className='me-2'
-                                        style={{ height: "30px" }}
-                                    />
-                                    <div>
-                                        <span>UPI Payment</span>
-                                        <div className='text-muted small'>
-                                            Pay by any UPI app
-                                        </div>
-                                    </div>
-                                </label>
-
                                 {/* Simpl Pay Later */}
                                 <label
                                     className={`payment-option mb-3 p-3 border rounded d-flex align-items-center cursor-pointer ${
@@ -212,31 +215,6 @@ const Payment = () => {
                                         <span>Pay Later with Simpl</span>
                                         <div className='text-muted small'>
                                             Buy now, pay after 15/30 days
-                                        </div>
-                                    </div>
-                                </label>
-
-                                {/* Credit / Debit Card */}
-                                <label
-                                    className={`payment-option mb-3 p-3 border rounded d-flex align-items-center cursor-pointer ${
-                                        paymentMethod === "CARD"
-                                            ? "border-primary"
-                                            : ""
-                                    }`}>
-                                    <Form.Check
-                                        type='radio'
-                                        name='paymentMethod'
-                                        id='card'
-                                        value='CARD'
-                                        checked={paymentMethod === "CARD"}
-                                        onChange={handlePaymentChange}
-                                        className='me-2'
-                                    />
-                                    <div>
-                                        <span>Credit/Debit/ATM Card</span>
-                                        <div className='text-muted small'>
-                                            Add any secure card by RBI
-                                            guidelines
                                         </div>
                                     </div>
                                 </label>
