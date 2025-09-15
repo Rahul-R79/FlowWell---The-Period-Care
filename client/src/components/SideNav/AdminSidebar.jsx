@@ -17,7 +17,7 @@ const sidebarItems = [
     { icon: <BsTicket size={20} />, text: 'Coupon', path: '/admin/coupons'},
     { icon: <BsGrid size={20} />, text: 'Category', path: '/admin/categories'},
     { icon: <BsCollection size={20} />, text: 'Banners' },
-    { icon: <BsPersonPlus size={20} />, text: 'Referrals' },
+    { icon: <BsPersonPlus size={20} />, text: 'Referrals', path: '/admin/referrals'},
 ];
 
 const SidebarContent = ({ closeMenu, handleAdminLogout, getAdminLoading, navigate }) => (

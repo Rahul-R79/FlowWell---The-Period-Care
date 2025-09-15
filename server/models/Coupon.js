@@ -47,6 +47,10 @@ const couponSchema = new mongoose.Schema(
             type: Boolean,
             default: true,
         },
+        referral: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Referral'
+        }
     },
     { timestamps: true }
 );

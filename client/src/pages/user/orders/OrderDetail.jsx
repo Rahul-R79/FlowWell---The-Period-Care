@@ -271,7 +271,7 @@ const OrderDetail = () => {
                                     <Row>
                                         <Col>Discount</Col>
                                         <Col className='text-end'>
-                                            ₹{currentOrder?.discount}
+                                            ₹{(currentOrder?.discount || 0) + (currentOrder?.couponDiscount || 0)}
                                         </Col>
                                     </Row>
                                     <Row>

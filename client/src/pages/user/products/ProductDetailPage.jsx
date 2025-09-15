@@ -28,6 +28,7 @@ import ToastNotification, {
     showErrorToast,
     showSuccessToast,
 } from "../../../components/ToastNotification";
+import ModalImage from "react-modal-image";
 
 function ProductDetailPage() {
     const dispatch = useDispatch();
@@ -74,9 +75,9 @@ function ProductDetailPage() {
 
     const handleWishlistToggle = async () => {
         try {
-            if(!user){
-                navigate('/signup');
-                return
+            if (!user) {
+                navigate("/signup");
+                return;
             }
             if (!isInWishlist) {
                 await dispatch(
@@ -106,7 +107,7 @@ function ProductDetailPage() {
         try {
             if (!user) {
                 navigate("/signup");
-                return
+                return;
             } else {
                 await dispatch(
                     addToCart({
@@ -182,11 +183,11 @@ function ProductDetailPage() {
                             <div className='flex-grow-1 product-main'>
                                 {selectedImage && (
                                     <InnerImageZoom
-                                        src={selectedImage}
-                                        zoomSrc={selectedImage}
-                                        zoomType='hover'
-                                        zoomPreload={true}
-                                        zoomScale={0.5}
+                                        src={selectedImage} 
+                                        zoomSrc={selectedImage} 
+                                        zoomType='hover' 
+                                        zoomPreload={true} 
+                                        zoomScale={0.5} 
                                         alt={productDetail.name}
                                         className='product-main-img'
                                     />

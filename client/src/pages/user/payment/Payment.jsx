@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { GoTag } from "react-icons/go";
 import "./payment.css";
 import { createOrder } from "../../../features/orders/orderSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import confetti from "canvas-confetti";
@@ -22,6 +22,11 @@ const Payment = () => {
     const { selectedAddress } = useSelector((state) => state.address);
     const { loadingByAction } = useSelector((state) => state.order);
     const { appliedCoupon } = useSelector((state) => state.coupon);
+    const {balance} = useSelector((state)=> state.wallet);
+
+    useEffect(()=>{
+        dispatch(getWalletAmount())
+    }, [dispatch]);
 
     const [paymentMethod, setPaymentMethod] = useState("RAZORPAY");
 
@@ -69,6 +74,7 @@ const Payment = () => {
                                         deliveryFee: totals.deliveryFee,
                                         total: totals.total,
                                         shippingAddress: selectedAddress,
+                                        appliedCouponId: appliedCoupon._id,
                                         paymentMethod: "RAZORPAY",
                                     },
                                 },
@@ -114,6 +120,7 @@ const Payment = () => {
                             discount: calculateTotal.discount,
                             deliveryFee: totals.deliveryFee,
                             total: calculateTotal.total,
+                            appliedCouponId: appliedCoupon._id
                         },
                     })
                 ).unwrap();
@@ -133,11 +140,12 @@ const Payment = () => {
             }
         } else {
             try {
+                console.log('appliedCoupon before order:', appliedCoupon);
                 await dispatch(
                     createOrder({
                         paymentMethod,
                         shippingAddressId: selectedAddress,
-                        appliedCouponId: appliedCoupon?._id,
+                        appliedCouponId: appliedCoupon._id,
                     })
                 ).unwrap();
 
@@ -237,9 +245,8 @@ const Payment = () => {
                                     />
                                     <div>
                                         <span>Wallets</span>
-                                        <div className='text-muted small'>
-                                            Pay using Paytm, PhonePe, Amazon
-                                            Pay, etc.
+                                        <div className='text-warning small'>
+                                            Wallet balance - {balance}
                                         </div>
                                     </div>
                                 </label>

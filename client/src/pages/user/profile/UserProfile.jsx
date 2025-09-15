@@ -147,6 +147,11 @@ function UserProfile() {
                                         src={avatarPreview}
                                         alt='User Avatar'
                                         className='rounded-circle userProfileAvatar'
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src =
+                                                "/images/hero/default-avatar.webp";
+                                        }}
                                     />
                                     <span className='avatar-camera-icon'>
                                         <FaCamera />

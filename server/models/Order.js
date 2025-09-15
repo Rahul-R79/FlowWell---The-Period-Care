@@ -98,7 +98,10 @@ const orderSchema = new mongoose.Schema(
             ],
             default: "PLACED",
         },
-
+        couponDiscount: {
+            type: Number,
+            default: 0
+        },
         appliedCoupon: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Coupon",

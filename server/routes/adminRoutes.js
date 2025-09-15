@@ -21,6 +21,7 @@ import upload from '../middlewares/multer.js';
 import { adminGetOrderDetail, adminGetOrders, adminUpdateOrderStatus } from '../controllers/admin/adminOrderController.js';
 import { validateCoupon } from '../middlewares/validators/couponValidator.js';
 import { addCoupon, couponStatus, editCoupon, getCoupons, getSingleCoupon } from '../controllers/admin/adminCouponController.js';
+import { getReferrals } from '../controllers/admin/adminReferralController.js';
 
 const router = express.Router();
 
@@ -52,5 +53,7 @@ router.get('/coupon', adminProtectedRoute, getCoupons);
 router.get('/coupon/:id', adminProtectedRoute, getSingleCoupon);
 router.patch('/coupon/:id', adminProtectedRoute, validateCoupon, handleValidation, editCoupon);
 router.patch('/coupon/status/:id', adminProtectedRoute, couponStatus);
+
+router.get('/referrals', adminProtectedRoute, getReferrals);
 
 export default router;

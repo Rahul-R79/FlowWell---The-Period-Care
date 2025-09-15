@@ -53,6 +53,8 @@ import EditCoupon from "./pages/admin/coupons/EditCoupon";
 import Wallet from "./pages/user/wallet/Wallet";
 import AddMoneyToWallet from "./pages/user/wallet/AddMoneyToWallet";
 import WalletHistroy from "./pages/user/wallet/WalletHistory";
+import ReferAndEarn from "./pages/user/refer&earn/ReferAndEarn";
+import AdminReferAndEarn from "./pages/admin/referAndEarn/AdminReferAndEarn";
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -149,6 +151,8 @@ function App() {
                         path='/admin/edit/coupon/:id'
                         element={<EditCoupon />}
                     />
+
+                    <Route path='/admin/referrals' element={<AdminReferAndEarn />} />
                 </Route>
 
                 {/* User Protected Routes */}
@@ -216,6 +220,11 @@ function App() {
                     <Route
                         path='/wallet/transactions'
                         element={<WalletHistroy />}
+                    />
+
+                    <Route
+                        path='/referAndEarn'
+                        element={<ReferAndEarn />}
                     />
                 </Route>
 

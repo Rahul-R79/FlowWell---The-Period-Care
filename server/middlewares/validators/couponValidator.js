@@ -5,8 +5,6 @@ export const validateCoupon = [
         .notEmpty()
         .withMessage("Coupon name is Required")
         .bail()
-        .matches(/^[A-Za-z\s]+$/)
-        .withMessage("Coupon name contain only letters")
         .isLength({ min: 5 })
         .withMessage("Coupon name must be at least 5 characters")
         .trim(),
