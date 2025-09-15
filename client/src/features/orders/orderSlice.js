@@ -4,11 +4,12 @@ import instance from "../../utils/axios";
 
 export const createOrder = createAsyncThunk(
     "/order/createOrder",
-    async ({ paymentMethod, shippingAddressId }, { rejectWithValue }) => {
+    async ({ paymentMethod, shippingAddressId, appliedCouponId  }, { rejectWithValue }) => {
         try {
             const response = await instance.post("/user/payment", {
                 paymentMethod,
                 shippingAddressId,
+                appliedCouponId 
             });
             return response.data.order;
         } catch (err) {

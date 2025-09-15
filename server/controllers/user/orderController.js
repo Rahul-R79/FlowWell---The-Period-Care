@@ -58,6 +58,28 @@ export const createOrder = async (req, res) => {
         const expectedDelivery = new Date();
         expectedDelivery.setDate(expectedDelivery.getDate() + 5);
 
+        const appliedCoupon = appliedCouponId
+            ? await Coupon.findById(appliedCouponId)
+            : null;
+        let couponDiscountAmount = 0;
+        if (appliedCoupon.couponType === "percentage") {
+            couponDiscountAmount =
+                (totals.subtotal * appliedCoupon.discountValue) / 100;
+            if (appliedCoupon.maxDiscountAmount) {
+                couponDiscountAmount = Math.min(
+                    couponDiscountAmount,
+                    appliedCoupon.maxDiscountAmount
+                );
+            }
+        } else if (appliedCoupon.couponType === "fixed") {
+            couponDiscountAmount = appliedCoupon.discountValue;
+        }
+        const finalTotal =
+            totals.subtotal -
+            (totals.discount || 0) -
+            couponDiscountAmount +
+            (totals.deliveryFee || 0);
+
         const cartItems = cart.products.map((item) => ({
             productId: item.product._id,
             name: item.product.name,
@@ -81,8 +103,9 @@ export const createOrder = async (req, res) => {
             subtotal: totals.subtotal,
             discount: totals.discount,
             deliveryFee: totals.deliveryFee,
-            total: totals.total,
+            total: finalTotal,
             shippingAddress: address._id,
+            couponDiscount: couponDiscountAmount,
             paymentMethod,
             paymentStatus: paymentMethod === "COD" ? "PENDING" : "PAID",
             orderStatus: "PLACED",
@@ -210,18 +233,19 @@ export const cancelOrder = async (req, res) => {
             order.orderStatus = "CANCELLED";
         }
 
-        if(order.paymentMethod !== "COD" && order.paymentMethod !== 'SIMPL'){
+        if (order.paymentMethod !== "COD" && order.paymentMethod !== "SIMPL") {
             const productSubtotal = productItem.price * productItem.quantity;
             const refundableTotal = order.subtotal - order.discount;
-            const refundedAmount = (productSubtotal / order.subtotal) * refundableTotal;
+            const refundedAmount =
+                (productSubtotal / order.subtotal) * refundableTotal;
 
-            let wallet = await Wallet.findOne({userId: order.user});
+            let wallet = await Wallet.findOne({ userId: order.user });
 
-            if(!wallet){
+            if (!wallet) {
                 wallet = await Wallet.create({
                     userId: order.user,
-                    balance: 0
-                })
+                    balance: 0,
+                });
             }
 
             wallet.balance += refundedAmount;
@@ -229,11 +253,11 @@ export const cancelOrder = async (req, res) => {
 
             await WalletTransaction.create({
                 walletId: wallet._id,
-                type: 'credit',
+                type: "credit",
                 amount: refundedAmount,
-                paymentMethod: 'wallet',
-                transactionFor: 'Refund Completed'
-            })
+                paymentMethod: "wallet",
+                transactionFor: "Refund Completed",
+            });
         }
 
         await order.save();
@@ -352,7 +376,7 @@ export const getInvoice = async (req, res) => {
 
         doc.moveDown();
         doc.text(`Subtotal: ${order.subtotal}`);
-        doc.text(`Discount: ${order.discount}`);
+        doc.text(`Discount: ${order.discount + order.couponDiscount || 0}`);
         doc.text(`Delivery Fee: ${order.deliveryFee}`);
         doc.text(`Total: ${order.total}`, { align: "right", underline: true });
 
@@ -419,6 +443,30 @@ export const verifyPayment = async (req, res) => {
         const expectedDelivery = new Date();
         expectedDelivery.setDate(expectedDelivery.getDate() + 5);
 
+        const appliedCoupon = orderData?.appliedCouponId
+            ? await Coupon.findById(orderData?.appliedCouponId)
+            : null;
+        let couponDiscountAmount = 0;
+        if (appliedCoupon) {
+            if (appliedCoupon.couponType === "percentage") {
+                couponDiscountAmount =
+                    (orderData.subtotal * appliedCoupon.discountValue) / 100;
+                if (appliedCoupon.maxDiscountAmount) {
+                    couponDiscountAmount = Math.min(
+                        couponDiscountAmount,
+                        appliedCoupon.maxDiscountAmount
+                    );
+                }
+            } else if (appliedCoupon.couponType === "fixed") {
+                couponDiscountAmount = appliedCoupon.discountValue;
+            }
+        }
+        const finalTotal =
+            orderData.subtotal -
+            (orderData.discount || 0) -
+            couponDiscountAmount +
+            (orderData.deliveryFee || 0);
+
         const cartItems = orderData.cart.products.map((item) => ({
             productId: item.product._id,
             name: item.product.name,
@@ -437,13 +485,21 @@ export const verifyPayment = async (req, res) => {
             subtotal: orderData.subtotal,
             discount: orderData.discount,
             deliveryFee: orderData.deliveryFee,
-            total: orderData.total,
+            total: finalTotal,
+            couponDiscount: couponDiscountAmount,
             shippingAddress: orderData.shippingAddress,
             paymentMethod: "RAZORPAY",
             paymentStatus: "PAID",
             orderStatus: "PLACED",
             expectedDelivery,
+            appliedCoupon: orderData?.appliedCouponId || null,
         });
+
+        if (orderData.appliedCouponId) {
+            await Coupon.findByIdAndUpdate(orderData.appliedCouponId, {
+                $inc: { usageLimit: -1 },
+            });
+        }
 
         for (let item of cartItems) {
             await Product.updateOne(
@@ -494,7 +550,7 @@ export const processWalletPayment = async (req, res) => {
                     type: "debit",
                     amount: parsedAmount,
                     paymentMethod: "wallet",
-                    transactionFor: "Product Purchased"
+                    transactionFor: "Product Purchased",
                 },
             ],
             { session }
@@ -544,11 +600,17 @@ export const processWalletPayment = async (req, res) => {
                     paymentStatus: "PAID",
                     orderStatus: "PLACED",
                     expectedDelivery,
+                    appliedCoupon: orderData?.appliedCouponId || null,
                 },
             ],
             { session }
         );
 
+        if (orderData.appliedCouponId) {
+            await Coupon.findByIdAndUpdate(orderData.appliedCouponId, {
+                $inc: { usageLimit: -1 },
+            });
+        }
         for (let item of cartItems) {
             await Product.updateOne(
                 { _id: item.productId, "sizes.size": item.selectedSize },
@@ -570,6 +632,8 @@ export const processWalletPayment = async (req, res) => {
     } catch (err) {
         await session.abortTransaction();
         session.endSession();
+        console.log(err.message);
+        
         return res.status(500).json({ message: "Internal server error" });
     }
 };

@@ -13,6 +13,7 @@ import { addToCart, getCartItems, removeFromCart } from '../controllers/user/car
 import { cancelOrder, createOrder, createRazorpayOrder, getInvoice, getOrderItem, getOrders, processWalletPayment, ReturnOrder, verifyPayment } from '../controllers/user/orderController.js';
 import { applyCoupon, getUserCoupon } from '../controllers/user/couponController.js';
 import { addMoneyToWallet, getWalletAmount, getWalletTransactions, verifyWalletPayment } from '../controllers/user/walletController.js';
+import { getReferralCode } from '../controllers/user/ReferralController.js';
 
 const router = express.Router();
 
@@ -54,5 +55,7 @@ router.post('/wallet/add/verify', userProtectedRoute, verifyWalletPayment);
 router.get('/wallet', userProtectedRoute, getWalletAmount);
 router.post('/wallet-payment', userProtectedRoute, processWalletPayment);
 router.get('/wallet/transaction', userProtectedRoute, getWalletTransactions);
+
+router.get('/referral', userProtectedRoute, getReferralCode);
 
 export default router;

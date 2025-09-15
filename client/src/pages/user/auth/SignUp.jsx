@@ -23,7 +23,8 @@ function SignUp() {
 		name: '',
 		email: '',
 		password: '',
-		confirmPassword: ''
+		confirmPassword: '',
+		referralCode: ''
 	});
 
 	const handleData = (e) => {
@@ -88,6 +89,7 @@ function SignUp() {
 										value={formData.name}
 										onChange={handleData}
 										required
+										autoComplete='username'
 									/>
 								</div>
 								{getFieldError('name') && <small className='text-danger'>{getFieldError('name')}</small>}
@@ -107,6 +109,7 @@ function SignUp() {
 										value={formData.email}
 										onChange={handleData}
 										required
+										autoComplete='email'
 									/>
 								</div>
 								{getFieldError('email') && <small className='text-danger'>{getFieldError('email')}</small>}
@@ -128,6 +131,7 @@ function SignUp() {
 										value={formData.password}
 										onChange={handleData}
 										required
+										autoComplete='new-password'
 									/>
 									<button type="button"
 										className="btn position-absolute end-0 top-50 translate-middle-y text-secondary p-0 eye-button"
@@ -140,7 +144,7 @@ function SignUp() {
 							</div>
 
 							{/* Confirm Password */}
-							<div className="mb-5 position-relative">
+							<div className="mb-3 position-relative">
 								<label htmlFor="confirmPassword" className="form-label small text-light">Confirm Password</label>
 								<div className="input-group">
 									<span className="input-group-text bg-transparent border-0 text-white">
@@ -155,6 +159,7 @@ function SignUp() {
 										value={formData.confirmPassword}
 										onChange={handleData}
 										required
+										autoComplete='new-password'
 									/>
 									<button type="button"
 										className="btn position-absolute end-0 top-50 translate-middle-y text-secondary p-0 eye-button"
@@ -164,6 +169,26 @@ function SignUp() {
 									</button>
 								</div>
 								{getFieldError('confirmPassword') && <small className='text-danger'>{getFieldError('confirmPassword')}</small>}
+							</div>
+
+							{/* RefferalCode */}
+							<div className="mb-5 position-relative">
+								<label htmlFor="referralCode" className="form-label small text-light">Refferal Code</label>
+								<div className="input-group">
+									<span className="input-group-text bg-transparent border-0 text-white">
+										<i className="bi bi-gift"></i>
+									</span>
+									<input
+										type='text'
+										id="referralCode"
+										className="form-control text-light bg-transparent"
+										placeholder="Refferal Code (Optional)"
+										name='referralCode'
+										value={formData.referralCode || ''}
+										onChange={handleData}
+									/>
+								</div>
+								{getFieldError('referralCode') && <small className='text-danger'>{getFieldError('referralCode')}</small>}
 							</div>
 
 							{/* Register Button */}

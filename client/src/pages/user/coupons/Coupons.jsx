@@ -57,14 +57,14 @@ const Coupons = () => {
                             <Card
                                 key={coupon._id}
                                 className={`mb-2 coupon-item ${
-                                    coupon.isActive ? "active" : "inactive"
+                                    coupon.usageLimit > 0 ? "active" : "inactive"
                                 } ${
                                     selectedCoupon?._id === coupon._id
                                         ? "selected"
                                         : ""
                                 }`}
                                 onClick={() =>
-                                    coupon.isActive && toggleCoupon(coupon)
+                                    coupon.usageLimit > 0 && toggleCoupon(coupon)
                                 }>
                                 <Card.Body className='d-flex justify-content-between align-items-center'>
                                     <div>
@@ -78,7 +78,7 @@ const Coupons = () => {
                                             EXP:{" "}
                                             {new Date(
                                                 coupon.expirationDate
-                                            ).toLocaleDateString()}
+                                            ).toDateString()}
                                         </Card.Text>
                                     </div>
                                     {coupon.isActive && (
@@ -94,7 +94,7 @@ const Coupons = () => {
                     </div>
 
                     <div className='d-flex justify-content-between mt-4'>
-                        <Button variant='secondary'>Cancel</Button>
+                        <Button variant='secondary' onClick={()=> navigate('/payment')}>Cancel</Button>
                         <Button
                             variant='success'
                             disabled={!selectedCoupon}

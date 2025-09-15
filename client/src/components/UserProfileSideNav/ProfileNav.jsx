@@ -33,6 +33,10 @@ function ProfileNav() {
                 <div className='profile-header d-flex align-items-center p-3 mb-3 rounded bg-dark text-white'>
                     <Image
                         src={user?.avatar || "/images/hero/default-avatar.webp"}
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "/images/hero/default-avatar.webp";
+                        }}
                         roundedCircle
                         className='me-2 user-nav-img'
                     />
@@ -40,19 +44,34 @@ function ProfileNav() {
                 </div>
 
                 <Nav className='flex-column'>
-                    <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm' as={Link} to='/profile'>
+                    <Nav.Link
+                        className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'
+                        as={Link}
+                        to='/profile'>
                         <FaUser className='me-3 icon' /> Profile
                     </Nav.Link>
-                    <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm' as={Link} to='/orders'>
+                    <Nav.Link
+                        className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'
+                        as={Link}
+                        to='/orders'>
                         <FaShoppingBag className='me-3 icon' /> My Orders
                     </Nav.Link>
-                    <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm' as={Link} to='/wallet'>
+                    <Nav.Link
+                        className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'
+                        as={Link}
+                        to='/wallet'>
                         <FaWallet className='me-3 icon' /> Wallet
                     </Nav.Link>
-                    <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm' as={Link} to='/address'>
+                    <Nav.Link
+                        className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'
+                        as={Link}
+                        to='/address'>
                         <FaMapMarkerAlt className='me-3 icon' /> Address
                     </Nav.Link>
-                    <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'>
+                    <Nav.Link
+                        className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'
+                        as={Link}
+                        to='/referAndEarn'>
                         <FaGift className='me-3 icon' /> Refer & Earn
                     </Nav.Link>
                     <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm text-danger'>

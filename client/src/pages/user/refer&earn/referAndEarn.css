@@ -1,0 +1,34 @@
+.referal-code {
+    border: 1px dashed #b5b5b5;
+    font-size: 1.5rem;
+    font-weight: bolder;
+}
+
+.refer-img {
+    width: 300px;
+    margin-bottom: 20px;
+}
+
+.share-options {
+    gap: 20px;
+}
+
+.share-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.share-option:hover {
+    background-color: #f0f0f0;
+}
+
+.share-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 8px;
+}
