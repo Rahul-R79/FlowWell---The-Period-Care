@@ -55,6 +55,7 @@ import AddMoneyToWallet from "./pages/user/wallet/AddMoneyToWallet";
 import WalletHistroy from "./pages/user/wallet/WalletHistory";
 import ReferAndEarn from "./pages/user/refer&earn/ReferAndEarn";
 import AdminReferAndEarn from "./pages/admin/referAndEarn/AdminReferAndEarn";
+import SalesReport from "./pages/admin/salesReport/SalesReport";
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -153,6 +154,8 @@ function App() {
                     />
 
                     <Route path='/admin/referrals' element={<AdminReferAndEarn />} />
+
+                    <Route path='/admin/sales/report' element={<SalesReport />} />
                 </Route>
 
                 {/* User Protected Routes */}

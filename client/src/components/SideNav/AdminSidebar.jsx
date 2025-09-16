@@ -12,7 +12,7 @@ const sidebarItems = [
     { icon: <BsGraphUp size={20} />, text: 'Dashboard', path: '/admin/dashboard'},
     { icon: <BsBag size={20} />, text: 'Order', path: '/admin/orders'},
     { icon: <BsCardList size={20} />, text: 'Products', path: '/admin/products'},
-    { icon: <BsBarChart size={20} />, text: 'Sales report' },
+    { icon: <BsBarChart size={20} />, text: 'Sales report', path: '/admin/sales/report' },
     { icon: <BsPeople size={20} />, text: 'Customer', path: '/admin/customers'},
     { icon: <BsTicket size={20} />, text: 'Coupon', path: '/admin/coupons'},
     { icon: <BsGrid size={20} />, text: 'Category', path: '/admin/categories'},
@@ -22,9 +22,9 @@ const sidebarItems = [
 
 const SidebarContent = ({ closeMenu, handleAdminLogout, getAdminLoading, navigate }) => (
     <div className="sidebar-content d-flex flex-column justify-content-between align-items-center py-4 container">
-        {/* Logo / Title */}
+        {/* Title */}
         <div className="px-3 mb-4 py-4 logo-head">
-            <h1 className="fs-3 fw-bold m-0">FlowWell</h1>
+            <img src="/images/adminLogo.jpg" alt="adminLogo" className='img-fluid'/>
         </div>
 
         {/* Menu Items */}

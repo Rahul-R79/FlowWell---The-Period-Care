@@ -1,5 +1,5 @@
 import { Form, Table } from "react-bootstrap";
-import { FaSearch, FaFilter } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import Sidebar from "../../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../../components/Footer/AdminFooter";
 import PaginationButton from "../../../components/Pagination";
@@ -79,14 +79,14 @@ const AdminOrders = () => {
             {loadingByAction.adminGetOrders && <LoadingSpinner />}
             <div className='d-flex flex-column flex-lg-row min-vh-100'>
                 <Sidebar />
-                <div className='flex-grow-1 d-flex flex-column main-content'>
+                <div className='flex-grow-1 d-flex flex-column main-content mt-5'>
                     <div className='flex-grow-1 py-4 d-flex flex-column container'>
-                        <h4 className='mb-4 text-center text-lg-start'>
+                        <h2 className='mb-4 text-center text-lg-start'>
                             Orders
-                        </h4>
+                        </h2>
 
                         {/* Search & Filter Section */}
-                        <Form className='mb-4'>
+                        <Form className='mb-4 mt-5'>
                             <div className='d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                 {/* Search Input */}
                                 <div className='position-relative'>
@@ -107,8 +107,8 @@ const AdminOrders = () => {
                                 <Dropdown align='end'>
                                     <Dropdown.Toggle
                                         variant='light'
-                                        className='rounded-pill d-flex align-items-center gap-2'>
-                                        Filters <FaFilter />
+                                        className='outline-secondary d-flex align-items-center gap-2'>
+                                        <i className='bi bi-funnel'></i> Filters
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu
