@@ -74,7 +74,7 @@ const Payment = () => {
                                         deliveryFee: totals.deliveryFee,
                                         total: totals.total,
                                         shippingAddress: selectedAddress,
-                                        appliedCouponId: appliedCoupon._id,
+                                        appliedCouponId: appliedCoupon?._id || null,
                                         paymentMethod: "RAZORPAY",
                                     },
                                 },
@@ -120,7 +120,7 @@ const Payment = () => {
                             discount: calculateTotal.discount,
                             deliveryFee: totals.deliveryFee,
                             total: calculateTotal.total,
-                            appliedCouponId: appliedCoupon._id
+                            appliedCouponId: appliedCoupon?._id || null,
                         },
                     })
                 ).unwrap();
@@ -132,7 +132,7 @@ const Payment = () => {
                     origin: { y: 0.6 },
                 });
                 navigate("/payment/success", { replace: true });
-            } catch (err) {
+            } catch (err) {                
                 showErrorToast(err.message);
                 setTimeout(() => {
                     navigate("/payment/failed", { replace: true });
@@ -140,12 +140,11 @@ const Payment = () => {
             }
         } else {
             try {
-                console.log('appliedCoupon before order:', appliedCoupon);
                 await dispatch(
                     createOrder({
                         paymentMethod,
                         shippingAddressId: selectedAddress,
-                        appliedCouponId: appliedCoupon._id,
+                        appliedCouponId: appliedCoupon?._id || null,
                     })
                 ).unwrap();
 

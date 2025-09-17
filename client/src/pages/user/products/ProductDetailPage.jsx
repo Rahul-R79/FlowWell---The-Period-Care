@@ -29,8 +29,12 @@ import ToastNotification, {
     showErrorToast,
     showSuccessToast,
 } from "../../../components/ToastNotification";
-import { getReviewsByProduct } from "../../../features/reviewSlice";
+import {
+    getReviewsByProduct,
+    getReviewSummary,
+} from "../../../features/reviewSlice";
 import { FaStar, FaCheckCircle } from "react-icons/fa";
+import { Toast, ToastContainer } from "react-bootstrap";
 
 function ProductDetailPage() {
     const dispatch = useDispatch();
@@ -44,7 +48,21 @@ function ProductDetailPage() {
     const { productDetail, loadingByAction, similarProducts } = useSelector(
         (state) => state.userProducts
     );
-    const { productReviews } = useSelector((state) => state.review);
+    const { productReviews, reviewSummary } = useSelector(
+        (state) => state.review
+    );
+
+    const [showSummaryToast, setShowSummaryToast] = useState(false);
+    const [showSummaryPopup, setShowSummaryPopup] = useState(false);
+
+    useEffect(() => {
+        setShowSummaryToast(false);
+        setShowSummaryPopup(false);
+
+        if (reviewSummary && reviewSummary !== "No reviews available yet.") {
+            setShowSummaryToast(true);
+        }
+    }, [id, reviewSummary]);
 
     const { wishlist } = useSelector((state) => state.wishlist);
     const { loadingByAction: cartLoading } = useSelector((state) => state.cart);
@@ -53,6 +71,7 @@ function ProductDetailPage() {
     useEffect(() => {
         dispatch(getUserProductById(id));
         dispatch(getReviewsByProduct(id));
+        dispatch(getReviewSummary(id));
         window.scrollTo(0, 0);
     }, [dispatch, id]);
 
@@ -530,6 +549,74 @@ function ProductDetailPage() {
                         </div>
                     </Row>
                 </Container>
+                {/* review preview */}
+                <ToastContainer
+                    className='p-3'
+                    style={{
+                        position: "fixed",
+                        bottom: "20px",
+                        right: "20px",
+                        zIndex: 1050,
+                    }}>
+                    <Toast
+                        show={showSummaryToast && !showSummaryPopup}
+                        onClose={() => setShowSummaryToast(false)}
+                        bg='primary'
+                        style={{ cursor: "pointer", minWidth: "200px" }}>
+                        <Toast.Body className='text-white d-flex justify-content-between align-items-center'>
+                            <div
+                                onClick={() => {
+                                    setShowSummaryPopup(true);
+                                    setShowSummaryToast(false);
+                                }}
+                                style={{ flex: 1, cursor: "pointer" }}>
+                                <p className='mb-0 text-semi-bold'>
+                                    📝 New review summary available!
+                                </p>
+                                <small className='text-dark text-semi-bold'>
+                                    Click to view
+                                </small>
+                            </div>
+                            <Button onClick={() => setShowSummaryToast(false)}>
+                                <i class='bi bi-x-circle'></i>
+                            </Button>
+                        </Toast.Body>
+                    </Toast>
+                </ToastContainer>
+
+                {/* Expanded Summary Popup */}
+                {showSummaryPopup && (
+                    <div
+                        className='summary-popup shadow-lg rounded p-4'
+                        style={{
+                            position: "fixed",
+                            bottom: "80px",
+                            right: "20px",
+                            background: "#fff",
+                            zIndex: 1055,
+                            width: "600px",
+                            maxHeight: "150px",
+                            overflowY: "auto",
+                            border: "1px solid #ffbbbb",
+                        }}>
+                        <div className='d-flex justify-content-between align-items-center mb-2'>
+                            <h6 className='fw-semi-bold m-0'>
+                                📝 What Customers Say
+                            </h6>
+                            <Button
+                                variant='outline-danger'
+                                size='sm'
+                                onClick={() => setShowSummaryPopup(false)}>
+                                <i class='bi bi-x-circle'></i>
+                            </Button>
+                        </div>
+                        {loadingByAction.getReviewSummary ? (
+                            <p>Generating summary...</p>
+                        ) : (
+                            <p>{reviewSummary}</p>
+                        )}
+                    </div>
+                )}
             </section>
             <Footer />
         </>

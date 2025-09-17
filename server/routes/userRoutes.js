@@ -14,7 +14,7 @@ import { cancelOrder, createOrder, createRazorpayOrder, getInvoice, getOrderItem
 import { applyCoupon, getUserCoupon } from '../controllers/user/couponController.js';
 import { addMoneyToWallet, getWalletAmount, getWalletTransactions, verifyWalletPayment } from '../controllers/user/walletController.js';
 import { getReferralCode } from '../controllers/user/ReferralController.js';
-import { addReview, getAllReviews, getReviewsByProduct } from '../controllers/user/reviewController.js';
+import { addReview, getAllReviews, getReviewsByProduct, getReviewSummary } from '../controllers/user/reviewController.js';
 import { validateReview } from '../middlewares/validators/reviewValidator.js';
 
 const router = express.Router();
@@ -63,5 +63,6 @@ router.get('/referral', userProtectedRoute, getReferralCode);
 router.post('/add-reviews', userProtectedRoute, validateReview, handleValidation, addReview);
 router.get('/reviews/:productId', userProtectedRoute, getReviewsByProduct);
 router.get('/reviews', userProtectedRoute, getAllReviews);
+router.get('/reviews/:productId/summary', userProtectedRoute, getReviewSummary);
 
 export default router;

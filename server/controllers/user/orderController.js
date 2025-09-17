@@ -630,10 +630,10 @@ export const processWalletPayment = async (req, res) => {
 
         return res.status(200).json({ order: order[0] });
     } catch (err) {
+        console.log(err);
+        
         await session.abortTransaction();
         session.endSession();
-        console.log(err.message);
-        
         return res.status(500).json({ message: "Internal server error" });
     }
 };
