@@ -43,11 +43,26 @@ export const getAllReviews = createAsyncThunk(
     }
 );
 
+export const getReviewSummary = createAsyncThunk(
+    "/user/getReviewSummary",
+    async (productId, { rejectWithValue }) => {
+        try {
+            const response = await instance.get(
+                `/user/reviews/${productId}/summary`
+            );
+            return response.data.summary;
+        } catch (err) {
+            return rejectWithValue(err.response.data);
+        }
+    }
+);
+
 const userReviewSlice = createSlice({
     name: "review",
     initialState: {
         review: [],
         productReviews: [],
+        reviewSummary: "",
         errorByAction: {},
         loadingByAction: {},
     },
@@ -98,11 +113,26 @@ const userReviewSlice = createSlice({
             .addCase(getAllReviews.fulfilled, (state, action) => {
                 state.loadingByAction.getAllReviews = false;
                 state.errorByAction.getAllReviews = null;
-                state.review = action.payload; 
+                state.review = action.payload;
             })
             .addCase(getAllReviews.rejected, (state, action) => {
                 state.loadingByAction.getAllReviews = false;
                 state.errorByAction.getAllReviews = action.payload;
+            })
+
+            //get review summary
+            .addCase(getReviewSummary.pending, (state) => {
+                state.loadingByAction.getReviewSummary = true;
+                state.errorByAction.getReviewSummary = null;
+            })
+            .addCase(getReviewSummary.fulfilled, (state, action) => {
+                state.loadingByAction.getReviewSummary = false;
+                state.errorByAction.getReviewSummary = null;
+                state.reviewSummary = action.payload;
+            })
+            .addCase(getReviewSummary.rejected, (state, action) => {
+                state.loadingByAction.getReviewSummary = false;
+                state.errorByAction.getReviewSummary = action.payload;
             });
     },
 });
