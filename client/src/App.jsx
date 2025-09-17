@@ -56,6 +56,10 @@ import WalletHistroy from "./pages/user/wallet/WalletHistory";
 import ReferAndEarn from "./pages/user/refer&earn/ReferAndEarn";
 import AdminReferAndEarn from "./pages/admin/referAndEarn/AdminReferAndEarn";
 import SalesReport from "./pages/admin/salesReport/SalesReport";
+import AddReviews from "./pages/user/reviews/AddReviews";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -153,9 +157,15 @@ function App() {
                         element={<EditCoupon />}
                     />
 
-                    <Route path='/admin/referrals' element={<AdminReferAndEarn />} />
+                    <Route
+                        path='/admin/referrals'
+                        element={<AdminReferAndEarn />}
+                    />
 
-                    <Route path='/admin/sales/report' element={<SalesReport />} />
+                    <Route
+                        path='/admin/sales/report'
+                        element={<SalesReport />}
+                    />
                 </Route>
 
                 {/* User Protected Routes */}
@@ -212,23 +222,16 @@ function App() {
                         element={<OrderDetail />}
                     />
 
-                    <Route
-                        path='/wallet'
-                        element={<Wallet />}
-                    />
-                    <Route
-                        path='/wallet/add'
-                        element={<AddMoneyToWallet />}
-                    />
+                    <Route path='/wallet' element={<Wallet />} />
+                    <Route path='/wallet/add' element={<AddMoneyToWallet />} />
                     <Route
                         path='/wallet/transactions'
                         element={<WalletHistroy />}
                     />
 
-                    <Route
-                        path='/referAndEarn'
-                        element={<ReferAndEarn />}
-                    />
+                    <Route path='/referAndEarn' element={<ReferAndEarn />} />
+
+                    <Route path='/add/reviews/:orderId/:productId' element={<AddReviews />} />
                 </Route>
 
                 {/* Public Routes accessible for everyone*/}

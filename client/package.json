@@ -41,6 +41,7 @@
     "react-toastify": "^11.0.5",
     "react-use": "^17.6.0",
     "redux-persist": "^6.0.0",
+    "slick-carousel": "^1.8.1",
     "sweetalert2": "^11.22.3",
     "sweetalert2-react-content": "^5.1.0",
     "swiper": "^11.2.10"

@@ -1,0 +1,18 @@
+.reviews{
+    margin-bottom: 120px;
+    margin-top: 50px;
+}
+
+@media (max-width: 1000px) {
+	.reviews{
+        margin-bottom: 40px;
+        margin-top: 30px;
+    }
+}
+
+.review-img{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+
+}
