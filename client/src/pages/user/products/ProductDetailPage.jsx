@@ -8,6 +8,7 @@ import {
     Tabs,
     Tab,
     Accordion,
+    Card,
 } from "react-bootstrap";
 import UserHeader from "../../../components/Header/UserHeader";
 import Footer from "../../../components/Footer/UserFooter";
@@ -28,7 +29,8 @@ import ToastNotification, {
     showErrorToast,
     showSuccessToast,
 } from "../../../components/ToastNotification";
-import ModalImage from "react-modal-image";
+import { getReviewsByProduct } from "../../../features/reviewSlice";
+import { FaStar, FaCheckCircle } from "react-icons/fa";
 
 function ProductDetailPage() {
     const dispatch = useDispatch();
@@ -42,6 +44,7 @@ function ProductDetailPage() {
     const { productDetail, loadingByAction, similarProducts } = useSelector(
         (state) => state.userProducts
     );
+    const { productReviews } = useSelector((state) => state.review);
 
     const { wishlist } = useSelector((state) => state.wishlist);
     const { loadingByAction: cartLoading } = useSelector((state) => state.cart);
@@ -49,6 +52,7 @@ function ProductDetailPage() {
 
     useEffect(() => {
         dispatch(getUserProductById(id));
+        dispatch(getReviewsByProduct(id));
         window.scrollTo(0, 0);
     }, [dispatch, id]);
 
@@ -183,11 +187,11 @@ function ProductDetailPage() {
                             <div className='flex-grow-1 product-main'>
                                 {selectedImage && (
                                     <InnerImageZoom
-                                        src={selectedImage} 
-                                        zoomSrc={selectedImage} 
-                                        zoomType='hover' 
-                                        zoomPreload={true} 
-                                        zoomScale={0.5} 
+                                        src={selectedImage}
+                                        zoomSrc={selectedImage}
+                                        zoomType='hover'
+                                        zoomPreload={true}
+                                        zoomScale={0.5}
                                         alt={productDetail.name}
                                         className='product-main-img'
                                     />
@@ -199,10 +203,28 @@ function ProductDetailPage() {
                         <Col md={6}>
                             <h3 className='fw-bold'>{productDetail?.name}</h3>
 
-                            {/* Reviews */}
+                            {/* Reviews Summary */}
                             <div className='d-flex align-items-center mb-2'>
-                                <span className='text-warning me-2'>★★★★☆</span>
-                                <span className='text-muted'>8 reviews</span>
+                                {Array.from({ length: 5 }, (_, index) => (
+                                    <FaStar
+                                        key={index}
+                                        size={18}
+                                        color={
+                                            index <
+                                            Math.round(
+                                                productReviews.reduce(
+                                                    (sum, r) => sum + r.rating,
+                                                    0
+                                                ) / productReviews.length
+                                            )
+                                                ? "#ffc107"
+                                                : "#e4e5e9"
+                                        }
+                                    />
+                                ))}
+                                <span className='text-muted ms-2'>
+                                    ({productReviews.length} reviews)
+                                </span>
                             </div>
 
                             {/* Price */}
@@ -384,7 +406,66 @@ function ProductDetailPage() {
                                 </Tab>
                                 <Tab eventKey='reviews' title='Reviews'>
                                     <div className='pt-3'>
-                                        <p>No reviews yet.</p>
+                                        {loadingByAction.getReviewsByProduct ? (
+                                            <p>Loading reviews...</p>
+                                        ) : productReviews.length === 0 ? (
+                                            <p className='text-muted'>
+                                                No reviews yet..
+                                            </p>
+                                        ) : (
+                                            productReviews.map((review) => (
+                                                <Card
+                                                    className='mb-3 shadow-sm'
+                                                    key={review._id}>
+                                                    <Card.Body>
+                                                        {/* Rating */}
+                                                        <div className='d-flex align-items-center mb-2'>
+                                                            {[...Array(5)].map(
+                                                                (_, index) => (
+                                                                    <FaStar
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                        size={
+                                                                            18
+                                                                        }
+                                                                        color={
+                                                                            index <
+                                                                            review.rating
+                                                                                ? "#ffc107"
+                                                                                : "#e4e5e9"
+                                                                        }
+                                                                    />
+                                                                )
+                                                            )}
+                                                        </div>
+
+                                                        <h5 className='fw-semi-bold mb-2'>
+                                                            {review.heading}
+                                                            <FaCheckCircle
+                                                                className='text-success ms-2'
+                                                                size={16}
+                                                            />
+                                                        </h5>
+
+                                                        <p className='mb-3 text-muted'>
+                                                            {review.description}
+                                                        </p>
+
+                                                        <p className='text-primary mb-0'>
+                                                            {review.user?.name}
+                                                        </p>
+
+                                                        <small className='text-success'>
+                                                            Posted On{" "}
+                                                            {new Date(
+                                                                review.createdAt
+                                                            ).toDateString()}
+                                                        </small>
+                                                    </Card.Body>
+                                                </Card>
+                                            ))
+                                        )}
                                     </div>
                                 </Tab>
                             </Tabs>

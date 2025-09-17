@@ -66,14 +66,14 @@ const ProductsPage = () => {
             {loadingByAction.getProduct && <LoadingSpinner />}
             <div className='d-flex flex-column flex-lg-row min-vh-100'>
                 <Sidebar />
-                <div className='flex-grow-1 d-flex flex-column main-content'>
+                <div className='flex-grow-1 d-flex flex-column main-content mt-5'>
                     <div className='flex-grow-1 py-4 d-flex flex-column container product-container'>
-                        <h4 className='mb-4 text-center text-lg-start'>
+                        <h2 className='mb-4 text-center text-lg-start'>
                             Products
-                        </h4>
+                        </h2>
 
                         {/* Search & Add button */}
-                        <Form className='mb-4'>
+                        <Form className='mb-4 mt-5'>
                             <div className='d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                 <div className='position-relative'>
                                     <Form.Control

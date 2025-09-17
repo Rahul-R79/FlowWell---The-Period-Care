@@ -16,6 +16,8 @@ import couponReducer from '../features/coupons/couponSlice';
 import walletReducer from '../features/walletSlice';
 import userReferralReducer from '../features/referral/userReferralSlice';
 import adminReferralReducer from '../features/referral/adminReferralSlice';
+import adminSalesReportReducer from '../features/salesReportSlice';
+import userReviewReducer from '../features/reviewSlice';
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 
@@ -36,7 +38,9 @@ const rootReducer = combineReducers({
     coupon: couponReducer,
     wallet: walletReducer,
     userReferral: userReferralReducer,
-    adminReferral: adminReferralReducer
+    adminReferral: adminReferralReducer,
+    salesReport: adminSalesReportReducer,
+    review: userReviewReducer
 })
 
 const persistConfig = {

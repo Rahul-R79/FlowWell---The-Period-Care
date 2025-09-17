@@ -81,12 +81,12 @@ const CustomersPage = () => {
         <div className="d-flex flex-column flex-lg-row min-vh-100">
             <Sidebar />
             {/* Main content */}
-            <div className="flex-grow-1 d-flex flex-column main-content">
+            <div className="flex-grow-1 d-flex flex-column main-content mt-5">
                 <div className="flex-grow-1 py-4 d-flex flex-column container">
-                    <h4 className="mb-4 text-center text-lg-start">Customers</h4>
+                    <h2 className="mb-4 text-center text-lg-start">Customers</h2>
 
                     {/* Search Input */}
-                    <Form.Group className="mb-3 search-customer" controlId="searchCustomer">
+                    <Form.Group className="mb-3 search-customer mt-5" controlId="searchCustomer">
                         <div className="search-wrapper">
                             <Form.Control
                                 type="text"

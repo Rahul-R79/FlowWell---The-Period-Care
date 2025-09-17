@@ -1,11 +1,41 @@
-.review-tab{
+.review-tab {
     margin-bottom: 120px;
 }
-.review-card{
-    font-family: 'Courier New', Courier, monospace;
+.review-card {
+    font-family: "Courier New", Courier, monospace;
 }
 @media (max-width: 1000px) {
-    .review-tab{
+    .review-tab {
         margin-bottom: 60px;
     }
+}
+
+.review-slider-wrapper {
+    overflow: hidden;
+    width: 100%;
+}
+
+.review-slider {
+    display: flex;
+    gap: 1rem;
+}
+
+.review-slide {
+    flex: 0 0 25%; 
+}
+
+@media (max-width: 992px) {
+    .review-slide {
+        flex: 0 0 50%; 
+    }
+}
+
+@media (max-width: 576px) {
+    .review-slide {
+        flex: 0 0 100%; 
+    }
+}
+
+.review-card {
+    height: 100%;
 }

@@ -49,15 +49,15 @@ function Home() {
                             </Button>
                             <Row>
                                 <Col xs={4}>
-                                    <h5>30+</h5>
-                                    <p>International Brands</p>
+                                    <h5>10+</h5>
+                                    <p>Categories</p>
                                 </Col>
                                 <Col xs={4}>
-                                    <h5>100+</h5>
+                                    <h5>40+</h5>
                                     <p>High-Quality Products</p>
                                 </Col>
                                 <Col xs={4}>
-                                    <h5>10,000+</h5>
+                                    <h5>100+</h5>
                                     <p>Happy Customers</p>
                                 </Col>
                             </Row>
@@ -104,9 +104,6 @@ function Home() {
                                     className='product-img img-fluid mb-2'
                                 />
                                 <h5 className='product-name'>{product.name}</h5>
-                                <p className='product-review'>
-                                    <span className='text-warning'>★★★★☆</span> (5)
-                                </p>
                                 <p className='product-price fw-bold'>
                                     {product.discountPrice && product.discountPrice > 0 ? (
                                         <>
@@ -151,9 +148,6 @@ function Home() {
                                     className='product-img img-fluid mb-2'
                                 />
                                 <h5 className='product-name'>{product.name}</h5>
-                                <p className='product-review'>
-                                    <span className='text-warning'>★★★★☆</span> (5)
-                                </p>
                                 <p className='product-price fw-bold'>
                                     {product.discountPrice && product.discountPrice > 0 ? (
                                         <>

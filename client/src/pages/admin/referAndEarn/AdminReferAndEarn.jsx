@@ -1,6 +1,6 @@
 import Sidebar from "../../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../../components/Footer/AdminFooter";
-import { Table, Spinner } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getAllReferrals } from "../../../features/referral/adminReferralSlice";
@@ -29,12 +29,12 @@ const AdminReferAndEarn = () => {
             <Sidebar />
             <div className='flex-grow-1 d-flex flex-column main-content mt-5'>
                 <div className='flex-grow-1 py-4 d-flex flex-column container referAndEarn-container'>
-                    <h4 className='mb-4 text-center text-lg-start'>
+                    <h2 className='mb-4 text-center text-lg-start'>
                         Refer And Earn
-                    </h4>
+                    </h2>
 
                     {/* summary boxes */}
-                    <div className='d-flex gap-3 mb-4 flex-wrap'>
+                    <div className='d-flex gap-3 mb-4 flex-wrap mt-5 mb-5'>
                         <div className='p-3 bg-light rounded shadow-sm flex-fill text-center'>
                             <h6 className='mb-2'>Total Referrals:</h6>
                             <h5 className='fw-bold'>{totalReferrals}</h5>

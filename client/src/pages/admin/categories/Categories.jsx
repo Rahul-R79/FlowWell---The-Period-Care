@@ -62,14 +62,14 @@ const CategoriesPage = () => {
             {loadingByAction.getCategory && <LoadingSpinner/>}
             <div className='d-flex flex-column flex-lg-row min-vh-100'>
                 <Sidebar />
-                <div className='flex-grow-1 d-flex flex-column main-content'>
-                    <div className='flex-grow-1 py-4 d-flex flex-column container categories-form-container'>
-                        <h4 className='mb-4 text-center text-lg-start'>
+                <div className='flex-grow-1 d-flex flex-column main-content mt-5'>
+                    <div className='flex-grow-1 py-4 d-flex flex-column container'>
+                        <h2 className='mb-4 text-center text-lg-start'>
                             Categories
-                        </h4>
+                        </h2>
 
                         {/* categories*/}
-                        <Form className='mb-4'>
+                        <Form className='mb-4 mt-5'>
                             <div className='d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                 {/* Search input */}
                                 <div className='position-relative'>

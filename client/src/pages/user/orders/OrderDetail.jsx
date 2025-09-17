@@ -97,7 +97,7 @@ const OrderDetail = () => {
                                             </h6>
                                             {orderItem.status ===
                                             "DELIVERED" ? (
-                                                <Button className='btn btn-info text-light'>
+                                                <Button className='btn btn-info text-light' onClick={()=> navigate(`/add/reviews/${orderId}/${orderItem.productId}`)}>
                                                     Add Review
                                                 </Button>
                                             ) : (
