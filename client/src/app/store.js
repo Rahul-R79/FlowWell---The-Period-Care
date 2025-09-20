@@ -18,6 +18,7 @@ import userReferralReducer from '../features/referral/userReferralSlice';
 import adminReferralReducer from '../features/referral/adminReferralSlice';
 import adminSalesReportReducer from '../features/salesReportSlice';
 import userReviewReducer from '../features/reviewSlice';
+import adminDashboardReducer from '../features/dashboardSlice';
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 
@@ -40,7 +41,8 @@ const rootReducer = combineReducers({
     userReferral: userReferralReducer,
     adminReferral: adminReferralReducer,
     salesReport: adminSalesReportReducer,
-    review: userReviewReducer
+    review: userReviewReducer,
+    dashboard: adminDashboardReducer,
 })
 
 const persistConfig = {

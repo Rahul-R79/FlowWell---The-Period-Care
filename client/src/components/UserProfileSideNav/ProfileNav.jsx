@@ -12,19 +12,32 @@ import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../../features/auth/authUserSlice";
 import { Link, useNavigate } from "react-router-dom";
 import "./profileNav.css";
+import { confirmAlert } from "../../utils/confirmAlert";
 
 function ProfileNav() {
     const { user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleLogout = async (e) => {
-        e.preventDefault();
+    const handleLogout = async () => {
         try {
             await dispatch(logoutUser()).unwrap();
             navigate("/", { replace: true });
         } catch (err) {
             console.log("logout error", err);
+        }
+    };
+
+    const handleLogoutClick = async () => {
+        const confirmed = await confirmAlert(
+            "Logout the account?",
+            "Are you sure you want to logout the account",
+            "Logout",
+            "Cancel"
+        );
+
+        if (confirmed) {
+            handleLogout();
         }
     };
     return (
@@ -79,7 +92,7 @@ function ProfileNav() {
                     </Nav.Link>
                     <button
                         className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'
-                        onClick={handleLogout}>
+                        onClick={handleLogoutClick}>
                         <FaSignOutAlt className='me-3 icon' /> Logout
                     </button>
                 </Nav>

@@ -98,7 +98,12 @@ export const adminUpdateOrderStatus = async (req, res) => {
             reason: `status changed to ${newStatus}`,
         });
 
-        if (newStatus === "DELIVERED") order.orderStatus = "DELIVERED";
+        if (newStatus === "DELIVERED"){
+            if(order.paymentMethod === 'COD'){
+                order.paymentStatus = "PAID"
+            }
+            order.orderStatus = "DELIVERED";
+        }
         if (newStatus === "CANCELLED") {
             order.orderStatus = "CANCELLED";
             if (order.paymentMethod !== "COD" && order.paymentMethod !== "SIMPL") {

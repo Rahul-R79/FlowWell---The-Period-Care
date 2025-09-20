@@ -23,6 +23,7 @@ import { validateCoupon } from '../middlewares/validators/couponValidator.js';
 import { addCoupon, couponStatus, editCoupon, getCoupons, getSingleCoupon } from '../controllers/admin/adminCouponController.js';
 import { getReferrals } from '../controllers/admin/adminReferralController.js';
 import { getSalesReport } from '../controllers/admin/adminSalesReportController.js';
+import { getDashboard } from '../controllers/admin/adminDashboardController.js';
 
 const router = express.Router();
 
@@ -58,5 +59,7 @@ router.patch('/coupon/status/:id', adminProtectedRoute, couponStatus);
 router.get('/referrals', adminProtectedRoute, getReferrals);
 
 router.get('/sales-report', adminProtectedRoute, getSalesReport);
+
+router.get('/dashboard', adminProtectedRoute, getDashboard);
 
 export default router;

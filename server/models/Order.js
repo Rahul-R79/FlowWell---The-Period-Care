@@ -31,6 +31,7 @@ const orderSchema = new mongoose.Schema(
                         "CANCELLED",
                         "DELIVERED",
                         "RETURNED",
+                        
                         "REFUNDED",
                     ],
                     default: "PLACED",
