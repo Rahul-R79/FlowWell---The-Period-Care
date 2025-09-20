@@ -50,9 +50,8 @@ export const SignUp = async (req, res) => {
         await redisClient.set(`otp:${email}`, user, { EX: 300 });
 
         await sendOTP(email, otp);
-
         return res.status(200).json({ message: "OTP send to mail" });
-    } catch (err) {                        
+    } catch (err) {                 
         return res
             .status(500)
             .json({ message: "SignUp failed Please try again" });

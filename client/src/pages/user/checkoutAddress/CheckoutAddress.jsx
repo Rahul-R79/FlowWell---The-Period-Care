@@ -65,14 +65,15 @@ const CheckoutAddress = () => {
                             <Form>
                                 {addresses.map((address, index) => (
                                     <Card
+                                        onClick={()=> handleSelectedAddress(address._id)}
                                         key={address._id}
+                                        style={{cursor: "pointer"}}
                                         className='mb-3 p-3'>
                                         <Form.Check
                                             type='radio'
                                             name='selectedAddress'
                                             checked={selectedAddress === address._id}
                                             id={`address-${address._id}`}
-                                            onChange={()=> handleSelectedAddress(address._id)}
                                             label={
                                                 <div className='address-label'>
                                                     <strong>

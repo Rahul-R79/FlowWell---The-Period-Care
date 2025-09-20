@@ -60,9 +60,9 @@ router.get('/wallet/transaction', userProtectedRoute, getWalletTransactions);
 
 router.get('/referral', userProtectedRoute, getReferralCode);
 
+router.get('/reviews/:productId', getReviewsByProduct);
+router.get('/reviews', getAllReviews);
 router.post('/add-reviews', userProtectedRoute, validateReview, handleValidation, addReview);
-router.get('/reviews/:productId', userProtectedRoute, getReviewsByProduct);
-router.get('/reviews', userProtectedRoute, getAllReviews);
 router.get('/reviews/:productId/summary', userProtectedRoute, getReviewSummary);
 
 export default router;

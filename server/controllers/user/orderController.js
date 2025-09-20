@@ -107,7 +107,7 @@ export const createOrder = async (req, res) => {
             shippingAddress: address._id,
             couponDiscount: couponDiscountAmount,
             paymentMethod,
-            paymentStatus: paymentMethod === "COD" ? "PENDING" : "PAID",
+            paymentStatus: "PENDING",
             orderStatus: "PLACED",
             expectedDelivery,
             appliedCoupon: appliedCouponId || null,
@@ -630,8 +630,6 @@ export const processWalletPayment = async (req, res) => {
 
         return res.status(200).json({ order: order[0] });
     } catch (err) {
-        console.log(err);
-        
         await session.abortTransaction();
         session.endSession();
         return res.status(500).json({ message: "Internal server error" });
