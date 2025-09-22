@@ -35,9 +35,9 @@ const CheckoutAddress = () => {
         }
     };
 
-    const handleSelectedAddress = (id)=>{
+    const handleSelectedAddress = (id) => {
         dispatch(setSelectedAddress(id));
-    }
+    };
 
     const handleDeleteClick = async (id) => {
         const confirmed = await confirmAlert(
@@ -65,14 +65,18 @@ const CheckoutAddress = () => {
                             <Form>
                                 {addresses.map((address, index) => (
                                     <Card
-                                        onClick={()=> handleSelectedAddress(address._id)}
+                                        onClick={() =>
+                                            handleSelectedAddress(address._id)
+                                        }
                                         key={address._id}
-                                        style={{cursor: "pointer"}}
+                                        style={{ cursor: "pointer" }}
                                         className='mb-3 p-3'>
                                         <Form.Check
                                             type='radio'
                                             name='selectedAddress'
-                                            checked={selectedAddress === address._id}
+                                            checked={
+                                                selectedAddress === address._id
+                                            }
                                             id={`address-${address._id}`}
                                             label={
                                                 <div className='address-label'>
@@ -117,6 +121,11 @@ const CheckoutAddress = () => {
                                 </Link>
                             </Form>
                         </div>
+                        <div className="mt-5 text-center">
+                            {addresses.length === 0 && (
+                                <h4 className="text-danger">Add a new address to checkout !</h4>
+                            )}
+                        </div>
                     </Col>
 
                     {/* Right side: Order Summary */}
@@ -140,7 +149,13 @@ const CheckoutAddress = () => {
                                 <span>Total</span>
                                 <span>₹{totals.total}</span>
                             </div>
-                            <Button variant='dark' className='w-100' onClick={()=> navigate('/payment', {replace: true})}>
+                            <Button
+                                variant='dark'
+                                className='w-100'
+                                onClick={() =>
+                                    navigate("/payment", { replace: true })
+                                }
+                                disabled={addresses.length === 0}>
                                 Go to Checkout
                             </Button>
                         </div>

@@ -59,6 +59,9 @@ import SalesReport from "./pages/admin/salesReport/SalesReport";
 import AddReviews from "./pages/user/reviews/AddReviews";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import AddBanner from "./pages/admin/banner/AddBanner";
+import GetBanner from "./pages/admin/banner/GetBanner";
+import EditBanner from "./pages/admin/banner/EditBanner";
 
 
 function App() {
@@ -165,6 +168,19 @@ function App() {
                     <Route
                         path='/admin/sales/report'
                         element={<SalesReport />}
+                    />
+
+                    <Route
+                        path='/admin/add/banner'
+                        element={<AddBanner />}
+                    />
+                    <Route
+                        path='/admin/banner'
+                        element={<GetBanner />}
+                    />
+                    <Route
+                        path='/admin/banner/edit/:id'
+                        element={<EditBanner />}
                     />
                 </Route>
 

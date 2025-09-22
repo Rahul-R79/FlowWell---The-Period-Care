@@ -81,7 +81,7 @@ const CustomersPage = () => {
         <div className="d-flex flex-column flex-lg-row min-vh-100">
             <Sidebar />
             {/* Main content */}
-            <div className="flex-grow-1 d-flex flex-column main-content mt-5">
+            <div className="flex-grow-1 d-flex flex-column main-content">
                 <div className="flex-grow-1 py-4 d-flex flex-column container">
                     <h2 className="mb-4 text-center text-lg-start">Customers</h2>
 

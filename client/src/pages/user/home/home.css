@@ -1,4 +1,13 @@
 /* gift hamper section */
+.hero-section,
+.gift-hampers-section,
+.banner-section,
+.new-arrivals,
+.period-kit {
+  overflow-x: hidden;
+}
+
+
 .gift-hampers-section {
 	background-color: #f5f5f5;
 	border-radius: 0.75rem;
