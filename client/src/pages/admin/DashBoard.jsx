@@ -171,22 +171,22 @@ const DashBoard = () => {
             {loadingByAction.getDashboard && <LoadingSpinner />}
             <div className='d-flex flex-column flex-lg-row min-vh-100'>
                 <Sidebar />
-                <div className='flex-grow-1 d-flex flex-column main-content mt-5'>
+                <div className='flex-grow-1 d-flex flex-column main-content'>
                     <div className='flex-grow-1 py-4 d-flex flex-column container'>
-                        {/* Header and DatePicker */}
-                        <div className='d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3'>
-                            <h2 className='fw-semi-bold m-0'>Dashboard</h2>
-                            <div className='d-flex align-items-center gap-2'>
-                                <DatePicker
-                                    selectsRange
-                                    startDate={selectedDate[0]}
-                                    endDate={selectedDate[1]}
-                                    onChange={(dates) => setSelectedDate(dates)}
-                                    placeholderText='Select date range'
-                                    className='form-control'
-                                    dateFormat='dd-MM-yyyy'
-                                />
-                            </div>
+                        <h2 className='fw-semi-bold m-0 text-center text-lg-start'>
+                            Dashboard
+                        </h2>
+                        {/*DatePicker */}
+                        <div className='d-flex flex-column flex-md-row justify-content-end align-items-md-center mb-5 mt-3'>
+                            <DatePicker
+                                selectsRange
+                                startDate={selectedDate[0]}
+                                endDate={selectedDate[1]}
+                                onChange={(dates) => setSelectedDate(dates)}
+                                placeholderText='Select date range'
+                                className='form-control'
+                                dateFormat='dd-MM-yyyy'
+                            />
                         </div>
 
                         {/* sales Cards */}

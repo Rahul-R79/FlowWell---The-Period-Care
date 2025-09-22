@@ -44,7 +44,7 @@ const sidebarItems = [
     },
     { icon: <BsTicket size={20} />, text: "Coupon", path: "/admin/coupons" },
     { icon: <BsGrid size={20} />, text: "Category", path: "/admin/categories" },
-    { icon: <BsCollection size={20} />, text: "Banners" },
+    { icon: <BsCollection size={20} />, text: "Banners", path: "/admin/banner"},
     {
         icon: <BsPersonPlus size={20} />,
         text: "Referrals",
@@ -62,7 +62,7 @@ const SidebarContent = ({
         {/* Title */}
         <div className='px-3 py-4 logo-head'>
             <img
-                src='/images/adminLogo1.webp'
+                src='/images/admin-Logo.webp'
                 alt='adminLogo'
                 className='img-fluid'
             />

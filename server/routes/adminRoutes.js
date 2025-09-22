@@ -24,6 +24,8 @@ import { addCoupon, couponStatus, editCoupon, getCoupons, getSingleCoupon } from
 import { getReferrals } from '../controllers/admin/adminReferralController.js';
 import { getSalesReport } from '../controllers/admin/adminSalesReportController.js';
 import { getDashboard } from '../controllers/admin/adminDashboardController.js';
+import { validateBanner, validateEditBanner } from '../middlewares/validators/BannerValidator.js';
+import { bannerStatus, createBanner, deleteBanner, editBanner, getBanners, getSingleBanner } from '../controllers/admin/adminBannerController.js';
 
 const router = express.Router();
 
@@ -61,5 +63,12 @@ router.get('/referrals', adminProtectedRoute, getReferrals);
 router.get('/sales-report', adminProtectedRoute, getSalesReport);
 
 router.get('/dashboard', adminProtectedRoute, getDashboard);
+
+router.post('/banner/add', adminProtectedRoute, upload.single('image'), validateBanner, handleValidation, createBanner);
+router.get('/banner', adminProtectedRoute, getBanners);
+router.get('/banner/:id', adminProtectedRoute, getSingleBanner);
+router.patch('/banner/:id', adminProtectedRoute, upload.single('image'), validateEditBanner, handleValidation, editBanner);
+router.delete('/banner/:id', adminProtectedRoute, deleteBanner);
+router.patch('/banner/status/:id', adminProtectedRoute, bannerStatus);
 
 export default router;
