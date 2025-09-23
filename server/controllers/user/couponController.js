@@ -2,6 +2,7 @@ import Coupon from "../../models/Coupon.js";
 import Order from "../../models/Order.js";
 import Referral from "../../models/Referral.js";
 
+//get coupons
 export const getUserCoupon = async (req, res) => {
     const cartTotal = req.query.cartTotal ? parseFloat(req.query.cartTotal) : 0;
 
@@ -37,6 +38,7 @@ export const getUserCoupon = async (req, res) => {
     }
 };
 
+//apply a coupon
 export const applyCoupon = async (req, res) => {
     const { couponCode, cartTotal } = req.body;
 

@@ -18,7 +18,7 @@ async function createAdmin(){
 
         mongoose.connection.close();
     }catch(err){
-        console.log('Error creating admin', err);
+        alert('create admin error');
         mongoose.connection.close();
         process.exit(1);
     }

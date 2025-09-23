@@ -1,3 +1,4 @@
+//referral schema
 import mongoose from 'mongoose';
 
 const referralSchema = new mongoose.Schema({

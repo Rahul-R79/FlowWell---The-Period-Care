@@ -1,3 +1,4 @@
+/* admin products css */
 @media (min-width: 992px) {
     .product-form-container {
         width: 75% !important;
@@ -73,7 +74,7 @@
     font-size: 14px;
     font-weight: 500;
     color: #007bff !important;
-    background-color: #f8f9fa !important; 
+    background-color: #f8f9fa !important;
 }
 .product-size:hover {
     background-color: #007bff !important;

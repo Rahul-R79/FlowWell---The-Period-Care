@@ -1,3 +1,4 @@
+//pagination button
 import { Pagination } from "react-bootstrap";
 import { useState, useEffect } from "react";
 
@@ -20,7 +21,7 @@ const PaginationButton = ({
         const nextStart = startPage + maxButtons;
         if (nextStart <= totalPages) {
             setStartPage(nextStart);
-            onPageChange(nextStart); 
+            onPageChange(nextStart);
         }
     };
 
@@ -28,7 +29,7 @@ const PaginationButton = ({
         const prevStart = startPage - maxButtons;
         if (prevStart >= 1) {
             setStartPage(prevStart);
-            onPageChange(prevStart); 
+            onPageChange(prevStart);
         }
     };
 

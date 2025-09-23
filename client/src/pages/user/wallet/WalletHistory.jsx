@@ -1,3 +1,4 @@
+//user wallet history page
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import PaginationButton from "../../../components/Pagination";
@@ -10,19 +11,20 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 
 function WalletHistory() {
     const dispatch = useDispatch();
-    const {transactions, loadingByAction, currentPage, totalPages} = useSelector((state)=> state.wallet);
+    const { transactions, loadingByAction, currentPage, totalPages } =
+        useSelector((state) => state.wallet);
 
-    useEffect(()=>{
-        dispatch(getWalletTransactions({page: currentPage, limit: 5}));
+    useEffect(() => {
+        dispatch(getWalletTransactions({ page: currentPage, limit: 5 }));
     }, [dispatch, currentPage]);
 
-    const handlePageChange = (page)=>{
-        dispatch(getWalletTransactions({page}));
-    }
+    const handlePageChange = (page) => {
+        dispatch(getWalletTransactions({ page }));
+    };
 
     return (
         <>
-            {loadingByAction.getWalletTransactions && <LoadingSpinner/>}
+            {loadingByAction.getWalletTransactions && <LoadingSpinner />}
             <UserHeader />
             <div className='wallet container mt-5 mb-5'>
                 <div className='row'>
@@ -45,33 +47,46 @@ function WalletHistory() {
                                 {transactions.map((transaction) => (
                                     <Card
                                         key={transaction._id}
-                                        className='mb-3 p-3 shadow-sm border-0 transaction-card'
-                                        >
+                                        className='mb-3 p-3 shadow-sm border-0 transaction-card'>
                                         <div className='d-flex justify-content-between align-items-center'>
                                             <div>
-                                                {transaction.type === 'debit' ? (
-                                                    <h6 className="text-danger">Amount Debited</h6> 
+                                                {transaction.type ===
+                                                "debit" ? (
+                                                    <h6 className='text-danger'>
+                                                        Amount Debited
+                                                    </h6>
                                                 ) : (
-                                                    <h6 className="text-success">Amount Credited</h6>
+                                                    <h6 className='text-success'>
+                                                        Amount Credited
+                                                    </h6>
                                                 )}
                                                 <small className='text-muted'>
                                                     {transaction.paymentMethod}
                                                 </small>
                                                 <br />
                                                 <small className='text-primary'>
-                                                    {transaction.transactionFor} on {new Date (transaction.createdAt).toDateString()}
+                                                    {transaction.transactionFor}{" "}
+                                                    on{" "}
+                                                    {new Date(
+                                                        transaction.createdAt
+                                                    ).toDateString()}
                                                 </small>
                                             </div>
                                             <div
                                                 className={`fw-bold amount ${
-                                                    transaction.type === 'debit'
+                                                    transaction.type === "debit"
                                                         ? "text-danger"
                                                         : "text-success"
                                                 }`}>
-                                                {transaction.type === 'debit' ? (
-                                                    <h6>-₹{transaction.amount}</h6>
-                                                ): (
-                                                    <h6>+₹{transaction.amount}</h6>
+                                                {transaction.type ===
+                                                "debit" ? (
+                                                    <h6>
+                                                        -₹{transaction.amount}
+                                                    </h6>
+                                                ) : (
+                                                    <h6>
+                                                        +₹{transaction.amount}
+                                                    </h6>
                                                 )}
                                             </div>
                                         </div>
@@ -80,7 +95,7 @@ function WalletHistory() {
                             </div>
 
                             {transactions.length > 0 && (
-                                <PaginationButton 
+                                <PaginationButton
                                     currentPage={currentPage}
                                     totalPages={totalPages}
                                     onPageChange={handlePageChange}

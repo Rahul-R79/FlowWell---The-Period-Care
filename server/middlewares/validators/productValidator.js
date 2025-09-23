@@ -1,20 +1,18 @@
+//admin product validator
 import { body } from "express-validator";
 
 export const parseFormData = (req, res, next) => {
     try {
-        // Parse sizes if string
         if (req.body.sizes && typeof req.body.sizes === "string") {
             req.body.sizes = JSON.parse(req.body.sizes);
         }
 
-        // Parse prices to numbers
         if (req.body.basePrice)
             req.body.basePrice = parseFloat(req.body.basePrice);
 
         if (req.body.discountPrice)
             req.body.discountPrice = parseFloat(req.body.discountPrice);
 
-        // sizes are integers
         if (req.body.sizes && Array.isArray(req.body.sizes)) {
             req.body.sizes = req.body.sizes.map((item) => ({
                 size: item.size,
@@ -22,7 +20,6 @@ export const parseFormData = (req, res, next) => {
             }));
         }
 
-        // Combine new uploaded images + existing images from frontend
         const existingImages = req.body.existingImages
             ? JSON.parse(req.body.existingImages)
             : [];
@@ -41,7 +38,6 @@ export const parseFormData = (req, res, next) => {
     }
 };
 
-// Validator for product fields
 export const validateProduct = [
     body("name")
         .notEmpty()

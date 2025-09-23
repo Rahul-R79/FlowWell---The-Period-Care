@@ -1,3 +1,4 @@
+//slide animation
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
@@ -31,8 +32,7 @@ const SlideInOnScroll = ({ children, direction = "left", delay = 0 }) => {
             ref={ref}
             initial='hidden'
             animate={controls}
-            variants={variants}
-            >
+            variants={variants}>
             {children}
         </motion.div>
     );

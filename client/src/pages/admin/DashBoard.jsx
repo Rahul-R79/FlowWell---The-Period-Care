@@ -1,3 +1,4 @@
+//admin dashboard
 import Sidebar from "../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../components/Footer/AdminFooter";
 import { Card, Button } from "react-bootstrap";

@@ -1,3 +1,4 @@
+//admin coupon slice
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import instance from "../../utils/axios";

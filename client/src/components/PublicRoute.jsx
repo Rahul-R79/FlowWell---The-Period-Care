@@ -1,3 +1,4 @@
+//public routes
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 

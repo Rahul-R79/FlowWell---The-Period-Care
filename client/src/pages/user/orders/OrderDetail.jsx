@@ -1,3 +1,4 @@
+//user order detail page
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import { Row, Col, Card, Button } from "react-bootstrap";
@@ -97,7 +98,13 @@ const OrderDetail = () => {
                                             </h6>
                                             {orderItem.status ===
                                             "DELIVERED" ? (
-                                                <Button className='btn btn-info text-light' onClick={()=> navigate(`/add/reviews/${orderId}/${orderItem.productId}`)}>
+                                                <Button
+                                                    className='btn btn-info text-light'
+                                                    onClick={() =>
+                                                        navigate(
+                                                            `/add/reviews/${orderId}/${orderItem.productId}`
+                                                        )
+                                                    }>
                                                     Add Review
                                                 </Button>
                                             ) : (
@@ -271,7 +278,10 @@ const OrderDetail = () => {
                                     <Row>
                                         <Col>Discount</Col>
                                         <Col className='text-end'>
-                                            ₹{(currentOrder?.discount || 0) + (currentOrder?.couponDiscount || 0)}
+                                            ₹
+                                            {(currentOrder?.discount || 0) +
+                                                (currentOrder?.couponDiscount ||
+                                                    0)}
                                         </Col>
                                     </Row>
                                     <Row>

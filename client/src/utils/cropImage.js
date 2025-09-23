@@ -1,3 +1,4 @@
+//image cropper
 export const getCroppedImg = (imageSrc, pixelCrop) => {
     const canvas = document.createElement("canvas");
     const image = new Image();

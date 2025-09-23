@@ -1,4 +1,4 @@
-import React from "react";
+//user page not found
 import { Button, Container, Row, Col } from "react-bootstrap";
 import { motion } from "framer-motion";
 import Footer from "../../../components/Footer/UserFooter";

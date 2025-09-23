@@ -4,12 +4,12 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
     plugins: [react()],
     server: {
-        port: 5173, 
+        port: 5173,
         strictPort: true,
         allowedHosts: [
-            "localhost", 
-            ".ngrok-free.app", 
-            "9c6afcb726fe.ngrok-free.app", 
+            "localhost",
+            ".ngrok-free.app",
+            "9c6afcb726fe.ngrok-free.app",
         ],
     },
 });

@@ -1,3 +1,4 @@
+//user coupons
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import { useState, useEffect } from "react";
@@ -13,9 +14,7 @@ import { useNavigate } from "react-router-dom";
 const Coupons = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { coupons, loadingByAction, errorByAction } = useSelector(
-        (state) => state.coupon
-    );
+    const { coupons } = useSelector((state) => state.coupon);
 
     const { totals } = useSelector((state) => state.cart);
     const cartTotal = totals.subtotal;
@@ -30,12 +29,12 @@ const Coupons = () => {
         }
     };
 
-    const handleApplyCoupon = async(couponCode) => {
+    const handleApplyCoupon = async (couponCode) => {
         try {
             await dispatch(applyCoupon({ couponCode, cartTotal })).unwrap();
             navigate("/payment");
         } catch (err) {
-            console.log("coupon apply error", err);
+            alert('apply coupon error');
         }
     };
 
@@ -57,14 +56,17 @@ const Coupons = () => {
                             <Card
                                 key={coupon._id}
                                 className={`mb-2 coupon-item ${
-                                    coupon.usageLimit > 0 ? "active" : "inactive"
+                                    coupon.usageLimit > 0
+                                        ? "active"
+                                        : "inactive"
                                 } ${
                                     selectedCoupon?._id === coupon._id
                                         ? "selected"
                                         : ""
                                 }`}
                                 onClick={() =>
-                                    coupon.usageLimit > 0 && toggleCoupon(coupon)
+                                    coupon.usageLimit > 0 &&
+                                    toggleCoupon(coupon)
                                 }>
                                 <Card.Body className='d-flex justify-content-between align-items-center'>
                                     <div>
@@ -94,7 +96,11 @@ const Coupons = () => {
                     </div>
 
                     <div className='d-flex justify-content-between mt-4'>
-                        <Button variant='secondary' onClick={()=> navigate('/payment')}>Cancel</Button>
+                        <Button
+                            variant='secondary'
+                            onClick={() => navigate("/payment")}>
+                            Cancel
+                        </Button>
                         <Button
                             variant='success'
                             disabled={!selectedCoupon}

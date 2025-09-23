@@ -1,3 +1,4 @@
+//user product slice
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import instance from "../../utils/axios";
@@ -30,16 +31,16 @@ export const getUserProductById = createAsyncThunk(
 );
 
 export const searchProducts = createAsyncThunk(
-    "user/searchProducts", 
-    async({ q = ""}, {rejectWithValue})=>{
-        try{
+    "user/searchProducts",
+    async ({ q = "" }, { rejectWithValue }) => {
+        try {
             const response = await instance.get(`/user/product/search?q=${q}`);
             return response.data.products;
-        }catch(err){
+        } catch (err) {
             return rejectWithValue(err.response.data);
         }
     }
-)
+);
 
 const initialState = {
     products: [],
@@ -138,20 +139,20 @@ const userProductSlice = createSlice({
             })
 
             //search produts
-            .addCase(searchProducts.pending, (state)=>{
+            .addCase(searchProducts.pending, (state) => {
                 state.loadingByAction.searchProducts = true;
                 state.errorByAction.searchProducts = null;
             })
-            .addCase(searchProducts.fulfilled, (state, action)=>{
+            .addCase(searchProducts.fulfilled, (state, action) => {
                 state.loadingByAction.searchProducts = false;
                 state.errorByAction.searchProducts = null;
                 state.searchResults = action.payload;
             })
-            .addCase(searchProducts.rejected, (state, action)=>{
+            .addCase(searchProducts.rejected, (state, action) => {
                 state.loadingByAction.searchProducts = false;
-                state.errorByAction.searchProducts = action.payload;                
+                state.errorByAction.searchProducts = action.payload;
                 state.searchResults = [];
-            })
+            });
     },
 });
 

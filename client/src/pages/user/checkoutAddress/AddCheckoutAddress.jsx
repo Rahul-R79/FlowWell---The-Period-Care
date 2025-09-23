@@ -1,3 +1,4 @@
+//user add checkout address
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import "./checkoutAddress.css";
@@ -40,7 +41,7 @@ const AddCheckoutAddress = () => {
             await dispatch(addAddress(formData)).unwrap();
             navigate("/checkout/address");
         } catch (err) {
-            console.log("add address error", err);
+            alert('add address error');
         }
     };
 
@@ -55,7 +56,7 @@ const AddCheckoutAddress = () => {
 
     return (
         <>
-        {loadingByAction.addAddress && <LoadingSpinner/>}
+            {loadingByAction.addAddress && <LoadingSpinner />}
             <UserHeader />
             <section className='checkout-address container'>
                 <div className='p-4 shadow rounded bg-white'>
@@ -79,10 +80,10 @@ const AddCheckoutAddress = () => {
                                     onChange={handleData}
                                 />
                                 {getFieldErrors("fullName") && (
-                                        <small className='text-danger'>
-                                            {getFieldErrors("fullName")}
-                                        </small>
-                                    )}
+                                    <small className='text-danger'>
+                                        {getFieldErrors("fullName")}
+                                    </small>
+                                )}
                             </div>
                             <div className='col-md-6 mb-3'>
                                 <Form.Label>Mobile Number</Form.Label>
@@ -94,10 +95,10 @@ const AddCheckoutAddress = () => {
                                     onChange={handleData}
                                 />
                                 {getFieldErrors("phone") && (
-                                        <small className='text-danger'>
-                                            {getFieldErrors("phone")}
-                                        </small>
-                                    )}
+                                    <small className='text-danger'>
+                                        {getFieldErrors("phone")}
+                                    </small>
+                                )}
                             </div>
 
                             <div className='col-md-6 mb-3'>
@@ -110,10 +111,10 @@ const AddCheckoutAddress = () => {
                                     onChange={handleData}
                                 />
                                 {getFieldErrors("pincode") && (
-                                        <small className='text-danger'>
-                                            {getFieldErrors("pincode")}
-                                        </small>
-                                    )}
+                                    <small className='text-danger'>
+                                        {getFieldErrors("pincode")}
+                                    </small>
+                                )}
                             </div>
                             <div className='col-md-6 mb-3'>
                                 <Form.Label>Locality</Form.Label>
@@ -125,10 +126,10 @@ const AddCheckoutAddress = () => {
                                     onChange={handleData}
                                 />
                                 {getFieldErrors("locality") && (
-                                        <small className='text-danger'>
-                                            {getFieldErrors("locality")}
-                                        </small>
-                                    )}
+                                    <small className='text-danger'>
+                                        {getFieldErrors("locality")}
+                                    </small>
+                                )}
                             </div>
 
                             <div className='col-12 mb-3'>
@@ -142,10 +143,10 @@ const AddCheckoutAddress = () => {
                                     onChange={handleData}
                                 />
                                 {getFieldErrors("streetAddress") && (
-                                        <small className='text-danger'>
-                                            {getFieldErrors("streetAddress")}
-                                        </small>
-                                    )}
+                                    <small className='text-danger'>
+                                        {getFieldErrors("streetAddress")}
+                                    </small>
+                                )}
                             </div>
 
                             <div className='col-md-6 mb-3'>
@@ -158,10 +159,10 @@ const AddCheckoutAddress = () => {
                                     onChange={handleData}
                                 />
                                 {getFieldErrors("city") && (
-                                        <small className='text-danger'>
-                                            {getFieldErrors("city")}
-                                        </small>
-                                    )}
+                                    <small className='text-danger'>
+                                        {getFieldErrors("city")}
+                                    </small>
+                                )}
                             </div>
                             <div className='col-md-6 mb-3'>
                                 <Form.Label>State</Form.Label>
@@ -173,10 +174,10 @@ const AddCheckoutAddress = () => {
                                     onChange={handleData}
                                 />
                                 {getFieldErrors("state") && (
-                                        <small className='text-danger'>
-                                            {getFieldErrors("state")}
-                                        </small>
-                                    )}
+                                    <small className='text-danger'>
+                                        {getFieldErrors("state")}
+                                    </small>
+                                )}
                             </div>
 
                             <div className='col-md-6 mb-3'>
@@ -189,10 +190,10 @@ const AddCheckoutAddress = () => {
                                     onChange={handleData}
                                 />
                                 {getFieldErrors("landmark") && (
-                                        <small className='text-danger'>
-                                            {getFieldErrors("landmark")}
-                                        </small>
-                                    )}
+                                    <small className='text-danger'>
+                                        {getFieldErrors("landmark")}
+                                    </small>
+                                )}
                             </div>
                             <div className='col-md-6 mb-3'>
                                 <Form.Label>Alternate Mobile Number</Form.Label>
@@ -204,10 +205,10 @@ const AddCheckoutAddress = () => {
                                     onChange={handleData}
                                 />
                                 {getFieldErrors("alternatePhone") && (
-                                        <small className='text-danger'>
-                                            {getFieldErrors("alternatePhone")}
-                                        </small>
-                                    )}
+                                    <small className='text-danger'>
+                                        {getFieldErrors("alternatePhone")}
+                                    </small>
+                                )}
                             </div>
                         </div>
 
@@ -239,7 +240,11 @@ const AddCheckoutAddress = () => {
                                 type='submit'>
                                 Save
                             </Button>
-                            <Button variant='outline-dark' onClick={()=> navigate('/checkout/address')}>Cancel</Button>
+                            <Button
+                                variant='outline-dark'
+                                onClick={() => navigate("/checkout/address")}>
+                                Cancel
+                            </Button>
                         </div>
                     </Form>
                 </div>

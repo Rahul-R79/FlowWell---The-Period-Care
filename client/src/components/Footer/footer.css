@@ -1,109 +1,110 @@
+/* admin footer css */
 .footer-section {
-	background-color: #f4f4f4;
-	font-family: Arial, sans-serif;
-	position: relative;
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    position: relative;
 }
 
 .custom-placeholder::placeholder {
-	color: #9d9d9d !important; 
-	opacity: 1;  
-	font-family: 'Times New Roman', Times, serif;
+    color: #9d9d9d !important;
+    opacity: 1;
+    font-family: "Times New Roman", Times, serif;
 }
 .newsletter-section {
-	background-color: black;
-	color: white;
-	padding: 2rem 0;
-	border-radius: 20px;
-	position: absolute;
-	top: -70px;
-	left: 50%;
-	transform: translateX(-50%);
-	width: 90%;
-	max-width: 1200px;
-	z-index: 2;
+    background-color: black;
+    color: white;
+    padding: 2rem 0;
+    border-radius: 20px;
+    position: absolute;
+    top: -70px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1200px;
+    z-index: 2;
 }
 
 @media (max-width: 1000px) {
-	.newsletter-section {
-		position: static; 
-		transform: none;
-		top: 0;
-		width: 100%;
-		border-radius: 0; 
-	}
-	.main-footer {
-		padding-top: 2rem;
-	}
+    .newsletter-section {
+        position: static;
+        transform: none;
+        top: 0;
+        width: 100%;
+        border-radius: 0;
+    }
+    .main-footer {
+        padding-top: 2rem;
+    }
 }
 
 .newsletter-text h2 {
-	font-weight: bold;
-	font-size: 2rem;
-	margin-bottom: 1rem;
+    font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 1rem;
 }
 
 .newsletter-form .input-group-text {
-	background-color: white;
-	border: none;
+    background-color: white;
+    border: none;
 }
 
 .newsletter-form input {
-	border: none;
-	border-radius: 25px;
+    border: none;
+    border-radius: 25px;
 }
 
 .subscribe-btn {
-	border-radius: 25px;
-	width: 100%;
-	font-weight: 500;
+    border-radius: 25px;
+    width: 100%;
+    font-weight: 500;
 }
 
 @media (min-width: 1000px) {
     .main-footer {
-        padding: 6rem 0 1rem; 
+        padding: 6rem 0 1rem;
     }
 }
 
 .footer-brand h3 {
-  	font-weight: bold;
+    font-weight: bold;
 }
 
 .footer-brand p {
-	color: gray;
-	font-size: 0.9rem;
-	margin-bottom: 1rem;
+    color: gray;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
 }
 
 .social-icons a {
-	margin-right: 10px;
-	font-size: 1.2rem;
-	color: black;
+    margin-right: 10px;
+    font-size: 1.2rem;
+    color: black;
 }
 
 .footer-links h6 {
-	font-weight: bold;
-	margin-bottom: 1rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
 }
 
 .footer-links ul {
-	list-style: none;
-	padding: 0;
+    list-style: none;
+    padding: 0;
 }
 
 .footer-links ul li a {
-	text-decoration: none;
-	color: gray;
-	font-size: 0.9rem;
+    text-decoration: none;
+    color: gray;
+    font-size: 0.9rem;
 }
 
 .footer-bottom {
-	border-top: 1px solid #ddd;
-	margin-top: 2rem;
-	padding-top: 1rem;
+    border-top: 1px solid #ddd;
+    margin-top: 2rem;
+    padding-top: 1rem;
 }
 
 .payment-icons img {
-	height: 40px;
-	width: 40px;
-	margin-left: 10px;
+    height: 40px;
+    width: 40px;
+    margin-left: 10px;
 }

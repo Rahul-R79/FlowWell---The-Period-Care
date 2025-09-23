@@ -1,3 +1,4 @@
+// user profile nav
 import { Nav, Image } from "react-bootstrap";
 import {
     FaUser,
@@ -24,7 +25,7 @@ function ProfileNav() {
             await dispatch(logoutUser()).unwrap();
             navigate("/", { replace: true });
         } catch (err) {
-            console.log("logout error", err);
+            alert("Failed to logout. Please try again.");
         }
     };
 
@@ -87,7 +88,10 @@ function ProfileNav() {
                         to='/referAndEarn'>
                         <FaGift className='me-3 icon' /> Refer & Earn
                     </Nav.Link>
-                    <Nav.Link className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm text-danger'>
+                    <Nav.Link
+                        className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm text-danger'
+                        as={Link}
+                        to='/delete/account'>
                         <FaUserTimes className='me-3 icon' /> Delete Account
                     </Nav.Link>
                     <button

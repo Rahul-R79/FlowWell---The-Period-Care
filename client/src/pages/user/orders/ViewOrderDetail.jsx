@@ -1,3 +1,4 @@
+//user view order page
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import PaginationButton from "../../../components/Pagination";
@@ -40,7 +41,7 @@ const ViewDetail = () => {
                 await dispatch(getOrderItem({ orderId, productId })).unwrap();
                 navigate(`/cancel/order/${orderId}/${productId}`);
             } catch (err) {
-                console.log("cancel order error", err);
+                alert("canerl order error");
             }
         }
     };
@@ -58,7 +59,7 @@ const ViewDetail = () => {
                 await dispatch(getOrderItem({ orderId, productId })).unwrap();
                 navigate(`/return/order/${orderId}/${productId}`);
             } catch (err) {
-                console.log("cancel order error", err);
+                alert("return order error");
             }
         }
     };
@@ -259,18 +260,18 @@ const ViewDetail = () => {
                                                             item.status
                                                         ) > index;
 
-                                                    const isFinalStatus =
-                                                        ["CANCELLED", "RETURNED", "REFUNDED"].includes(
-                                                            item.status
-                                                        );
+                                                    const isFinalStatus = [
+                                                        "CANCELLED",
+                                                        "RETURNED",
+                                                        "REFUNDED",
+                                                    ].includes(item.status);
 
                                                     let dotClass = "pending";
                                                     if (
                                                         item.status ===
                                                             "REFUNDED" &&
                                                         (step === "RETURNED" ||
-                                                            step ===
-                                                                "REFUNDED")
+                                                            step === "REFUNDED")
                                                     ) {
                                                         dotClass = "refunded";
                                                     } else if (

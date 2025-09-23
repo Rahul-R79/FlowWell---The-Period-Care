@@ -1,3 +1,4 @@
+//user checkout address
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import { Row, Col, Button, Card, Form } from "react-bootstrap";
@@ -31,7 +32,7 @@ const CheckoutAddress = () => {
             await dispatch(deleteAddress(id)).unwrap();
             showSuccessToast("Address deleted successfully!");
         } catch (err) {
-            console.log("address delete error");
+            alert("checkout address");
         }
     };
 
@@ -121,9 +122,11 @@ const CheckoutAddress = () => {
                                 </Link>
                             </Form>
                         </div>
-                        <div className="mt-5 text-center">
+                        <div className='mt-5 text-center'>
                             {addresses.length === 0 && (
-                                <h4 className="text-danger">Add a new address to checkout !</h4>
+                                <h4 className='text-danger'>
+                                    Add a new address to checkout !
+                                </h4>
                             )}
                         </div>
                     </Col>

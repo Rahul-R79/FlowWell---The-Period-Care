@@ -1,3 +1,4 @@
+//user coupon slice
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import instance from "../../utils/axios";
@@ -18,11 +19,12 @@ export const getUserCoupons = createAsyncThunk(
 
 export const applyCoupon = createAsyncThunk(
     "/user/applyCoupon",
-    async ({couponCode, cartTotal}, { rejectWithValue }) => {
+    async ({ couponCode, cartTotal }, { rejectWithValue }) => {
         try {
-            const response = await instance.post(
-                '/user/coupon/apply', {couponCode, cartTotal}
-            );
+            const response = await instance.post("/user/coupon/apply", {
+                couponCode,
+                cartTotal,
+            });
             return response.data;
         } catch (err) {
             return rejectWithValue(err.response.data);

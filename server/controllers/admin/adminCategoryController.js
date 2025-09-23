@@ -1,5 +1,6 @@
 import Category from "../../models/Category.js";
 
+//get categories
 export const getCategory = async(req, res)=>{
     try{
         let {page = 1, limit = 10, search = ''} = req.query;
@@ -21,6 +22,7 @@ export const getCategory = async(req, res)=>{
     }
 }
 
+//add categories
 export const addCategory = async(req, res)=>{
     const {name, description} = req.body;
 
@@ -41,6 +43,7 @@ export const addCategory = async(req, res)=>{
     }
 }
 
+//get single category
 export const getSingleCategory = async(req, res)=>{
 
     try{
@@ -57,6 +60,7 @@ export const getSingleCategory = async(req, res)=>{
     }
 }
 
+//edit category
 export const editCategory = async(req, res)=>{
     const {id} = req.params;
     const {name, description} = req.body;
@@ -83,6 +87,7 @@ export const editCategory = async(req, res)=>{
     }
 }
 
+//change category status
 export const categoryStatus = async(req, res)=>{
     const {id} = req.params;
 

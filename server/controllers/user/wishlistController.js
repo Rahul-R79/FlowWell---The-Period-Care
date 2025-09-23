@@ -1,5 +1,6 @@
 import Wishlist from "../../models/Wishlist.js";
 
+//add a product to wishlist
 export const addToWishlist = async (req, res) => {
     const { productId, selectedSize } = req.body;
     try {
@@ -27,6 +28,7 @@ export const addToWishlist = async (req, res) => {
     }
 };
 
+//get the product from the wishlist
 export const getWishlist = async (req, res) => {
     try {
         let { page = 1, limit = 3 } = req.query;
@@ -69,6 +71,7 @@ export const getWishlist = async (req, res) => {
     }
 };
 
+//remove from the wishlist
 export const removeFromWishlist = async (req, res) => {
     const { productId } = req.params;
     let { page = 1, limit = 3 } = req.query;

@@ -1,3 +1,4 @@
+//admin page not found
 import { motion } from "framer-motion";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import AdminFooter from "../../../components/Footer/AdminFooter";

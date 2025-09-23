@@ -1,3 +1,4 @@
+//admin orders
 import { Form, Table } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import Sidebar from "../../../components/SideNav/AdminSidebar";
@@ -85,7 +86,7 @@ const AdminOrders = () => {
                             Orders
                         </h2>
 
-                        {/* Search & Filter Section */}
+                        {/* Search and Filter Section */}
                         <Form className='mb-4 mt-5'>
                             <div className='d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                 {/* Search Input */}

@@ -1,6 +1,7 @@
 import Banner from "../../models/Banner.js";
 import cloudinary from "../../utils/cloudinary.js";
 
+//create banner
 export const createBanner = async (req, res) => {
     const { title, subTitle, startingDate, endingDate } = req.body;
 
@@ -45,6 +46,7 @@ export const createBanner = async (req, res) => {
     }
 };
 
+//get banner
 export const getBanners = async (req, res) => {
     try {
         let { page = 1, limit = 4, search = "" } = req.query;
@@ -78,6 +80,7 @@ export const getBanners = async (req, res) => {
     }
 };
 
+//get a single banner
 export const getSingleBanner = async (req, res) => {
     try {
         const { id } = req.params;
@@ -93,6 +96,7 @@ export const getSingleBanner = async (req, res) => {
     }
 };
 
+//edit a banner
 export const editBanner = async (req, res) => {
     const { id } = req.params;
     const { title, subTitle, startingDate, endingDate } = req.body;
@@ -147,46 +151,48 @@ export const editBanner = async (req, res) => {
     }
 };
 
-export const deleteBanner = async(req, res)=>{
-    const {id} = req.params;
+//delete a banner
+export const deleteBanner = async (req, res) => {
+    const { id } = req.params;
 
-    try{
-        const banner = await Banner.findByIdAndDelete(id)
+    try {
+        const banner = await Banner.findByIdAndDelete(id);
 
-        if(!banner){
-            return res.status(404).json({message: 'banner not found'})
+        if (!banner) {
+            return res.status(404).json({ message: "banner not found" });
         }
 
-        return res.status(200).json({banner});
-    }catch(err){
-        return res.status(500).json({message: 'internal server error'});
+        return res.status(200).json({ banner });
+    } catch (err) {
+        return res.status(500).json({ message: "internal server error" });
     }
-}
+};
 
-export const bannerStatus = async (req, res)=>{
-    const {id} = req.params;
+//change banner status
+export const bannerStatus = async (req, res) => {
+    const { id } = req.params;
 
-    try{
+    try {
         const banner = await Banner.findById(id);
 
-        if(!banner){
-            return res.status(400).json({message: 'banner not found'});
+        if (!banner) {
+            return res.status(400).json({ message: "banner not found" });
         }
 
-        if(!banner.isActive){
+        if (!banner.isActive) {
             await Banner.updateMany(
-                {_id: {$ne: id}},
-                {$set: {isActive: false}}
-            )
+                { _id: { $ne: id } },
+                { $set: { isActive: false } }
+            );
             banner.isActive = true;
-        }else{
+        } else {
             banner.isActive = false;
         }
 
         banner.save();
 
-        return res.status(200).json({banner})
-    }catch(err){
-        return res.status(500).json({message: 'internal server error'});
+        return res.status(200).json({ banner });
+    } catch (err) {
+        return res.status(500).json({ message: "internal server error" });
     }
-}
+};

@@ -1,3 +1,4 @@
+//user return order
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import { useEffect, useState } from "react";
@@ -49,9 +50,9 @@ const ReturnOrders = () => {
             await dispatch(
                 returnOrder({ orderId, productId, reason: reasonToSend })
             ).unwrap();
-            navigate("/view/order", {replace: true});
+            navigate("/view/order", { replace: true });
         } catch (err) {
-            console.log("order cancel error", err);
+            alert("return order error");
         }
     };
 

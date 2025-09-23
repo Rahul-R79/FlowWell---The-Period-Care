@@ -1,3 +1,4 @@
+//user edit address
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import ProfileNav from "../../../components/UserProfileSideNav/ProfileNav";
@@ -12,25 +13,27 @@ import { useEffect, useState } from "react";
 function EditAddress() {
     const disptach = useDispatch();
     const navigate = useNavigate();
-    const {id} = useParams();
+    const { id } = useParams();
 
-    const {singleAddress, loadingByAction, errorByAction} = useSelector(state => state.address);
+    const { singleAddress, loadingByAction, errorByAction } = useSelector(
+        (state) => state.address
+    );
 
     const [formData, setFormData] = useState({
-        fullName: '',
-        phone: '',
-        pincode: '',
-        locality: '',
-        streetAddress: '',
-        city: '',
-        state: '',
-        landmark: '',
-        alternatePhone: '',
-        type: ''
-    })
+        fullName: "",
+        phone: "",
+        pincode: "",
+        locality: "",
+        streetAddress: "",
+        city: "",
+        state: "",
+        landmark: "",
+        alternatePhone: "",
+        type: "",
+    });
 
-    useEffect(()=>{
-        if(singleAddress){
+    useEffect(() => {
+        if (singleAddress) {
             setFormData({
                 fullName: singleAddress.fullName || "",
                 phone: singleAddress.phone || "",
@@ -41,37 +44,39 @@ function EditAddress() {
                 state: singleAddress.state || "",
                 landmark: singleAddress.landmark || "",
                 alternatePhone: singleAddress.alternatePhone || "",
-                type: singleAddress.type || ""
-            })
+                type: singleAddress.type || "",
+            });
         }
     }, [singleAddress]);
 
-    const handleData = (e)=>{
-        setFormData({...formData, [e.target.name] : e.target.value});
-    }
+    const handleData = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-    const handleSubmit = async(e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        try{
-            await disptach(editAddress({id, formData})).unwrap();
-            navigate('/address');
-        }catch(err){
-            console.log('edit address error', err);
+        try {
+            await disptach(editAddress({ id, formData })).unwrap();
+            navigate("/address");
+        } catch (err) {
+            alert('edit address failed');
         }
-    }
+    };
 
-    const getFieldErrors = (fieldName)=>{
-        return errorByAction.editAddress?.find(e => e.field === fieldName)?.message;
-    }
+    const getFieldErrors = (fieldName) => {
+        return errorByAction.editAddress?.find((e) => e.field === fieldName)
+            ?.message;
+    };
 
-    useEffect(()=>{
+    useEffect(() => {
         disptach(getSingleAddress(id));
         disptach(clearAddressErrors());
     }, [disptach, id]);
 
     return (
         <>
-            {loadingByAction.editAddress || loadingByAction.getSingleAddress && <LoadingSpinner/>}
+            {loadingByAction.editAddress ||
+                (loadingByAction.getSingleAddress && <LoadingSpinner />)}
             <UserHeader />
             <div className='add-address container mt-5 mb-5'>
                 <div className='row'>
@@ -81,9 +86,7 @@ function EditAddress() {
 
                     <div className='col-xl-9 col-lg-8 col-md-7 col-sm-12 mt-4 mb-5'>
                         <div className='p-4 shadow rounded bg-white'>
-                            <h3 className='text-center mb-4'>
-                                Edit ADDRESS
-                            </h3>
+                            <h3 className='text-center mb-4'>Edit ADDRESS</h3>
 
                             <Form onSubmit={handleSubmit}>
                                 <div className='row'>
@@ -92,12 +95,14 @@ function EditAddress() {
                                         <Form.Control
                                             type='text'
                                             placeholder='Enter name'
-                                            name="fullName"
+                                            name='fullName'
                                             value={formData.fullName}
                                             onChange={handleData}
                                         />
                                         {getFieldErrors("fullName") && (
-                                            <small className="text-danger">{getFieldErrors("fullName")}</small>
+                                            <small className='text-danger'>
+                                                {getFieldErrors("fullName")}
+                                            </small>
                                         )}
                                     </div>
                                     <div className='col-md-6 mb-3'>
@@ -105,12 +110,14 @@ function EditAddress() {
                                         <Form.Control
                                             type='text'
                                             placeholder='Enter mobile number'
-                                            name="phone"
+                                            name='phone'
                                             value={formData.phone}
                                             onChange={handleData}
                                         />
                                         {getFieldErrors("phone") && (
-                                            <small className="text-danger">{getFieldErrors("phone")}</small>
+                                            <small className='text-danger'>
+                                                {getFieldErrors("phone")}
+                                            </small>
                                         )}
                                     </div>
 
@@ -119,12 +126,14 @@ function EditAddress() {
                                         <Form.Control
                                             type='text'
                                             placeholder='Enter pincode'
-                                            name="pincode"
+                                            name='pincode'
                                             value={formData.pincode}
                                             onChange={handleData}
                                         />
                                         {getFieldErrors("pincode") && (
-                                            <small className="text-danger">{getFieldErrors("pincode")}</small>
+                                            <small className='text-danger'>
+                                                {getFieldErrors("pincode")}
+                                            </small>
                                         )}
                                     </div>
                                     <div className='col-md-6 mb-3'>
@@ -132,12 +141,14 @@ function EditAddress() {
                                         <Form.Control
                                             type='text'
                                             placeholder='Enter locality'
-                                            name="locality"
+                                            name='locality'
                                             value={formData.locality}
                                             onChange={handleData}
                                         />
                                         {getFieldErrors("locality") && (
-                                            <small className="text-danger">{getFieldErrors("locality")}</small>
+                                            <small className='text-danger'>
+                                                {getFieldErrors("locality")}
+                                            </small>
                                         )}
                                     </div>
 
@@ -147,12 +158,16 @@ function EditAddress() {
                                             as='textarea'
                                             rows={3}
                                             placeholder='Enter full address'
-                                            name="streetAddress"
+                                            name='streetAddress'
                                             value={formData.streetAddress}
                                             onChange={handleData}
                                         />
                                         {getFieldErrors("streetAddress") && (
-                                            <small className="text-danger">{getFieldErrors("streetAddress")}</small>
+                                            <small className='text-danger'>
+                                                {getFieldErrors(
+                                                    "streetAddress"
+                                                )}
+                                            </small>
                                         )}
                                     </div>
 
@@ -163,12 +178,14 @@ function EditAddress() {
                                         <Form.Control
                                             type='text'
                                             placeholder='Enter city'
-                                            name="city"
+                                            name='city'
                                             value={formData.city}
                                             onChange={handleData}
                                         />
                                         {getFieldErrors("city") && (
-                                            <small className="text-danger">{getFieldErrors("city")}</small>
+                                            <small className='text-danger'>
+                                                {getFieldErrors("city")}
+                                            </small>
                                         )}
                                     </div>
                                     <div className='col-md-6 mb-3'>
@@ -176,12 +193,14 @@ function EditAddress() {
                                         <Form.Control
                                             type='text'
                                             placeholder='Enter state'
-                                            name="state"
+                                            name='state'
                                             value={formData.state}
                                             onChange={handleData}
                                         />
                                         {getFieldErrors("state") && (
-                                            <small className="text-danger">{getFieldErrors("state")}</small>
+                                            <small className='text-danger'>
+                                                {getFieldErrors("state")}
+                                            </small>
                                         )}
                                     </div>
 
@@ -190,12 +209,14 @@ function EditAddress() {
                                         <Form.Control
                                             type='text'
                                             placeholder='Nearby landmark'
-                                            name="landmark"
+                                            name='landmark'
                                             value={formData.landmark}
                                             onChange={handleData}
                                         />
                                         {getFieldErrors("landmark") && (
-                                            <small className="text-danger">{getFieldErrors("landmark")}</small>
+                                            <small className='text-danger'>
+                                                {getFieldErrors("landmark")}
+                                            </small>
                                         )}
                                     </div>
                                     <div className='col-md-6 mb-3'>
@@ -205,12 +226,16 @@ function EditAddress() {
                                         <Form.Control
                                             type='text'
                                             placeholder='Optional'
-                                            name="alternatePhone"
+                                            name='alternatePhone'
                                             value={formData.alternatePhone}
                                             onChange={handleData}
                                         />
                                         {getFieldErrors("alternatePhone") && (
-                                            <small className="text-danger">{getFieldErrors("alternatePhone")}</small>
+                                            <small className='text-danger'>
+                                                {getFieldErrors(
+                                                    "alternatePhone"
+                                                )}
+                                            </small>
                                         )}
                                     </div>
                                 </div>
@@ -221,7 +246,7 @@ function EditAddress() {
                                         label='Home'
                                         name='type'
                                         value='home'
-                                        checked={formData.type === 'home'}
+                                        checked={formData.type === "home"}
                                         onChange={handleData}
                                         type='radio'
                                     />
@@ -230,17 +255,22 @@ function EditAddress() {
                                         label='Work'
                                         name='type'
                                         value='work'
-                                        checked={formData.type === 'work'}
+                                        checked={formData.type === "work"}
                                         onChange={handleData}
                                         type='radio'
                                     />
                                 </div>
 
                                 <div className='d-flex justify-content-end'>
-                                    <Button variant='dark' className='me-2' type="submit">
+                                    <Button
+                                        variant='dark'
+                                        className='me-2'
+                                        type='submit'>
                                         Save
                                     </Button>
-                                    <Button variant='outline-dark' onClick={()=> navigate('/address')}>
+                                    <Button
+                                        variant='outline-dark'
+                                        onClick={() => navigate("/address")}>
                                         Cancel
                                     </Button>
                                 </div>

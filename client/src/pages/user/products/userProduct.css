@@ -1,3 +1,4 @@
+/* user product css */
 .product-page,
 .product-detail {
     margin-bottom: 120px !important;
@@ -216,7 +217,6 @@
 
 .product-main-img:hover {
     transform: scale(2);
-    filter: brightness(1.1); 
+    filter: brightness(1.1);
     cursor: zoom-in;
 }
-

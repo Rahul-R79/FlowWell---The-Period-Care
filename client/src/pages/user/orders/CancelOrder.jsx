@@ -1,3 +1,4 @@
+//user cancel order
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import { useEffect, useState } from "react";
@@ -49,9 +50,9 @@ const CancelOrders = () => {
             await dispatch(
                 cancelOrder({ orderId, productId, reason: reasonToSend })
             ).unwrap();
-            navigate("/view/order", {replace: true});
+            navigate("/view/order", { replace: true });
         } catch (err) {
-            console.log("order cancel error", err);
+            alert('cancel order error');
         }
     };
 

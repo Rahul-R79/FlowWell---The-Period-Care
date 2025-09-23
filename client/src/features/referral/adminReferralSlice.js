@@ -1,3 +1,4 @@
+//admin referral slice
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import instance from "../../utils/axios";
 
@@ -8,9 +9,7 @@ export const getAllReferrals = createAsyncThunk(
             const response = await instance.get("/admin/referrals");
             return response.data.referrals;
         } catch (err) {
-            return rejectWithValue(
-                err.response.data
-            );
+            return rejectWithValue(err.response.data);
         }
     }
 );

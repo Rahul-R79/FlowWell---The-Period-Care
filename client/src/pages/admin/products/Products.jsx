@@ -1,3 +1,4 @@
+//admin product page
 import { Form, Button, Table } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineModeEdit } from "react-icons/md";
@@ -42,7 +43,7 @@ const ProductsPage = () => {
         try {
             await dispatch(productToggleStatus(id)).unwrap();
         } catch (err) {
-            console.log("change status error", err);
+            alert('change status error, please try again');
         }
     };
 

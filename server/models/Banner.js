@@ -1,3 +1,4 @@
+//banner schema
 import mongoose from "mongoose";
 
 const bannerSchema = new mongoose.Schema({

@@ -1,3 +1,4 @@
+//user addresses
 import { Link, useParams } from "react-router-dom";
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
@@ -26,7 +27,7 @@ function Address() {
         try {
             await dispatch(deleteAddress(id)).unwrap();
         } catch (err) {
-            console.log("address delete failed", err);
+            alert('address delete failed');
         }
     };
 
@@ -102,7 +103,9 @@ function Address() {
                                                 <button
                                                     className='dropdown-item text-danger'
                                                     onClick={() =>
-                                                        handleDeleteClick(addr._id)
+                                                        handleDeleteClick(
+                                                            addr._id
+                                                        )
                                                     }>
                                                     Delete
                                                 </button>

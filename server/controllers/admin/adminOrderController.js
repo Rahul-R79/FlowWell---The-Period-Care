@@ -2,6 +2,7 @@ import Order from "../../models/Order.js";
 import Wallet from "../../models/Wallet.js";
 import WalletTransaction from "../../models/WalletTransaction.js";
 
+//get the user orders
 export const adminGetOrders = async (req, res) => {
     let {
         page = 1,
@@ -56,6 +57,7 @@ export const adminGetOrders = async (req, res) => {
     }
 };
 
+//get the order detail
 export const adminGetOrderDetail = async (req, res) => {
     const { orderId } = req.params;
 
@@ -72,6 +74,7 @@ export const adminGetOrderDetail = async (req, res) => {
     }
 };
 
+//change order status
 export const adminUpdateOrderStatus = async (req, res) => {
     const { orderId } = req.params;
     const { productId, newStatus } = req.body;
@@ -98,15 +101,18 @@ export const adminUpdateOrderStatus = async (req, res) => {
             reason: `status changed to ${newStatus}`,
         });
 
-        if (newStatus === "DELIVERED"){
-            if(order.paymentMethod === 'COD'){
-                order.paymentStatus = "PAID"
+        if (newStatus === "DELIVERED") {
+            if (order.paymentMethod === "COD") {
+                order.paymentStatus = "PAID";
             }
             order.orderStatus = "DELIVERED";
         }
         if (newStatus === "CANCELLED") {
             order.orderStatus = "CANCELLED";
-            if (order.paymentMethod !== "COD" && order.paymentMethod !== "SIMPL") {
+            if (
+                order.paymentMethod !== "COD" &&
+                order.paymentMethod !== "SIMPL"
+            ) {
                 const productSubtotal = product.price * product.quantity;
                 const refundableTotal = order.subtotal - order.discount;
                 const refundedAmount =
@@ -134,10 +140,17 @@ export const adminUpdateOrderStatus = async (req, res) => {
         if (newStatus === "RETURNED") order.orderStatus = "RETURNED";
         if (newStatus === "REFUNDED") {
             order.orderStatus = "REFUNDED";
+
             const productSubtotal = product.price * product.quantity;
-            const refundableTotal = order.subtotal - order.discount;
+
+            const totalDiscount =
+                (order.discount || 0) + (order.couponDiscount || 0);
+
+            const productDiscount =
+                (productSubtotal / order.subtotal) * totalDiscount;
+
             const refundedAmount =
-                (productSubtotal / order.subtotal) * refundableTotal;
+                Math.round((productSubtotal - productDiscount) * 100) / 100;
 
             let wallet = await Wallet.findOne({ userId: order.user });
             if (!wallet) {
@@ -146,6 +159,7 @@ export const adminUpdateOrderStatus = async (req, res) => {
                     balance: 0,
                 });
             }
+
             wallet.balance += refundedAmount;
             await wallet.save();
 
@@ -161,8 +175,6 @@ export const adminUpdateOrderStatus = async (req, res) => {
         await order.save();
         res.status(200).json({ order });
     } catch (err) {
-        console.log("return error", err);
-
         return res.status(500).json({ message: "internal server error" });
     }
 };

@@ -1,3 +1,4 @@
+//admin sales report slice
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import instance from "../utils/axios";
 

@@ -1,3 +1,4 @@
+//category schema
 import mongoose from "mongoose";
 
 const categorySchema = mongoose.Schema({

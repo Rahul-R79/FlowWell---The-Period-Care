@@ -1,3 +1,4 @@
+//admin banner page
 import Sidebar from "../../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../../components/Footer/AdminFooter";
 import PaginationButton from "../../../components/Pagination";
@@ -16,7 +17,7 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 import { useState, useEffect } from "react";
 import { confirmAlert } from "../../../utils/confirmAlert";
 
-const GetBanner = () => {
+const Banner = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { loadingByAction, banner, currentPage, totalPages } = useSelector(
@@ -42,7 +43,7 @@ const GetBanner = () => {
         try {
             dispatch(deleteBanner(id));
         } catch (err) {
-            console.log("delete banner error", err);
+            alert('delete banner error, please try again');
         }
     };
 
@@ -59,13 +60,13 @@ const GetBanner = () => {
         }
     };
 
-    const handleBannerStatus = async(id)=>{
-        try{
+    const handleBannerStatus = async (id) => {
+        try {
             await dispatch(bannerStatus(id)).unwrap();
-        }catch(err){
-            console.log('banner status change error', err.message);
+        } catch (err) {
+            alert('banner status change error, please try again');
         }
-    }
+    };
 
     const handleBannerStatusClick = async (id, currentStatus) => {
         const confirmed = await confirmAlert(
@@ -84,7 +85,9 @@ const GetBanner = () => {
 
     return (
         <>
-            {(loadingByAction.getBanners || loadingByAction.deleteBanner || loadingByAction.bannerStatus) && <LoadingSpinner />}
+            {(loadingByAction.getBanners ||
+                loadingByAction.deleteBanner ||
+                loadingByAction.bannerStatus) && <LoadingSpinner />}
             <div className='d-flex flex-column flex-lg-row min-vh-100'>
                 <Sidebar />
                 <div className='flex-grow-1 d-flex flex-column main-content'>
@@ -93,7 +96,7 @@ const GetBanner = () => {
                             Banners
                         </h2>
 
-                        {/* Search & Add button */}
+                        {/* Search and Add button */}
                         <Form className='mb-4 mt-5'>
                             <div className='d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                 <div className='position-relative'>
@@ -167,19 +170,38 @@ const GetBanner = () => {
                                                 }>
                                                 Edit
                                             </Button>
-                                            <Button variant='danger' size='sm' onClick={()=> handleStatusClick(banner._id)}>
+                                            <Button
+                                                variant='danger'
+                                                size='sm'
+                                                onClick={() =>
+                                                    handleStatusClick(
+                                                        banner._id
+                                                    )
+                                                }>
                                                 Delete
                                             </Button>
                                             {banner.isActive ? (
                                                 <Button
                                                     variant='warning'
-                                                    size='sm' onClick={()=> handleBannerStatusClick(banner._id, banner.isActive)}>
+                                                    size='sm'
+                                                    onClick={() =>
+                                                        handleBannerStatusClick(
+                                                            banner._id,
+                                                            banner.isActive
+                                                        )
+                                                    }>
                                                     Deactivate
                                                 </Button>
                                             ) : (
                                                 <Button
                                                     variant='success'
-                                                    size='sm'onClick={()=> handleBannerStatusClick(banner._id, banner.isActive)}>
+                                                    size='sm'
+                                                    onClick={() =>
+                                                        handleBannerStatusClick(
+                                                            banner._id,
+                                                            banner.isActive
+                                                        )
+                                                    }>
                                                     Activate
                                                 </Button>
                                             )}
@@ -203,4 +225,4 @@ const GetBanner = () => {
     );
 };
 
-export default GetBanner;
+export default Banner;

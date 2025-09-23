@@ -1,3 +1,4 @@
+/* admin category css */
 .search-input {
     border: 1px solid #d6d6d6 !important;
 }
@@ -13,11 +14,11 @@
 }
 
 .edit-categories-form-container form textarea.edit-category-input {
-    border: 1px solid #ccc; 
-    border-radius: 8px;         
-    padding: 10px;             
-    outline: none;              
-    transition: border-color 0.3s ease; 
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    outline: none;
+    transition: border-color 0.3s ease;
 }
 
 .edit-categories-form-container form textarea.edit-category-input:focus {
@@ -31,9 +32,6 @@
 }
 
 .edit-category-input::placeholder {
-    color: rgb(199, 199, 199) !important; 
-    opacity: 1; 
+    color: rgb(199, 199, 199) !important;
+    opacity: 1;
 }
-
-
-

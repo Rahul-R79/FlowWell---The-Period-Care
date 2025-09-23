@@ -1,5 +1,6 @@
 import Address from "../../models/Address.js";
 
+//add a address
 export const addAddress = async(req, res)=>{
     const {
         fullName,
@@ -39,6 +40,7 @@ export const addAddress = async(req, res)=>{
     }
 }
 
+//get all the addresses
 export const getAllAddresses = async(req, res)=>{
     try{
         const addresses = await Address.find({user: req.user.id}).sort({createdAt: -1});
@@ -48,7 +50,7 @@ export const getAllAddresses = async(req, res)=>{
     }
 }
 
-
+//get a single address
 export const getSingleAddress = async(req, res)=>{
     const {id} = req.params;
 
@@ -65,6 +67,7 @@ export const getSingleAddress = async(req, res)=>{
     }
 }
 
+//edit a address
 export const editAddress = async(req, res)=>{
     const {id} = req.params;
     const {
@@ -105,6 +108,7 @@ export const editAddress = async(req, res)=>{
     }
 }
 
+//delete a address
 export const deleteAddress = async(req, res)=>{
     const {id} = req.params;
 

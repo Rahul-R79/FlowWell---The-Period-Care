@@ -1,8 +1,13 @@
+//admin edit banner
 import { Form, Button, Row, Col } from "react-bootstrap";
 import Sidebar from "../../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../../components/Footer/AdminFooter";
 import { useSelector, useDispatch } from "react-redux";
-import { editBanner, clearBannerErrors, getSingleBanner } from "../../../features/banner/adminBannerSlice";
+import {
+    editBanner,
+    clearBannerErrors,
+    getSingleBanner,
+} from "../../../features/banner/adminBannerSlice";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingSpinner from "../../../components/LoadingSpinner";
@@ -10,7 +15,7 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 const EditBanner = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {id} = useParams();
+    const { id } = useParams();
     const { loadingByAction, errorByAction, currentBanner } = useSelector(
         (state) => state.adminBanner
     );
@@ -40,31 +45,31 @@ const EditBanner = () => {
         data.append("image", formData.image);
 
         try {
-            await dispatch(editBanner({id, formData: data})).unwrap();
-            navigate('/admin/banner');
+            await dispatch(editBanner({ id, formData: data })).unwrap();
+            navigate("/admin/banner");
         } catch (err) {
-            console.log("banner edit error", err);
+            alert('edit banner error');
         }
     };
 
-    useEffect(()=>{
-        if(currentBanner){
+    useEffect(() => {
+        if (currentBanner) {
             setformData({
                 title: currentBanner.title,
                 subTitle: currentBanner.subTitle,
-                startingDate: currentBanner.startingDate.split('T')[0],
-                endingDate: currentBanner.endingDate.split('T')[0],
-                image: currentBanner.image
-            })
-            setPreviewImage(currentBanner.image)
+                startingDate: currentBanner.startingDate.split("T")[0],
+                endingDate: currentBanner.endingDate.split("T")[0],
+                image: currentBanner.image,
+            });
+            setPreviewImage(currentBanner.image);
         }
-    }, [currentBanner])
+    }, [currentBanner]);
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(clearBannerErrors());
         dispatch(getSingleBanner(id));
     }, [dispatch, id]);
-    
+
     const getFieldError = (fieldName) => {
         return errorByAction.editBanner?.find((e) => e.field === fieldName)
             ?.message;
@@ -72,7 +77,7 @@ const EditBanner = () => {
 
     return (
         <>
-            {loadingByAction.editBanner && <LoadingSpinner/>}
+            {loadingByAction.editBanner && <LoadingSpinner />}
             <div className='d-flex flex-column flex-lg-row min-vh-100'>
                 <Sidebar />
                 <div className='flex-grow-1 d-flex flex-column main-content'>
@@ -232,7 +237,10 @@ const EditBanner = () => {
                                                 className='px-5 py-2 mx-3 mb-3'>
                                                 Save
                                             </Button>
-                                            <Button onClick={()=> navigate('/admin/banner')}
+                                            <Button
+                                                onClick={() =>
+                                                    navigate("/admin/banner")
+                                                }
                                                 variant='outline-dark'
                                                 type='button'
                                                 className='px-5 py-2 mb-3'>

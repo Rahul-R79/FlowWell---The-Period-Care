@@ -1,16 +1,17 @@
-.authForm{
+/* user auth css */
+.authForm {
     background-color: #000;
 }
 
-.text-flowwell{
+.text-flowwell {
     text-align: left !important;
 }
 
 .col-lg-6.bg-white {
-    height: 100%;               
+    height: 100%;
 }
 
-.right-form{
+.right-form {
     background-color: #05070f;
 }
 
@@ -24,7 +25,7 @@
     border-bottom: 1px solid #ccc;
     border-radius: 0;
 }
-.eye-button{
+.eye-button {
     z-index: 10 !important;
 }
 .form-control:focus {
@@ -32,7 +33,7 @@
     box-shadow: none;
 }
 
-.google-text{
+.google-text {
     color: #7fa8ff;
 }
 
@@ -41,7 +42,7 @@
     width: 100%;
 }
 
-.google-btn:hover{
+.google-btn:hover {
     background-color: #fff !important;
 }
 
@@ -50,7 +51,3 @@
         width: 50% !important;
     }
 }
-
-
-
-

@@ -1,3 +1,4 @@
+//admin categories 
 import { Form, Button, Table, Row, Col } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineModeEdit } from "react-icons/md";
@@ -18,48 +19,51 @@ import { confirmAlert } from "../../../utils/confirmAlert";
 
 const CategoriesPage = () => {
     const dispatch = useDispatch();
-    const {category, loadingByAction, currentPage, totalPages} = useSelector(state => state.category);
+    const { category, loadingByAction, currentPage, totalPages } = useSelector(
+        (state) => state.category
+    );
 
-    const [search, setSearch] = useState('');
-    const [debouncedSearch, setDebouncedSearch] = useState('');
+    const [search, setSearch] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
 
-    useEffect(()=>{
+    useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedSearch(search);
             dispatch(setCurrentPage(1));
         }, 500);
-        return ()=> clearTimeout(handler);
+        return () => clearTimeout(handler);
     }, [dispatch, search]);
 
-
-    useEffect(()=>{
-        dispatch(getCategory({page: currentPage, search: debouncedSearch}));
+    useEffect(() => {
+        dispatch(getCategory({ page: currentPage, search: debouncedSearch }));
     }, [dispatch, currentPage, debouncedSearch]);
 
-    const handlechangeStatus = async(id)=>{
-        try{
+    const handlechangeStatus = async (id) => {
+        try {
             await dispatch(changeStatus(id)).unwrap();
-        }catch(err){
-            console.log('change status error', err);
+        } catch (err) {
+            alert('category change status error, please try again');
         }
-    }
+    };
 
-    const handleStatusClick = async(id, currentStatus)=>{
+    const handleStatusClick = async (id, currentStatus) => {
         const confirmed = await confirmAlert(
-            'Change Status?',
-            `Are you sure you want to ${currentStatus === 'active' ? 'deactivate' : 'activate'} this category?`,
-            'Submit',
-            'Cancel'
+            "Change Status?",
+            `Are you sure you want to ${
+                currentStatus === "active" ? "deactivate" : "activate"
+            } this category?`,
+            "Submit",
+            "Cancel"
         );
 
-        if(confirmed){
+        if (confirmed) {
             handlechangeStatus(id);
         }
-    }
+    };
 
     return (
         <>
-            {loadingByAction.getCategory && <LoadingSpinner/>}
+            {loadingByAction.getCategory && <LoadingSpinner />}
             <div className='d-flex flex-column flex-lg-row min-vh-100'>
                 <Sidebar />
                 <div className='flex-grow-1 d-flex flex-column main-content'>
@@ -79,7 +83,9 @@ const CategoriesPage = () => {
                                         aria-label='Search here'
                                         className='rounded-pill ps-5 search-input'
                                         value={search}
-                                        onChange={(e)=> setSearch(e.target.value)}
+                                        onChange={(e) =>
+                                            setSearch(e.target.value)
+                                        }
                                     />
                                     <FaSearch className='search-icon position-absolute top-50 start-0 translate-middle-y ms-3 text-muted' />
                                 </div>
@@ -103,34 +109,78 @@ const CategoriesPage = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {category.map(({_id, name, description, status}) => (
-                                    <tr key={_id}>
-                                        <td>{name}</td>
-                                        <td>{description}</td>
-                                        <td> 
-                                            <Button size="sm" variant={status === "active" ? "outline-success" : "outline-danger"} style={{ width: 80 }} disabled>
-                                                {status.charAt(0).toUpperCase() + status.slice(1)}
-                                            </Button>
-                                        </td>
-                                        <td>
-                                            <Link to={`/admin/editcategories/${_id}`} style={{ color: "inherit", textDecoration: "none" }}>
-                                                <MdOutlineModeEdit className='me-3'style={{ cursor: "pointer" }}/>
-                                            </Link>
-                                            <button onClick={()=> handleStatusClick(_id, status)} style={{ background: "none", border: "none", padding: 0 }}>
-                                                {status === 'active' ? (
-                                                    <SiTicktick style={{ cursor: "pointer", color: 'green'}}/>
-                                                ): (
-                                                    <MdUpdateDisabled style={{ cursor: "pointer", color: 'red'}}/>
-                                                )}
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {category.map(
+                                    ({ _id, name, description, status }) => (
+                                        <tr key={_id}>
+                                            <td>{name}</td>
+                                            <td>{description}</td>
+                                            <td>
+                                                <Button
+                                                    size='sm'
+                                                    variant={
+                                                        status === "active"
+                                                            ? "outline-success"
+                                                            : "outline-danger"
+                                                    }
+                                                    style={{ width: 80 }}
+                                                    disabled>
+                                                    {status
+                                                        .charAt(0)
+                                                        .toUpperCase() +
+                                                        status.slice(1)}
+                                                </Button>
+                                            </td>
+                                            <td>
+                                                <Link
+                                                    to={`/admin/editcategories/${_id}`}
+                                                    style={{
+                                                        color: "inherit",
+                                                        textDecoration: "none",
+                                                    }}>
+                                                    <MdOutlineModeEdit
+                                                        className='me-3'
+                                                        style={{
+                                                            cursor: "pointer",
+                                                        }}
+                                                    />
+                                                </Link>
+                                                <button
+                                                    onClick={() =>
+                                                        handleStatusClick(
+                                                            _id,
+                                                            status
+                                                        )
+                                                    }
+                                                    style={{
+                                                        background: "none",
+                                                        border: "none",
+                                                        padding: 0,
+                                                    }}>
+                                                    {status === "active" ? (
+                                                        <SiTicktick
+                                                            style={{
+                                                                cursor: "pointer",
+                                                                color: "green",
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <MdUpdateDisabled
+                                                            style={{
+                                                                cursor: "pointer",
+                                                                color: "red",
+                                                            }}
+                                                        />
+                                                    )}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    )
+                                )}
                             </tbody>
                         </Table>
                     </div>
 
-                    <PaginationButton 
+                    <PaginationButton
                         currentPage={currentPage}
                         totalPages={totalPages}
                         onPageChange={(page) => {

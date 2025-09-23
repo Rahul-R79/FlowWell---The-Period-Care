@@ -1,3 +1,4 @@
+//admin dashboard slice
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import instance from "../utils/axios";
 
@@ -28,7 +29,7 @@ const adminDashboardSlice = createSlice({
             totalProducts: 0,
             totalCustomers: 0,
             salesTrend: [],
-            topSelling: []
+            topSelling: [],
         },
         errorByAction: {},
         loadingByAction: {},

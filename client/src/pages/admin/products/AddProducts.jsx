@@ -1,3 +1,4 @@
+//admin add product
 import { Form, Button, Row, Col } from "react-bootstrap";
 import AdminFooter from "../../../components/Footer/AdminFooter";
 import Sidebar from "../../../components/SideNav/AdminSidebar";
@@ -21,7 +22,6 @@ const AddProducts = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-	//initial state
     const [formData, setFormData] = useState({
         name: "",
         description: "",
@@ -33,8 +33,12 @@ const AddProducts = () => {
         offer: "",
     });
 
-
-    const [imagePreviews, setImagePreviews] = useState([null,null,null,null,]);
+    const [imagePreviews, setImagePreviews] = useState([
+        null,
+        null,
+        null,
+        null,
+    ]);
 
     const handleData = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -91,8 +95,8 @@ const AddProducts = () => {
         setFormData({ ...formData, images: newImages });
         setImagePreviews(newPreviews);
 
-		const fileInput = document.getElementById(`fileInput${index + 1}`);
-    	if (fileInput) fileInput.value = "";
+        const fileInput = document.getElementById(`fileInput${index + 1}`);
+        if (fileInput) fileInput.value = "";
     };
 
     const handleSubmit = async (e) => {
@@ -117,7 +121,7 @@ const AddProducts = () => {
             await dispatch(addProduct(data)).unwrap();
             navigate("/admin/products");
         } catch (err) {
-            console.log("product add error", err);
+            alert("product add error, please try again");
         }
     };
 
@@ -455,7 +459,10 @@ const AddProducts = () => {
 
                             {/* Buttons */}
                             <div className='d-flex justify-content-center gap-2'>
-                                <Button variant='light' className='px-4' onClick={()=> navigate('/admin/products')}>
+                                <Button
+                                    variant='light'
+                                    className='px-4'
+                                    onClick={() => navigate("/admin/products")}>
                                     Cancel
                                 </Button>
                                 <Button

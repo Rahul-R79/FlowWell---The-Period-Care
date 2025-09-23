@@ -1,6 +1,7 @@
+//user all orders page
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
-import { Row, Col, Image, Spinner } from "react-bootstrap";
+import { Row, Col, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./orders.css";
 import PaginationButton from "../../../components/Pagination";
@@ -31,7 +32,7 @@ const AllOrders = () => {
         DELIVERED: "primary",
         CANCELLED: "danger",
         RETURNED: "danger",
-        REFUNDED: 'primary'
+        REFUNDED: "primary",
     };
 
     return (
@@ -110,7 +111,9 @@ const AllOrders = () => {
                                                 order.expectedDelivery
                                             ).toDateString()}
                                         </p>
-                                        <Link className='p-0 text-decoration-none view-link fw-bold' to={'/view/order'}>
+                                        <Link
+                                            className='p-0 text-decoration-none view-link fw-bold'
+                                            to={"/view/order"}>
                                             VIEW DETAILS
                                         </Link>
                                     </Col>

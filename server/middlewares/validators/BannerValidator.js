@@ -1,3 +1,4 @@
+//admin banner validator
 import { body } from "express-validator";
 
 export const validateBanner = [

@@ -1,6 +1,7 @@
 import Product from "../../models/Product.js";
 import cloudinary from "../../utils/cloudinary.js";
 
+//add a new product
 export const addProduct = async (req, res) => {
     const {
         name, 
@@ -51,7 +52,7 @@ export const addProduct = async (req, res) => {
     }
 };
 
-
+//get the added product
 export const getProduct = async(req, res)=>{
     try{
         let {page = 1, limit = 10, search = ''} = req.query;
@@ -74,6 +75,7 @@ export const getProduct = async(req, res)=>{
     }
 }
 
+//change the product status
 export const productStatus = async(req, res)=>{
     const {id} = req.params;
 
@@ -94,6 +96,7 @@ export const productStatus = async(req, res)=>{
     }
 }
 
+//get a single product
 export const getSingleProductById = async (req, res) => {
     const { id } = req.params;
     try{
@@ -107,6 +110,7 @@ export const getSingleProductById = async (req, res) => {
     }
 };
 
+//edit the product
 export const updateProductById = async (req, res) => {
     const { id } = req.params;
     const { name, description, basePrice, discountPrice, category, sizes, offer } = req.body;

@@ -1,15 +1,19 @@
+//user order slice
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import instance from "../../utils/axios";
 
 export const createOrder = createAsyncThunk(
     "/order/createOrder",
-    async ({ paymentMethod, shippingAddressId, appliedCouponId  }, { rejectWithValue }) => {
+    async (
+        { paymentMethod, shippingAddressId, appliedCouponId },
+        { rejectWithValue }
+    ) => {
         try {
             const response = await instance.post("/user/payment", {
                 paymentMethod,
                 shippingAddressId,
-                appliedCouponId 
+                appliedCouponId,
             });
             return response.data.order;
         } catch (err) {
@@ -78,7 +82,10 @@ export const returnOrder = createAsyncThunk(
 
 export const payWithWallet = createAsyncThunk(
     "/user/payWithWallet",
-    async ({ walletAmount, shippingAddressId, orderData }, { rejectWithValue }) => {
+    async (
+        { walletAmount, shippingAddressId, orderData },
+        { rejectWithValue }
+    ) => {
         try {
             const response = await instance.post("/user/wallet-payment", {
                 walletAmount,
@@ -204,7 +211,7 @@ const orderSlice = createSlice({
             .addCase(payWithWallet.fulfilled, (state, action) => {
                 state.loadingByAction.payWithWallet = false;
                 state.errorByAction.payWithWallet = null;
-                state.order = action.payload; 
+                state.order = action.payload;
             })
             .addCase(payWithWallet.rejected, (state, action) => {
                 state.loadingByAction.payWithWallet = false;

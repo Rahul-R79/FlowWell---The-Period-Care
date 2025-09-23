@@ -60,9 +60,9 @@ import AddReviews from "./pages/user/reviews/AddReviews";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import AddBanner from "./pages/admin/banner/AddBanner";
-import GetBanner from "./pages/admin/banner/GetBanner";
+import Banner from "./pages/admin/banner/Banner";
 import EditBanner from "./pages/admin/banner/EditBanner";
-
+import DeleteAccount from "./pages/user/profile/DeleteAccount";
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -101,7 +101,7 @@ function App() {
                     />
                 </Route>
 
-                {/* Forgot Password */}
+                {/* Forgot Password flow*/}
                 <Route
                     element={
                         <ProtectedRoute
@@ -123,8 +123,13 @@ function App() {
                             redirectPath='/admin/signin'
                         />
                     }>
+                    {/* admin dashboard */}
                     <Route path='/admin/dashboard' element={<DashBoard />} />
+
+                    {/* admin users page */}
                     <Route path='/admin/customers' element={<Customers />} />
+
+                    {/* admin categories */}
                     <Route
                         path='/admin/categories'
                         element={<CategoriesPage />}
@@ -137,6 +142,8 @@ function App() {
                         path='/admin/addcategories'
                         element={<AddCategories />}
                     />
+
+                    {/* admin products */}
                     <Route path='/admin/products' element={<Products />} />
                     <Route
                         path='/admin/products/add'
@@ -146,13 +153,15 @@ function App() {
                         path='/admin/products/edit/:id'
                         element={<EditProducts />}
                     />
-                    <Route path='/admin/*' element={<AdminPageNotFound />} />
+
+                    {/* admin orders */}
                     <Route path='/admin/orders' element={<AdminOrders />} />
                     <Route
                         path='/admin/order/detail/:orderId'
                         element={<AdminOrdersDetail />}
                     />
 
+                    {/* admin coupons */}
                     <Route path='/admin/coupons' element={<AdminCoupons />} />
                     <Route path='/admin/add/coupon' element={<AddCoupon />} />
                     <Route
@@ -160,28 +169,28 @@ function App() {
                         element={<EditCoupon />}
                     />
 
+                    {/* admin referrals */}
                     <Route
                         path='/admin/referrals'
                         element={<AdminReferAndEarn />}
                     />
 
+                    {/* admin sales report */}
                     <Route
                         path='/admin/sales/report'
                         element={<SalesReport />}
                     />
 
-                    <Route
-                        path='/admin/add/banner'
-                        element={<AddBanner />}
-                    />
-                    <Route
-                        path='/admin/banner'
-                        element={<GetBanner />}
-                    />
+                    {/* admin banners */}
+                    <Route path='/admin/add/banner' element={<AddBanner />} />
+                    <Route path='/admin/banner' element={<Banner />} />
                     <Route
                         path='/admin/banner/edit/:id'
                         element={<EditBanner />}
                     />
+
+                    {/* admin page not found */}
+                    <Route path='/admin/*' element={<AdminPageNotFound />} />
                 </Route>
 
                 {/* User Protected Routes */}
@@ -192,16 +201,25 @@ function App() {
                             redirectPath='/signup'
                         />
                     }>
+                    {/* user profile */}
                     <Route path='/profile' element={<UserProfile />} />
                     <Route
                         path='/changepassword'
                         element={<ChangePassword />}
                     />
+
+                    {/* user address */}
                     <Route path='/address/add' element={<AddAddress />} />
                     <Route path='/address' element={<Address />} />
                     <Route path='/address/:id/edit' element={<EditAddress />} />
+
+                    {/* user wishlist */}
                     <Route path='/wishlist' element={<Wishlist />} />
+
+                    {/* user cart */}
                     <Route path='/cart' element={<Cart />} />
+
+                    {/* user chekout address */}
                     <Route
                         path='/checkout/address'
                         element={<CheckoutAddress />}
@@ -215,7 +233,10 @@ function App() {
                         element={<EditCheckoutAddress />}
                     />
 
+                    {/* user coupons */}
                     <Route path='/coupons' element={<Coupons />} />
+
+                    {/* user payments */}
                     <Route path='/payment' element={<Payment />} />
                     <Route
                         path='/payment/success'
@@ -223,6 +244,7 @@ function App() {
                     />
                     <Route path='/payment/failed' element={<PaymentFailed />} />
 
+                    {/* user orders */}
                     <Route path='/orders' element={<AllOrders />} />
                     <Route path='/view/order' element={<ViewDetail />} />
                     <Route
@@ -238,6 +260,7 @@ function App() {
                         element={<OrderDetail />}
                     />
 
+                    {/* user wallet */}
                     <Route path='/wallet' element={<Wallet />} />
                     <Route path='/wallet/add' element={<AddMoneyToWallet />} />
                     <Route
@@ -245,9 +268,17 @@ function App() {
                         element={<WalletHistroy />}
                     />
 
+                    {/* user referals */}
                     <Route path='/referAndEarn' element={<ReferAndEarn />} />
 
-                    <Route path='/add/reviews/:orderId/:productId' element={<AddReviews />} />
+                    {/* user reviews */}
+                    <Route
+                        path='/add/reviews/:orderId/:productId'
+                        element={<AddReviews />}
+                    />
+
+                    {/* user delete account */}
+                    <Route path='/delete/account' element={<DeleteAccount />} />
                 </Route>
 
                 {/* Public Routes accessible for everyone*/}

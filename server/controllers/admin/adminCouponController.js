@@ -1,5 +1,6 @@
 import Coupon from "../../models/Coupon.js";
 
+//add coupons
 export const addCoupon = async (req, res) => {
     const {
         couponName,
@@ -19,13 +20,9 @@ export const addCoupon = async (req, res) => {
         });
 
         if (existingCoupon) {
-            return res
-                .status(400)
-                .json({
-                    errors: [
-                        { field: "general", message: "Coupon already exist" },
-                    ],
-                });
+            return res.status(400).json({
+                errors: [{ field: "general", message: "Coupon already exist" }],
+            });
         }
 
         const newCoupon = await Coupon.create({
@@ -46,45 +43,60 @@ export const addCoupon = async (req, res) => {
     }
 };
 
-export const getCoupons = async(req, res)=>{
-    try{
-        let {page = 1, limit = 10, search = ''} = req.query;
+//get coupons
+export const getCoupons = async (req, res) => {
+    try {
+        let { page = 1, limit = 10, search = "" } = req.query;
         page = parseInt(page);
         limit = parseInt(limit);
 
-        const query = search ? {$or: [{couponName: {$regex: search, $options: 'i'}}, {couponCode: {$regex: search, $options: 'i'}}]} : {}
+        const query = {
+            referral: { $exists: false },
+            ...(search && {
+                $or: [
+                    { couponName: { $regex: search, $options: "i" } },
+                    { couponCode: { $regex: search, $options: "i" } },
+                ],
+            }),
+        };
 
         const totalCoupons = await Coupon.countDocuments(query);
         const totalPages = Math.ceil(totalCoupons / limit);
 
         const coupons = await Coupon.find(query)
-        .skip((page  - 1) * limit)
-        .limit(limit)
-        .sort({createdAt: -1})
-        res.status(200).json({coupons, currentPage: page, totalPages, totalCoupons});
-    }catch(err){
-        res.status(500).json({message: 'internal server error'});
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .sort({ createdAt: -1 });
+        res.status(200).json({
+            coupons,
+            currentPage: page,
+            totalPages,
+            totalCoupons,
+        });
+    } catch (err) {
+        res.status(500).json({ message: "internal server error" });
     }
-}
+};
 
-export const getSingleCoupon = async(req, res)=>{
-
-    try{
-        const {id} = req.params;
+//get a single coupon
+export const getSingleCoupon = async (req, res) => {
+    try {
+        const { id } = req.params;
         const coupon = await Coupon.findById(id);
 
-        if(!coupon){
-            return res.status(404).json({message: 'coupon not found'});
+        if (!coupon) {
+            return res.status(404).json({ message: "coupon not found" });
         }
 
-        res.status(200).json({coupon});
-    }catch(err){
-        return res.status(500).json({message: 'internal server error'});
+        res.status(200).json({ coupon });
+    } catch (err) {
+        return res.status(500).json({ message: "internal server error" });
     }
-}
+};
 
-export const editCoupon = async(req, res)=>{
-    const {id} = req.params;
+//edit a coupon
+export const editCoupon = async (req, res) => {
+    const { id } = req.params;
     const {
         couponName,
         couponCode,
@@ -97,15 +109,24 @@ export const editCoupon = async(req, res)=>{
         firstOrderOnly,
     } = req.body;
 
-    try{
+    try {
         const coupon = await Coupon.findById(id);
-        if(!coupon){
-            return res.status(404).json({message: 'coupon not found'});
+        if (!coupon) {
+            return res.status(404).json({ message: "coupon not found" });
         }
-        const existingCoupon = await Coupon.findOne({$or: [{couponName}, {couponCode}], _id: {$ne: id}});
+        const existingCoupon = await Coupon.findOne({
+            $or: [{ couponName }, { couponCode }],
+            _id: { $ne: id },
+        });
 
-        if(existingCoupon){
-            return res.status(400).json({errors: [{field: 'general', message: 'Coupon already exists'}]});
+        if (existingCoupon) {
+            return res
+                .status(400)
+                .json({
+                    errors: [
+                        { field: "general", message: "Coupon already exists" },
+                    ],
+                });
         }
 
         coupon.couponName = couponName;
@@ -120,28 +141,36 @@ export const editCoupon = async(req, res)=>{
 
         await coupon.save();
 
-        res.status(200).json({coupon});
-    }catch(err){        
-        return res.status(500).json({message: 'internal server error'});
+        res.status(200).json({ coupon });
+    } catch (err) {
+        return res.status(500).json({ message: "internal server error" });
     }
-}
+};
 
-export const couponStatus = async(req, res)=>{
-    const {id} = req.params;
+//change coupon status
+export const couponStatus = async (req, res) => {
+    const { id } = req.params;
 
-    try{
+    try {
         const coupon = await Coupon.findById(id);
 
-        if(!coupon){
-            return res.status(404).json({message: 'coupon not found'});
+        if (!coupon) {
+            return res.status(404).json({ message: "coupon not found" });
         }
 
         const toggleStatus = !coupon.isActive;
 
-        const updatedCoupon = await Coupon.findByIdAndUpdate(id, {$set: {isActive: toggleStatus}}, {new: true});
+        const updatedCoupon = await Coupon.findByIdAndUpdate(
+            id,
+            { $set: { isActive: toggleStatus } },
+            { new: true }
+        );
 
-        res.status(200).json({message: 'status updated', coupon: updatedCoupon});
-    }catch(err){
-        return res.status(500).json({message: 'internal server error'});
+        res.status(200).json({
+            message: "status updated",
+            coupon: updatedCoupon,
+        });
+    } catch (err) {
+        return res.status(500).json({ message: "internal server error" });
     }
-}
+};
