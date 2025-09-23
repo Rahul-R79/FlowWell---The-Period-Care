@@ -1,3 +1,4 @@
+//wallet history schema
 import mongoose from "mongoose";
 
 const walletTransactionSchema = new mongoose.Schema({

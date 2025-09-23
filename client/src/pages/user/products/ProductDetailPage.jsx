@@ -1,3 +1,4 @@
+//product detail page
 import { useEffect, useState } from "react";
 import {
     Container,
@@ -122,7 +123,7 @@ function ProductDetailPage() {
             }
             await dispatch(getWishlist({ page: 1, limit: 3 })).unwrap();
         } catch (err) {
-            console.log("Wishlist toggle error", err);
+            alert("wishlist toggle error");
         }
     };
 
@@ -145,7 +146,7 @@ function ProductDetailPage() {
                 }, 400);
             }
         } catch (err) {
-            console.log("Add to cart error", err);
+            alert("add to cart error");
         }
     };
 

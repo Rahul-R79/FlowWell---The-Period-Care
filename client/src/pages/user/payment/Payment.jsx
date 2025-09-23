@@ -1,3 +1,4 @@
+//user payment page
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import { Row, Col, Button, Form } from "react-bootstrap";
@@ -12,7 +13,10 @@ import confetti from "canvas-confetti";
 import axios from "axios";
 import { payWithWallet } from "../../../features/orders/orderSlice";
 import { getWalletAmount } from "../../../features/walletSlice";
-import ToastNotification, {showErrorToast, showSuccessToast} from "../../../components/ToastNotification";
+import ToastNotification, {
+    showErrorToast,
+    showSuccessToast,
+} from "../../../components/ToastNotification";
 
 const Payment = () => {
     const dispatch = useDispatch();
@@ -22,10 +26,10 @@ const Payment = () => {
     const { selectedAddress } = useSelector((state) => state.address);
     const { loadingByAction } = useSelector((state) => state.order);
     const { appliedCoupon } = useSelector((state) => state.coupon);
-    const {balance} = useSelector((state)=> state.wallet);
+    const { balance } = useSelector((state) => state.wallet);
 
-    useEffect(()=>{
-        dispatch(getWalletAmount())
+    useEffect(() => {
+        dispatch(getWalletAmount());
     }, [dispatch]);
 
     const [paymentMethod, setPaymentMethod] = useState("RAZORPAY");
@@ -74,7 +78,8 @@ const Payment = () => {
                                         deliveryFee: totals.deliveryFee,
                                         total: totals.total,
                                         shippingAddress: selectedAddress,
-                                        appliedCouponId: appliedCoupon?._id || null,
+                                        appliedCouponId:
+                                            appliedCoupon?._id || null,
                                         paymentMethod: "RAZORPAY",
                                     },
                                 },
@@ -132,7 +137,7 @@ const Payment = () => {
                     origin: { y: 0.6 },
                 });
                 navigate("/payment/success", { replace: true });
-            } catch (err) {                
+            } catch (err) {
                 showErrorToast(err.message);
                 setTimeout(() => {
                     navigate("/payment/failed", { replace: true });
@@ -164,7 +169,7 @@ const Payment = () => {
         <>
             {loadingByAction.createOrder && <LoadingSpinner />}
             <UserHeader />
-            <ToastNotification/>
+            <ToastNotification />
             <section className='checkout-payment container'>
                 <h3 className='mb-4 fw-bold'>Select Payment Method</h3>
                 <Row>

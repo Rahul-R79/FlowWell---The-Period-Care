@@ -1,3 +1,4 @@
+//admin add coupons
 import { Form, Button, Row, Col } from "react-bootstrap";
 import Sidebar from "../../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../../components/Footer/AdminFooter";
@@ -14,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 const AddCoupon = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loadingByAction, errorByAction, coupons } = useSelector(
+    const { loadingByAction, errorByAction } = useSelector(
         (state) => state.adminCoupon
     );
     const [formData, setFormData] = useState({});
@@ -35,9 +36,9 @@ const AddCoupon = () => {
         e.preventDefault();
         try {
             await dispatch(adminCreateCoupon(formData)).unwrap();
-            navigate('/admin/coupons')
+            navigate("/admin/coupons");
         } catch (err) {
-            console.log("Create coupon error:", err);
+            alert("create coupon error, please try again");
         }
     };
 
@@ -55,13 +56,18 @@ const AddCoupon = () => {
                         <h2 className='mt-5 text-center mb-5'>
                             Add New Coupon
                         </h2>
-
+                        {/* coupon form */}
                         <Form
                             className='p-4 rounded add-coupon-form'
                             noValidate
                             onSubmit={handleSubmit}>
                             <Row className='mb-3'>
-                                {getFieldError('general') && <small className="text-center mb-4 text-danger">{getFieldError('general')}</small>}
+                                {getFieldError("general") && (
+                                    <small className='text-center mb-4 text-danger'>
+                                        {getFieldError("general")}
+                                    </small>
+                                )}
+                                {/* coupon name */}
                                 <Col md={4}>
                                     <Form.Group controlId='couponName'>
                                         <Form.Label>Coupon Name</Form.Label>
@@ -81,6 +87,7 @@ const AddCoupon = () => {
                                     )}
                                 </Col>
 
+                                {/* coupon code */}
                                 <Col md={4}>
                                     <Form.Group controlId='couponCode'>
                                         <Form.Label>Coupon Code</Form.Label>
@@ -100,6 +107,7 @@ const AddCoupon = () => {
                                     )}
                                 </Col>
 
+                                {/* coupon type */}
                                 <Col md={4}>
                                     <Form.Group controlId='couponType'>
                                         <Form.Label>Coupon Type</Form.Label>
@@ -125,6 +133,7 @@ const AddCoupon = () => {
                                 </Col>
                             </Row>
 
+                            {/* discount value */}
                             <Row className='mb-3'>
                                 <Col md={4}>
                                     <Form.Group controlId='discountValue'>
@@ -145,6 +154,7 @@ const AddCoupon = () => {
                                     )}
                                 </Col>
 
+                                {/* minimum purchase amount */}
                                 <Col md={4}>
                                     <Form.Group controlId='minPurchaseAmount'>
                                         <Form.Label>
@@ -169,6 +179,7 @@ const AddCoupon = () => {
                                     )}
                                 </Col>
 
+                                {/* maximum discount amount */}
                                 <Col md={4}>
                                     <Form.Group controlId='maxDiscountAmount'>
                                         <Form.Label>
@@ -193,6 +204,7 @@ const AddCoupon = () => {
                             </Row>
 
                             <Row className='mb-3'>
+                                {/* usage limit */}
                                 <Col md={4}>
                                     <Form.Group controlId='usageLimit'>
                                         <Form.Label>Usage Limit</Form.Label>
@@ -211,6 +223,7 @@ const AddCoupon = () => {
                                     )}
                                 </Col>
 
+                                {/* expiration date */}
                                 <Col md={4}>
                                     <Form.Group controlId='expirationDate'>
                                         <Form.Label>Expiration Date</Form.Label>
@@ -232,6 +245,7 @@ const AddCoupon = () => {
                                 </Col>
                             </Row>
                             <Row className='mb-3'>
+                                {/* first user only */}
                                 <Col md={4}>
                                     <Form.Group
                                         controlId='firstOrderOnly'
@@ -257,7 +271,10 @@ const AddCoupon = () => {
                                 className='me-2'>
                                 Create
                             </Button>
-                            <Button variant='secondary' type='button' onClick={()=> navigate('/admin/coupons')}>
+                            <Button
+                                variant='secondary'
+                                type='button'
+                                onClick={() => navigate("/admin/coupons")}>
                                 Cancel
                             </Button>
                         </Form>

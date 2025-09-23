@@ -1,3 +1,4 @@
+//admin coupons
 import { Form, Button, Table } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineModeEdit } from "react-icons/md";
@@ -43,7 +44,7 @@ const AdminCoupons = () => {
         try {
             await dispatch(changeCouponStatus(id)).unwrap();
         } catch (err) {
-            console.log("change coupon status error", err);
+            alert('change coupon error, please try again');
         }
     };
 
@@ -64,7 +65,8 @@ const AdminCoupons = () => {
 
     return (
         <>
-            {(loadingByAction.getCoupons || loadingByAction.changeCouponStatus) && <LoadingSpinner />}
+            {(loadingByAction.getCoupons ||
+                loadingByAction.changeCouponStatus) && <LoadingSpinner />}
             <div className='d-flex flex-column flex-lg-row min-vh-100'>
                 <Sidebar />
                 <div className='flex-grow-1 d-flex flex-column main-content'>
@@ -73,7 +75,7 @@ const AdminCoupons = () => {
                             Coupons
                         </h2>
 
-                        {/* Search & Add button */}
+                        {/* Search and Add button */}
                         <Form className='mb-4 mt-5'>
                             <div className='d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                 <div className='position-relative'>
@@ -158,7 +160,13 @@ const AdminCoupons = () => {
                                                     }}
                                                 />
                                             </Link>
-                                            <button onClick={()=> handleStatusClick(coupon._id, coupon.isActive)}
+                                            <button
+                                                onClick={() =>
+                                                    handleStatusClick(
+                                                        coupon._id,
+                                                        coupon.isActive
+                                                    )
+                                                }
                                                 style={{
                                                     background: "none",
                                                     border: "none",

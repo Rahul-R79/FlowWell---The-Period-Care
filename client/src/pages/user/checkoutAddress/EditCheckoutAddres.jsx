@@ -1,3 +1,4 @@
+//user edit checkout address
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import "./checkoutAddress.css";
@@ -59,10 +60,10 @@ const EditCheckoutAddress = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await dispatch(editAddress({id, formData})).unwrap();
+            await dispatch(editAddress({ id, formData })).unwrap();
             navigate("/checkout/address");
         } catch (err) {
-            console.log("add address error", err);
+            alert("edit address error");
         }
     };
 

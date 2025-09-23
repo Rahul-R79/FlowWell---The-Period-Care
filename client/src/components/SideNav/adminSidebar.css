@@ -1,4 +1,4 @@
-/* Fixed sidebar on desktop */
+/* admin sidenav */
 .sidebar {
     width: 220px;
     background-color: #fff;
@@ -17,7 +17,6 @@
     transform: scale(1.1);
 }
 
-/* Menu Item Styling */
 .sidebar-item {
     cursor: pointer;
     border-radius: 6px;

@@ -1,3 +1,4 @@
+//admin category validator
 import {body} from 'express-validator';
 
 export const validateCategory = [

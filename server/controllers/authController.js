@@ -8,6 +8,7 @@ import Admin from "../models/Admin.js";
 import Referral from "../models/Referral.js";
 import Coupon from "../models/Coupon.js";
 
+//user signup
 export const SignUp = async (req, res) => {
     const { name, email, password, referralCode } = req.body;
     try {
@@ -58,6 +59,7 @@ export const SignUp = async (req, res) => {
     }
 };
 
+//verify the email
 export const verifyOTP = async (req, res) => {
     const { email, otp } = req.body;
 
@@ -126,6 +128,7 @@ export const verifyOTP = async (req, res) => {
     }
 };
 
+//resend the otp
 export const resendOTP = async (req, res) => {
     const { email } = req.body;
 
@@ -159,6 +162,7 @@ export const resendOTP = async (req, res) => {
     }
 };
 
+//user signin
 export const SignIn = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -203,6 +207,7 @@ export const SignIn = async (req, res) => {
     }
 };
 
+//forgot user password
 export const forgotPassword = async (req, res) => {
     const { email } = req.body;
 
@@ -233,6 +238,7 @@ export const forgotPassword = async (req, res) => {
     }
 };
 
+//verify forgot password
 export const verifyForgotOTP = async (req, res) => {
     const { email, otp } = req.body;
 
@@ -261,6 +267,7 @@ export const verifyForgotOTP = async (req, res) => {
     }
 };
 
+//resend forgot otp
 export const resendForgotOTP = async (req, res) => {
     const { email } = req.body;
 
@@ -295,6 +302,7 @@ export const resendForgotOTP = async (req, res) => {
     }
 };
 
+//reset password
 export const forgotResetPassword = async (req, res) => {
     const { email, newPassword } = req.body;
 
@@ -315,6 +323,7 @@ export const forgotResetPassword = async (req, res) => {
     }
 };
 
+//google auth callback
 export const googleAuthCallback = async (req, res) => {
     try {
         if (!req.user) {
@@ -345,6 +354,7 @@ export const googleAuthCallback = async (req, res) => {
     }
 };
 
+//get current user 
 export const userauthMe = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -361,6 +371,7 @@ export const userauthMe = async (req, res) => {
     }
 };
 
+//admin signin
 export const adminSignin = async (req, res) => {
     const { email, password } = req.body;
 
@@ -399,6 +410,7 @@ export const adminSignin = async (req, res) => {
     }
 };
 
+//get the current admin
 export const adminauthMe = async (req, res) => {
     try {
         const adminId = req.admin.id;
@@ -415,6 +427,7 @@ export const adminauthMe = async (req, res) => {
     }
 };
 
+//admin logout 
 export const adminLogout = (req, res) => {
     try {
         res.clearCookie("admin-access-token", {
@@ -430,6 +443,7 @@ export const adminLogout = (req, res) => {
     }
 };
 
+//user logout
 export const userLogout = (req, res) => {
     try {
         res.clearCookie("user-access-token", {
@@ -445,6 +459,7 @@ export const userLogout = (req, res) => {
     }
 };
 
+//user change password
 export const changePassword = async (req, res) => {
     const userId = req.user.id;
     const { oldPassword, newPassword } = req.body;
@@ -491,8 +506,23 @@ export const changePassword = async (req, res) => {
             .status(200)
             .json({ message: "password changed successfully" });
     } catch (err) {
-        console.log(err.message);
-
         return res.status(500).json({ message: "internal server error" });
     }
 };
+
+//delete user account
+export const deleteAccount = async(req, res)=>{
+    const {id} = req.params;
+
+    try{
+        const user = await User.findByIdAndDelete(id);
+
+        if(!user){
+            return res.status(404).json({message: 'user not found'});
+        }
+
+        res.status(200).json({user});
+    }catch(err){
+        return res.status(500).json({message: 'internal server error'});
+    }
+}

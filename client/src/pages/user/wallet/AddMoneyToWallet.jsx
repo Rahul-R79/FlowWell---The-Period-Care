@@ -1,3 +1,4 @@
+//user add money to wallet page
 import { useState } from "react";
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
@@ -19,12 +20,12 @@ function AddMoneyToWallet() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
-    const {loadingByAction} = useSelector(state => state.wallet)
+    const { loadingByAction } = useSelector((state) => state.wallet);
     const { user } = useSelector((state) => state.auth);
 
     const [paymentMethod, setPaymentMethod] = useState("razorpay");
     const queryParams = new URLSearchParams(location.search);
-    const initialAmount = queryParams.get("amount") 
+    const initialAmount = queryParams.get("amount");
     const [amount, setAmount] = useState(initialAmount);
 
     const handlePayment = async (e) => {
@@ -35,7 +36,9 @@ function AddMoneyToWallet() {
                 amount: Orderamount,
                 currency,
                 key,
-            } = await dispatch(addMoneyToWallet({addAmount: amount})).unwrap();
+            } = await dispatch(
+                addMoneyToWallet({ addAmount: amount })
+            ).unwrap();
 
             const options = {
                 key,
@@ -82,9 +85,9 @@ function AddMoneyToWallet() {
 
     return (
         <>
-            {loadingByAction.addMoneyToWallet && <LoadingSpinner/>}
+            {loadingByAction.addMoneyToWallet && <LoadingSpinner />}
             <UserHeader />
-            <ToastNotification/>
+            <ToastNotification />
             <div className='wallet container my-5'>
                 <div className='row'>
                     <div className='col-xl-3 col-lg-4 col-md-5 col-sm-12'>
@@ -131,7 +134,10 @@ function AddMoneyToWallet() {
                                             <img
                                                 src='/images/icons/razorpay-icon.webp'
                                                 alt='Razorpay'
-                                                style={{width: '200px', height: '200px'}}
+                                                style={{
+                                                    width: "200px",
+                                                    height: "200px",
+                                                }}
                                             />
                                         </label>
                                     </div>

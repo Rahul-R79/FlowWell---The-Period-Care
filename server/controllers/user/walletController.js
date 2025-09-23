@@ -3,6 +3,7 @@ import WalletTransaction from "../../models/WalletTransaction.js";
 import Wallet from "../../models/Wallet.js";
 import crypto from "crypto";
 
+//add money to wallet
 export const addMoneyToWallet = async (req, res) => {
     const { addAmount } = req.body;
 
@@ -28,6 +29,7 @@ export const addMoneyToWallet = async (req, res) => {
     }
 };
 
+//verify the wallet payment
 export const verifyWalletPayment = async (req, res) => {
     const {
         userId,
@@ -76,11 +78,11 @@ export const verifyWalletPayment = async (req, res) => {
             balance: wallet.balance,
         });
     } catch (err) {
-        console.log(err);
         return res.status(500).json({ message: "internal server error" });
     }
 };
 
+//get the total wallet amount
 export const getWalletAmount = async(req, res)=>{
     try{
         const wallet = await Wallet.findOne({userId: req.user.id});
@@ -95,6 +97,7 @@ export const getWalletAmount = async(req, res)=>{
     }
 }
 
+//get wallet transactions
 export const getWalletTransactions = async(req, res)=>{
     let { page = 1, limit = 5} = req.query;
     try{

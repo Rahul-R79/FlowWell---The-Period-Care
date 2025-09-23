@@ -1,6 +1,7 @@
 import Product from "../../models/Product.js";
 import Category from "../../models/Category.js";
 
+//get all the products
 export const getAllProducts = async(req, res)=>{
     try{
         let {page = 1, limit = 9, sortBy, size, price, categoryName, offer} = req.query;
@@ -103,6 +104,7 @@ export const getAllProducts = async(req, res)=>{
     }
 }
 
+//get a productdetail
 export const getProductById = async(req, res)=>{
     const {id} = req.params;
     try{
@@ -124,6 +126,7 @@ export const getProductById = async(req, res)=>{
     }
 }
 
+//search a product
 export const searchProduct = async(req, res)=>{
     const {q} = req.query;
     

@@ -1,3 +1,4 @@
+// home page user reviews
 import { Container, Card } from "react-bootstrap";
 import { FaStar, FaCheckCircle } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
@@ -20,14 +21,14 @@ export default function ReviewsTab() {
         if (!slider) return;
 
         let scrollPos = 0;
-        const speed = 1; 
+        const speed = 1;
         let animationFrameId;
 
         const scroll = () => {
             if (slider.scrollWidth > slider.clientWidth) {
                 scrollPos += speed;
                 if (scrollPos >= slider.scrollWidth - slider.clientWidth) {
-                    scrollPos = 0; 
+                    scrollPos = 0;
                 }
                 slider.scrollLeft = scrollPos;
             }

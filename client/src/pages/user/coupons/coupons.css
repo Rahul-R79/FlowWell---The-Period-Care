@@ -1,3 +1,4 @@
+/* user coupon css */
 .coupons {
     max-width: 1000px;
     margin-bottom: 150px;
@@ -5,7 +6,7 @@
 }
 
 @media (max-width: 1000px) {
-	.coupons{
+    .coupons {
         margin-top: 40px;
         margin-bottom: 40px;
     }
@@ -36,5 +37,3 @@
 .coupon-item.selected {
     border: 2px solid darkgreen;
 }
-
-

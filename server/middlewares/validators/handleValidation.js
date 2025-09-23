@@ -1,3 +1,4 @@
+//hangle the validation result
 import { validationResult } from "express-validator"
 
 export const handleValidation = ((req, res, next)=>{

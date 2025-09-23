@@ -1,3 +1,4 @@
+// admin sideNav
 import { useState, useEffect } from "react";
 import { Button, Offcanvas } from "react-bootstrap";
 import {
@@ -44,7 +45,11 @@ const sidebarItems = [
     },
     { icon: <BsTicket size={20} />, text: "Coupon", path: "/admin/coupons" },
     { icon: <BsGrid size={20} />, text: "Category", path: "/admin/categories" },
-    { icon: <BsCollection size={20} />, text: "Banners", path: "/admin/banner"},
+    {
+        icon: <BsCollection size={20} />,
+        text: "Banners",
+        path: "/admin/banner",
+    },
     {
         icon: <BsPersonPlus size={20} />,
         text: "Referrals",
@@ -108,7 +113,7 @@ export default function Sidebar() {
             await dispatch(adminLogout()).unwrap();
             navigate("/admin/signin");
         } catch (err) {
-            console.error("adminLogout error:", err);
+            alert("Failed to logout. Please try again.");
         }
     };
 

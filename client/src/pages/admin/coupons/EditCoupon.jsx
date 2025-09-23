@@ -1,3 +1,4 @@
+// admin edit coupon
 import { Form, Button, Row, Col } from "react-bootstrap";
 import Sidebar from "../../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../../components/Footer/AdminFooter";
@@ -15,7 +16,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const EditCoupon = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {id} = useParams();
+    const { id } = useParams();
 
     const { loadingByAction, errorByAction, currentCoupon } = useSelector(
         (state) => state.adminCoupon
@@ -29,40 +30,39 @@ const EditCoupon = () => {
     };
 
     const getFieldError = (fieldName) => {
-        return errorByAction.editCoupon?.find(
-            (e) => e.field === fieldName
-        )?.message;
+        return errorByAction.editCoupon?.find((e) => e.field === fieldName)
+            ?.message;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await dispatch(editCoupon({id, formData})).unwrap();
-            navigate('/admin/coupons');
+            await dispatch(editCoupon({ id, formData })).unwrap();
+            navigate("/admin/coupons");
         } catch (err) {
-            console.log("edit coupon error:", err);
+            alert("admin edit coupon error, please try again");
         }
     };
 
-    useEffect(()=>{
-        if(currentCoupon){
+    useEffect(() => {
+        if (currentCoupon) {
             setFormData({
                 couponName: currentCoupon.couponName,
                 couponCode: currentCoupon.couponCode,
                 couponType: currentCoupon.couponType,
                 discountValue: currentCoupon.discountValue,
-                expirationDate: currentCoupon.expirationDate.split('T')[0],
+                expirationDate: currentCoupon.expirationDate.split("T")[0],
                 minPurchaseAmount: currentCoupon.minPurchaseAmount,
                 maxDiscountAmount: currentCoupon.maxDiscountAmount,
                 usageLimit: currentCoupon.usageLimit,
-                firstOrderOnly: currentCoupon.firstOrderOnly
-            })
+                firstOrderOnly: currentCoupon.firstOrderOnly,
+            });
         }
-    }, [currentCoupon])
+    }, [currentCoupon]);
 
     useEffect(() => {
         dispatch(clearCouponErrors());
-        dispatch(getSingleCoupon(id))
+        dispatch(getSingleCoupon(id));
     }, [dispatch, id]);
 
     return (
@@ -72,16 +72,21 @@ const EditCoupon = () => {
                 <Sidebar />
                 <div className='flex-grow-1 d-flex flex-column main-content'>
                     <div className='flex-grow-1 py-4 d-flex flex-column container add-coupon-form-container'>
-                        <h2 className='mt-5 text-center mb-5'>
-                            Edit Coupon
-                        </h2>
+                        <h2 className='mt-5 text-center mb-5'>Edit Coupon</h2>
 
+                        {/* coupon form */}
                         <Form
                             className='p-4 rounded add-coupon-form'
                             noValidate
                             onSubmit={handleSubmit}>
                             <Row className='mb-3'>
-                                {getFieldError('general') && <small className="text-center mb-4 text-danger">{getFieldError('general')}</small>}
+                                {getFieldError("general") && (
+                                    <small className='text-center mb-4 text-danger'>
+                                        {getFieldError("general")}
+                                    </small>
+                                )}
+
+                                {/* coupon name */}
                                 <Col md={4}>
                                     <Form.Group controlId='couponName'>
                                         <Form.Label>Coupon Name</Form.Label>
@@ -101,6 +106,7 @@ const EditCoupon = () => {
                                     )}
                                 </Col>
 
+                                {/* coupon code */}
                                 <Col md={4}>
                                     <Form.Group controlId='couponCode'>
                                         <Form.Label>Coupon Code</Form.Label>
@@ -120,6 +126,7 @@ const EditCoupon = () => {
                                     )}
                                 </Col>
 
+                                {/* coupon type */}
                                 <Col md={4}>
                                     <Form.Group controlId='couponType'>
                                         <Form.Label>Coupon Type</Form.Label>
@@ -145,6 +152,7 @@ const EditCoupon = () => {
                                 </Col>
                             </Row>
 
+                            {/* discount value */}
                             <Row className='mb-3'>
                                 <Col md={4}>
                                     <Form.Group controlId='discountValue'>
@@ -165,6 +173,7 @@ const EditCoupon = () => {
                                     )}
                                 </Col>
 
+                                {/* minimum purchase amount */}
                                 <Col md={4}>
                                     <Form.Group controlId='minPurchaseAmount'>
                                         <Form.Label>
@@ -189,6 +198,7 @@ const EditCoupon = () => {
                                     )}
                                 </Col>
 
+                                {/* maximum discount */}
                                 <Col md={4}>
                                     <Form.Group controlId='maxDiscountAmount'>
                                         <Form.Label>
@@ -213,6 +223,7 @@ const EditCoupon = () => {
                             </Row>
 
                             <Row className='mb-3'>
+                                {/* usage limit */}
                                 <Col md={4}>
                                     <Form.Group controlId='usageLimit'>
                                         <Form.Label>Usage Limit</Form.Label>
@@ -231,6 +242,7 @@ const EditCoupon = () => {
                                     )}
                                 </Col>
 
+                                {/* expiration date */}
                                 <Col md={4}>
                                     <Form.Group controlId='expirationDate'>
                                         <Form.Label>Expiration Date</Form.Label>
@@ -252,6 +264,7 @@ const EditCoupon = () => {
                                 </Col>
                             </Row>
                             <Row className='mb-3'>
+                                {/* user first order only */}
                                 <Col md={4}>
                                     <Form.Group
                                         controlId='firstOrderOnly'
@@ -277,7 +290,10 @@ const EditCoupon = () => {
                                 className='me-2'>
                                 Update
                             </Button>
-                            <Button variant='secondary' type='button' onClick={()=> navigate('/admin/coupons')}>
+                            <Button
+                                variant='secondary'
+                                type='button'
+                                onClick={() => navigate("/admin/coupons")}>
                                 Cancel
                             </Button>
                         </Form>

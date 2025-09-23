@@ -2,6 +2,7 @@ import Product from "../../models/Product.js";
 import Order from "../../models/Order.js";
 import User from "../../models/User.js";
 
+//get admin dashboard
 export const getDashboard = async (req, res) => {
     const { startDate, endDate, range } = req.query;
 

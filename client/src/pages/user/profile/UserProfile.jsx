@@ -1,3 +1,4 @@
+// user profile page
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import ProfileNav from "../../../components/UserProfileSideNav/ProfileNav";
@@ -7,7 +8,7 @@ import "./userProfile.css";
 import { useSelector, useDispatch } from "react-redux";
 import { updateProfile } from "../../../features/profileSlice";
 import { setCurrentUser } from "../../../features/auth/authUserSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import ImageCropper from "../../../components/ImageCropper";
@@ -86,7 +87,7 @@ function UserProfile() {
             const currentUser = await dispatch(updateProfile(data)).unwrap();
             dispatch(setCurrentUser(currentUser));
         } catch (err) {
-            console.log("user profile update error", err);
+            alert('profile update error');
         }
     };
 

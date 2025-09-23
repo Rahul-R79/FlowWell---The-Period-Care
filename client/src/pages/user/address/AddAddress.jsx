@@ -1,3 +1,4 @@
+//user add address
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import ProfileNav from "../../../components/UserProfileSideNav/ProfileNav";
@@ -40,7 +41,7 @@ function AddAddress() {
             await disptach(addAddress(formData)).unwrap();
             navigate("/address");
         } catch (err) {
-            console.log("add address error", err);
+            alert('add address error, please try again');
         }
     };
 

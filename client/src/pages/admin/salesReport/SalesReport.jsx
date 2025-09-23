@@ -1,3 +1,4 @@
+//admin sales report
 import Sidebar from "../../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../../components/Footer/AdminFooter";
 import { Table, Button, Dropdown } from "react-bootstrap";
@@ -96,7 +97,9 @@ const SalesReport = () => {
                 <Sidebar />
                 <div className='flex-grow-1 d-flex flex-column main-content'>
                     <div className='flex-grow-1 py-4 container salesReport-container'>
-                        <h2 className='mb-4 text-center text-lg-start'>Sales Report</h2>
+                        <h2 className='mb-4 text-center text-lg-start'>
+                            Sales Report
+                        </h2>
 
                         {/* date filters */}
                         <div className='row g-2 mb-4 mt-5 align-items-center'>
@@ -230,6 +233,7 @@ const SalesReport = () => {
                                 </div>
                             </div>
 
+                            {/* export pdf */}
                             <div
                                 className='col-12 col-sm-auto'
                                 onClick={handleExportPDF}>

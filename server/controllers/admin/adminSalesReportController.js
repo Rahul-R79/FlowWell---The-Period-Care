@@ -1,6 +1,6 @@
 import Order from "../../models/Order.js";
-import User from "../../models/User.js";
 
+//get the sales report
 export const getSalesReport = async (req, res) => {
     const { startDate, endDate, status } = req.query;
 

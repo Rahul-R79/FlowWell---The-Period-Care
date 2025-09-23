@@ -1,3 +1,4 @@
+// user header
 import {
     Navbar,
     Nav,
@@ -197,7 +198,10 @@ export default function UserHeader() {
                                                                 fontSize:
                                                                     "0.65rem",
                                                             }}>
-                                                            {cart.products?.length}
+                                                            {
+                                                                cart.products
+                                                                    ?.length
+                                                            }
                                                         </span>
                                                     )}
                                                 </Link>

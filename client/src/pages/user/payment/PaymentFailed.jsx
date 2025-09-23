@@ -1,3 +1,4 @@
+//payment failed page
 import { Button, Container } from "react-bootstrap";
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
@@ -9,7 +10,7 @@ import { useEffect } from "react";
 const PaymentFailed = () => {
     const navigate = useNavigate();
 
-    useEffect(()=>{
+    useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
@@ -44,10 +45,20 @@ const PaymentFailed = () => {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.8, duration: 0.6 }}>
-                        <Button variant='outline-dark' className='px-4 py-2' onClick={()=> navigate('/orders', {replace: true})}>
+                        <Button
+                            variant='outline-dark'
+                            className='px-4 py-2'
+                            onClick={() =>
+                                navigate("/orders", { replace: true })
+                            }>
                             VIEW ORDERS
                         </Button>
-                        <Button variant='outline-dark' className='px-4 py-2' onClick={()=> navigate('/cart', {replace: true})}>
+                        <Button
+                            variant='outline-dark'
+                            className='px-4 py-2'
+                            onClick={() =>
+                                navigate("/cart", { replace: true })
+                            }>
                             Try Again
                         </Button>
                     </motion.div>

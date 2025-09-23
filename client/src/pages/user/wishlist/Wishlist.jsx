@@ -1,3 +1,4 @@
+//user wishlist page
 import Footer from "../../../components/Footer/UserFooter";
 import UserHeader from "../../../components/Header/UserHeader";
 import { Row, Col, Button, Image } from "react-bootstrap";
@@ -41,7 +42,7 @@ function Wishlist() {
             ).unwrap();
             showErrorToast("Removed from wishlist!");
         } catch (err) {
-            console.log("remove from dispatch error", err);
+            alert('remove from the wishlist error');
         }
     };
 
@@ -78,7 +79,7 @@ function Wishlist() {
                 navigate("/cart");
             }, 500);
         } catch (err) {
-            console.log("add to cart failed", err);
+            alert('add to cart failed');
         }
     };
 
@@ -131,8 +132,7 @@ function Wishlist() {
                                     className={`fw-bold ${
                                         item.product.sizes.find(
                                             (s) =>
-                                                s.size ===
-                                                    item.selectedSize &&
+                                                s.size === item.selectedSize &&
                                                 s.stock > 0
                                         )
                                             ? "text-success"
@@ -140,8 +140,7 @@ function Wishlist() {
                                     }`}>
                                     {item.product.sizes.find(
                                         (s) =>
-                                            s.size ===
-                                                item.selectedSize &&
+                                            s.size === item.selectedSize &&
                                             s.stock > 0
                                     )
                                         ? "In Stock"

@@ -1,3 +1,4 @@
+//user cart
 import { useEffect } from "react";
 import { Row, Col, Button, Image } from "react-bootstrap";
 import Footer from "../../../components/Footer/UserFooter";
@@ -200,7 +201,12 @@ const Cart = () => {
                             <Button
                                 variant='dark'
                                 className='w-100'
-                                onClick={() => navigate("/checkout/address", {replace: true})} disabled={cart.products?.length === 0}>
+                                onClick={() =>
+                                    navigate("/checkout/address", {
+                                        replace: true,
+                                    })
+                                }
+                                disabled={cart.products?.length === 0}>
                                 Go to Checkout
                             </Button>
                         </div>

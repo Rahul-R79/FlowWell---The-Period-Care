@@ -1,3 +1,4 @@
+// redux store
 import {configureStore, combineReducers}from '@reduxjs/toolkit';
 import authUserSliceReducer from '../features/auth/authUserSlice';
 import adminAuthSliceReducer from '../features/auth/authAdminSlice'
@@ -51,7 +52,6 @@ const persistConfig = {
     key: 'root',
     version: 1,
     storage,
-    whitelist: ['auth', 'adminAuth']
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

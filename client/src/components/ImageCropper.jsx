@@ -1,3 +1,4 @@
+// userProfile image cropper
 import { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import { getCroppedImg } from "../utils/cropImage";
@@ -8,9 +9,12 @@ function ImageCropper({ imageSrc, onCropComplete, onClose }) {
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
-    const onCropCompleteHandler = useCallback((croppedArea, croppedAreaPixels) => {
-        setCroppedAreaPixels(croppedAreaPixels);
-    }, []);
+    const onCropCompleteHandler = useCallback(
+        (croppedArea, croppedAreaPixels) => {
+            setCroppedAreaPixels(croppedAreaPixels);
+        },
+        []
+    );
 
     const handleCropSave = async () => {
         const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
@@ -19,7 +23,7 @@ function ImageCropper({ imageSrc, onCropComplete, onClose }) {
     };
 
     return (
-        <Modal show={true} onHide={onClose} size="lg" centered>
+        <Modal show={true} onHide={onClose} size='lg' centered>
             <Modal.Header closeButton>
                 <Modal.Title>Crop Image</Modal.Title>
             </Modal.Header>
@@ -28,15 +32,19 @@ function ImageCropper({ imageSrc, onCropComplete, onClose }) {
                     image={imageSrc}
                     crop={crop}
                     zoom={zoom}
-                    aspect={1} 
+                    aspect={1}
                     onCropChange={setCrop}
                     onZoomChange={setZoom}
                     onCropComplete={onCropCompleteHandler}
                 />
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={onClose}>Cancel</Button>
-                <Button variant="primary" onClick={handleCropSave}>Save</Button>
+                <Button variant='secondary' onClick={onClose}>
+                    Cancel
+                </Button>
+                <Button variant='primary' onClick={handleCropSave}>
+                    Save
+                </Button>
             </Modal.Footer>
         </Modal>
     );

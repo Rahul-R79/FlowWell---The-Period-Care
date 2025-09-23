@@ -1,3 +1,4 @@
+//user profile validator
 import { body } from "express-validator";
 
 export const validateProfile = [

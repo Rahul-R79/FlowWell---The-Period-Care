@@ -1,3 +1,4 @@
+//user profile slice
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import instance from "../utils/axios";
@@ -6,8 +7,11 @@ export const updateProfile = createAsyncThunk(
     "/profile/updateProfile",
     async (formData, { rejectWithValue }) => {
         try {
-            const response = await instance.patch("/user/profile/edit", formData);
-            
+            const response = await instance.patch(
+                "/user/profile/edit",
+                formData
+            );
+
             return response.data.user;
         } catch (err) {
             return rejectWithValue(err.response.data.errors);
@@ -23,9 +27,9 @@ const profileSlice = createSlice({
         errorByAction: {},
     },
     reducers: {
-        resetProfileState: (state)=>{
+        resetProfileState: (state) => {
             state.errorByAction = {};
-        }
+        },
     },
     extraReducers: (builder) => {
         builder

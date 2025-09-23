@@ -1,10 +1,11 @@
+//protected route
 import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectedRoute = ({isAllowed, redirectPath})=>{
-    if(!isAllowed){
+const ProtectedRoute = ({ isAllowed, redirectPath }) => {
+    if (!isAllowed) {
         return <Navigate to={redirectPath} replace />;
     }
-    return <Outlet/>
-}
+    return <Outlet />;
+};
 
 export default ProtectedRoute;

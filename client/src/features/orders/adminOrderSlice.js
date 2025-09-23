@@ -1,3 +1,4 @@
+//admin order slice
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import instance from "../../utils/axios";
@@ -5,7 +6,7 @@ import instance from "../../utils/axios";
 export const adminGetOrders = createAsyncThunk(
     "adminOrders/getOrders",
     async (
-        { page = 1, limit = 10, search = "", filterStatus = "", date = ""},
+        { page = 1, limit = 10, search = "", filterStatus = "", date = "" },
         { rejectWithValue }
     ) => {
         try {
@@ -110,7 +111,7 @@ const adminOrderSlice = createSlice({
             .addCase(adminUpdateOrderStatus.rejected, (state, action) => {
                 state.loadingByAction.adminUpdateOrderStatus = false;
                 state.errorByAction.adminUpdateOrderStatus = action.payload;
-            })
+            });
     },
 });
 

@@ -10,6 +10,7 @@ import Wallet from "../../models/Wallet.js";
 import WalletTransaction from "../../models/WalletTransaction.js";
 import mongoose from "mongoose";
 
+// calculate the totals 
 const calculateTotals = (cart) => {
     let subtotal = 0;
     let discount = 0;
@@ -28,6 +29,7 @@ const calculateTotals = (cart) => {
     return { subtotal, discount, deliveryFee, total };
 };
 
+//create a cod order
 export const createOrder = async (req, res) => {
     const { paymentMethod, shippingAddressId, appliedCouponId } = req.body;
 
@@ -58,27 +60,34 @@ export const createOrder = async (req, res) => {
         const expectedDelivery = new Date();
         expectedDelivery.setDate(expectedDelivery.getDate() + 5);
 
-        const appliedCoupon = appliedCouponId
-            ? await Coupon.findById(appliedCouponId)
-            : null;
+        let appliedCoupon = null;
         let couponDiscountAmount = 0;
-        if (appliedCoupon.couponType === "percentage") {
-            couponDiscountAmount =
-                (totals.subtotal * appliedCoupon.discountValue) / 100;
-            if (appliedCoupon.maxDiscountAmount) {
-                couponDiscountAmount = Math.min(
-                    couponDiscountAmount,
-                    appliedCoupon.maxDiscountAmount
-                );
+
+        if (appliedCouponId) {
+            appliedCoupon = await Coupon.findById(appliedCouponId);
+            if (!appliedCoupon) {
+                return res.status(400).json({ message: "Invalid coupon code" });
             }
-        } else if (appliedCoupon.couponType === "fixed") {
-            couponDiscountAmount = appliedCoupon.discountValue;
+
+            if (appliedCoupon.couponType === "percentage") {
+                couponDiscountAmount =
+                    (totals.subtotal * appliedCoupon.discountValue) / 100;
+                if (appliedCoupon.maxDiscountAmount) {
+                    couponDiscountAmount = Math.min(
+                        couponDiscountAmount,
+                        appliedCoupon.maxDiscountAmount
+                    );
+                }
+            } else if (appliedCoupon.couponType === "fixed") {
+                couponDiscountAmount = appliedCoupon.discountValue;
+            }
         }
+
         const finalTotal =
             totals.subtotal -
-            (totals.discount || 0) -
+            totals.discount -
             couponDiscountAmount +
-            (totals.deliveryFee || 0);
+            totals.deliveryFee;
 
         const cartItems = cart.products.map((item) => ({
             productId: item.product._id,
@@ -134,11 +143,11 @@ export const createOrder = async (req, res) => {
             .status(201)
             .json({ message: "Order placed successfully", order });
     } catch (err) {
-        console.error(err);
         return res.status(500).json({ message: "Internal server error" });
     }
 };
 
+//get the placed orders
 export const getOrders = async (req, res) => {
     try {
         let { page = 1, limit = 3 } = req.query;
@@ -164,6 +173,7 @@ export const getOrders = async (req, res) => {
     }
 };
 
+//get the order details
 export const getOrderItem = async (req, res) => {
     const { orderId, productId } = req.params;
 
@@ -183,6 +193,7 @@ export const getOrderItem = async (req, res) => {
     }
 };
 
+//cancel a order
 export const cancelOrder = async (req, res) => {
     const { orderId, productId } = req.params;
     const { reason } = req.body;
@@ -201,6 +212,7 @@ export const cancelOrder = async (req, res) => {
         const productItem = order.cartItems.find(
             (cart) => cart.productId.toString() === productId
         );
+
         if (!productItem) {
             return res
                 .status(404)
@@ -219,7 +231,6 @@ export const cancelOrder = async (req, res) => {
         productItem.status = "CANCELLED";
         productItem.cancelReason = reason;
         productItem.cancelledAt = new Date();
-
         productItem.statusHistory.push({
             status: "CANCELLED",
             date: new Date(),
@@ -235,12 +246,17 @@ export const cancelOrder = async (req, res) => {
 
         if (order.paymentMethod !== "COD" && order.paymentMethod !== "SIMPL") {
             const productSubtotal = productItem.price * productItem.quantity;
-            const refundableTotal = order.subtotal - order.discount;
+
+            const totalDiscount =
+                (order.discount || 0) + (order.couponDiscount || 0);
+
+            const productDiscount =
+                (productSubtotal / order.subtotal) * totalDiscount;
+
             const refundedAmount =
-                (productSubtotal / order.subtotal) * refundableTotal;
+                Math.round((productSubtotal - productDiscount) * 100) / 100;
 
             let wallet = await Wallet.findOne({ userId: order.user });
-
             if (!wallet) {
                 wallet = await Wallet.create({
                     userId: order.user,
@@ -266,11 +282,11 @@ export const cancelOrder = async (req, res) => {
             .status(200)
             .json({ message: "Product cancelled successfully", order });
     } catch (err) {
-        console.error(err);
         return res.status(500).json({ message: "Internal server error" });
     }
 };
 
+//return a order
 export const ReturnOrder = async (req, res) => {
     const { orderId, productId } = req.params;
     const { reason } = req.body;
@@ -318,11 +334,11 @@ export const ReturnOrder = async (req, res) => {
             .status(200)
             .json({ message: "Product returned successfully", order });
     } catch (err) {
-        console.error(err);
         return res.status(500).json({ message: "Internal server error" });
     }
 };
 
+//create the order invoice
 export const getInvoice = async (req, res) => {
     try {
         const { id } = req.params;
@@ -386,6 +402,7 @@ export const getInvoice = async (req, res) => {
     }
 };
 
+//create a razorpay order
 export const createRazorpayOrder = async (req, res) => {
     const { amount } = req.body;
 
@@ -413,6 +430,7 @@ export const createRazorpayOrder = async (req, res) => {
     }
 };
 
+//verify the razorpay order
 export const verifyPayment = async (req, res) => {
     try {
         const {
@@ -513,13 +531,13 @@ export const verifyPayment = async (req, res) => {
 
         res.status(200).json({ order });
     } catch (err) {
-        console.error(err);
         return res
             .status(500)
             .json({ success: false, message: "Internal server error" });
     }
 };
 
+//create a wallet order
 export const processWalletPayment = async (req, res) => {
     const { walletAmount, shippingAddressId, orderData } = req.body;
 

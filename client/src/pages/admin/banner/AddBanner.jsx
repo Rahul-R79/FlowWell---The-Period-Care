@@ -1,8 +1,12 @@
+//admin add banner
 import { Form, Button, Row, Col } from "react-bootstrap";
 import Sidebar from "../../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../../components/Footer/AdminFooter";
 import { useSelector, useDispatch } from "react-redux";
-import { addBanner, clearBannerErrors } from "../../../features/banner/adminBannerSlice";
+import {
+    addBanner,
+    clearBannerErrors,
+} from "../../../features/banner/adminBannerSlice";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../../components/LoadingSpinner";
@@ -40,16 +44,16 @@ const AddBanner = () => {
 
         try {
             await dispatch(addBanner(data)).unwrap();
-            navigate('/admin/banner');
+            navigate("/admin/banner");
         } catch (err) {
-            console.log("banner add error", err);
+            alert('add banner error, please try again');
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(clearBannerErrors());
     }, [dispatch]);
-    
+
     const getFieldError = (fieldName) => {
         return errorByAction.addBanner?.find((e) => e.field === fieldName)
             ?.message;
@@ -62,7 +66,7 @@ const AddBanner = () => {
 
     return (
         <>
-            {loadingByAction.addBanner && <LoadingSpinner/>}
+            {loadingByAction.addBanner && <LoadingSpinner />}
             <div className='d-flex flex-column flex-lg-row min-vh-100'>
                 <Sidebar />
                 <div className='flex-grow-1 d-flex flex-column main-content'>
@@ -247,7 +251,10 @@ const AddBanner = () => {
                                                 className='px-5 py-2 mx-3 mb-3'>
                                                 Create
                                             </Button>
-                                            <Button onClick={()=> navigate('/admin/banner')}
+                                            <Button
+                                                onClick={() =>
+                                                    navigate("/admin/banner")
+                                                }
                                                 variant='outline-dark'
                                                 type='button'
                                                 className='px-5 py-2 mb-3'>

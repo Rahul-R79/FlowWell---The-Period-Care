@@ -1,5 +1,6 @@
 import Referral from "../../models/Referral.js";
 
+//get all the user referrals
 export const getReferrals = async(req, res)=>{
     try{
         const referrals = await Referral.find()

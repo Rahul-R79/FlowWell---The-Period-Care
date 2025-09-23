@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+//add reviews
 export const addReview = async (req, res) => {
     const { rating, heading, description, productId, orderId, userId } =
         req.body;
@@ -41,6 +42,7 @@ export const addReview = async (req, res) => {
     }
 };
 
+//get product reviews
 export const getReviewsByProduct = async (req, res) => {
     const { productId } = req.params;
 
@@ -51,12 +53,11 @@ export const getReviewsByProduct = async (req, res) => {
 
         return res.status(200).json({ reviews });
     } catch (err) {
-        console.log(err);
-
         return res.status(500).json({ message: "internal server error" });
     }
 };
 
+//get all reviews in home page
 export const getAllReviews = async (req, res) => {
     try {
         const reviews = await Review.find()
@@ -69,6 +70,7 @@ export const getAllReviews = async (req, res) => {
     }
 };
 
+//create a review summary
 export const getReviewSummary = async (req, res) => {
     const { productId } = req.params;
 

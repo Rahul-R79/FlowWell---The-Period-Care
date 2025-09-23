@@ -1,3 +1,4 @@
+/* user profile css */
 .profile-content {
     background: url("/images/user_profile_bg.jpg") no-repeat center center;
     background-size: cover;
@@ -43,12 +44,11 @@
 }
 
 .avatar-preview:hover {
-    transform: scale(1.1);    
-    box-shadow: 0 0 50px rgba(0, 123, 255, 0.7); 
+    transform: scale(1.1);
+    box-shadow: 0 0 50px rgba(0, 123, 255, 0.7);
     border-radius: 50%;
 }
 
-
-.avatar-preview{
+.avatar-preview {
     cursor: pointer;
 }

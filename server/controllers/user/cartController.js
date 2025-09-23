@@ -1,6 +1,7 @@
 import Cart from "../../models/Cart.js";
 import Product from "../../models/Product.js";
 
+//cart total calculation
 const calculateTotals = (cart) => {
     let subtotal = 0;
     let discount = 0;
@@ -19,6 +20,7 @@ const calculateTotals = (cart) => {
     return { subtotal, discount, deliveryFee, total };
 };
 
+//add a product to the cart
 export const addToCart = async (req, res) => {
     const { productId, quantity, selectedSize } = req.body;
 
@@ -96,11 +98,11 @@ export const addToCart = async (req, res) => {
         const totals = calculateTotals(cart);
         res.status(200).json({ cart, totals });
     } catch (err) {
-        console.log(err);
         res.status(500).json({ message: "internal server error" });
     }
 };
 
+//get the card products
 export const getCartItems = async (req, res) => {
     try {
         const cart = await Cart.findOne({ user: req.user.id }).populate(
@@ -118,6 +120,7 @@ export const getCartItems = async (req, res) => {
     }
 };
 
+//remove a product from the cart
 export const removeFromCart = async (req, res) => {
     const { productId, selectedSize } = req.params;
     try {
@@ -140,8 +143,6 @@ export const removeFromCart = async (req, res) => {
         const totals = calculateTotals(cart)
         return res.status(200).json({ cart, totals });
     } catch (err) {
-        console.log(err.message);
-
         return res.status(500).json({ message: "internal server error" });
     }
 };

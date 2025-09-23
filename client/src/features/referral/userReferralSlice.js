@@ -1,3 +1,4 @@
+//user referral slice
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import instance from "../../utils/axios";

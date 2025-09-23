@@ -1,3 +1,4 @@
+//user change password
 import { useNavigate, Link } from "react-router-dom";
 import { changePassword } from "../../../features/auth/authUserSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,7 +34,7 @@ function ChangePassword() {
             await dispatch(changePassword(formData)).unwrap();
             navigate("/", { replace: true });
         } catch (err) {
-            console.log("change password error", err);
+            alert('change password error');
         }
     };
 

@@ -1,3 +1,4 @@
+//admin order detail
 import Sidebar from "../../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../../components/Footer/AdminFooter";
 import { Row, Col, Card, Button } from "react-bootstrap";
@@ -43,7 +44,7 @@ const AdminOrdersDetail = () => {
                 ).unwrap();
                 dispatch(adminGetOrderDetail(orderDetail._id));
             } catch (err) {
-                console.log("change order status error", err);
+                alert("change order status error, please try again");
             }
         }
     };
@@ -61,6 +62,7 @@ const AdminOrdersDetail = () => {
                         </h4>
                     </div>
 
+                    {/* admin order detail card */}
                     <div className='flex-grow-1 container mb-5'>
                         <Row className='g-4'>
                             {orderDetail?.cartItems.map((item) => (
@@ -191,9 +193,9 @@ const AdminOrdersDetail = () => {
                                                         item.status !==
                                                             "CANCELLED" &&
                                                         item.status !==
-                                                            "RETURNED" && 
+                                                            "RETURNED" &&
                                                         item.status !==
-                                                            "REFUNDED" &&(
+                                                            "REFUNDED" && (
                                                             <Button
                                                                 variant='outline-danger'
                                                                 disabled={
@@ -213,7 +215,7 @@ const AdminOrdersDetail = () => {
                                                             </Button>
                                                         )}
 
-                                                    {/* Refund / Returned */}
+                                                    {/* Refund completion */}
                                                     {item.status ===
                                                         "RETURNED" && (
                                                         <Button
@@ -241,7 +243,6 @@ const AdminOrdersDetail = () => {
                                 </Col>
                             ))}
 
-                            {/* Sidebar: Shipping + Price Details */}
                             <Col lg={4}>
                                 {/* Shipping Details */}
                                 <Card className='mb-3 p-3 shadow-sm'>
@@ -276,7 +277,11 @@ const AdminOrdersDetail = () => {
                                     </div>
                                     <div className='d-flex justify-content-between mb-1'>
                                         <span>Discount</span>
-                                        <span>- ₹{orderDetail?.discount}</span>
+                                        <span>
+                                            - ₹
+                                            {orderDetail?.discount +
+                                                orderDetail?.couponDiscount}
+                                        </span>
                                     </div>
                                     <div className='d-flex justify-content-between mb-1'>
                                         <span>Delivery Fee</span>

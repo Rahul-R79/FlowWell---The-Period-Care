@@ -1,6 +1,7 @@
 import Referral from "../../models/Referral.js";
 import crypto from 'crypto';
 
+//get refferal code
 export const getReferralCode  = async(req, res)=>{
     try{
         let referral = await Referral.findOne({generatedUser: req.user.id});

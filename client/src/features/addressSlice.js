@@ -1,3 +1,4 @@
+//user address slice
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import instance from "../utils/axios";
@@ -89,19 +90,16 @@ const addressSlice = createSlice({
     extraReducers: (builder) => {
         builder
             //add address
-            .addCase(addAddress.pending, (state) => {
-                state.loadingByAction.addAddress = true;
-                state.errorByAction.addAddress = null;
-            })
             .addCase(addAddress.fulfilled, (state, action) => {
                 state.addresses.push(action.payload);
                 state.loadingByAction.addAddress = false;
                 state.errorByAction.addAddress = null;
+
+                if (!state.selectedAddress) {
+                    state.selectedAddress = action.payload._id;
+                }
             })
-            .addCase(addAddress.rejected, (state, action) => {
-                state.loadingByAction.addAddress = false;
-                state.errorByAction.addAddress = action.payload;
-            })
+
             //get all address
             .addCase(getAllAddresses.pending, (state) => {
                 state.loadingByAction.getAllAddresses = true;
@@ -112,7 +110,7 @@ const addressSlice = createSlice({
                 state.loadingByAction.getAllAddresses = false;
                 state.errorByAction.getAllAddresses = null;
                 if (!state.selectedAddress && action.payload.length > 0) {
-                    state.selectedAddress = action.payload[0]._id; 
+                    state.selectedAddress = action.payload[0]._id;
                 }
             })
             .addCase(getAllAddresses.rejected, (state, action) => {
@@ -164,7 +162,15 @@ const addressSlice = createSlice({
                 state.addresses = state.addresses.filter(
                     (address) => address._id !== action.payload._id
                 );
+
+                if (state.selectedAddress === action.payload._id) {
+                    state.selectedAddress =
+                        state.addresses.length > 0
+                            ? state.addresses[0]._id
+                            : null;
+                }
             })
+
             .addCase(deleteAddress.rejected, (state, action) => {
                 state.loadingByAction.deleteAddress = false;
                 state.errorByAction.deleteAddress = action.payload;

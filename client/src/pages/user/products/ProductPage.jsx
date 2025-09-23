@@ -1,3 +1,4 @@
+//user products page
 import { useState, useEffect } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 import Select from "react-select";
@@ -39,7 +40,7 @@ function ProductPage() {
                 size: selectedSize.map((s) => s.value),
                 price: selectedPrice?.value || "",
                 categoryName: selectedCategory?.value || "",
-                offer: selectedOffer.map((o) => o.value)
+                offer: selectedOffer.map((o) => o.value),
             })
         );
     };
@@ -57,9 +58,9 @@ function ProductPage() {
         setSelectedOffer([]);
     };
 
-    const productDetailById = (id)=>{
+    const productDetailById = (id) => {
         navigate(`/user/productdetail/${id}`);
-    }
+    };
 
     const sortOptions = [
         { value: "priceLowToHigh", label: "Price: Low to High" },
@@ -208,7 +209,11 @@ function ProductPage() {
                                     <Col
                                         key={product._id}
                                         className='text-left'>
-                                        <div className='product-card' onClick={()=> productDetailById(product._id)}>
+                                        <div
+                                            className='product-card'
+                                            onClick={() =>
+                                                productDetailById(product._id)
+                                            }>
                                             <img
                                                 src={product.images[0]}
                                                 alt={product.name}
@@ -226,9 +231,14 @@ function ProductPage() {
                                                             <span
                                                                 key={index}
                                                                 className='size-box'>
-                                                                {s.size.length <= 3 ?
-                                                                    s.size.toUpperCase() : s.size.charAt(0).toUpperCase()
-                                                                }
+                                                                {s.size
+                                                                    .length <= 3
+                                                                    ? s.size.toUpperCase()
+                                                                    : s.size
+                                                                          .charAt(
+                                                                              0
+                                                                          )
+                                                                          .toUpperCase()}
                                                             </span>
                                                         )
                                                     )}
@@ -247,19 +257,22 @@ function ProductPage() {
                                                     </p>
 
                                                     {/* If discounted, show savings */}
-                                                    {product.finalPrice < product.basePrice && (
+                                                    {product.finalPrice <
+                                                        product.basePrice && (
                                                         <p className='savings'>
                                                             You save ₹
-                                                            {product.basePrice - product.finalPrice}
+                                                            {product.basePrice -
+                                                                product.finalPrice}
                                                         </p>
                                                     )}
 
                                                     {/* Offer Badge */}
                                                     {product.offer && (
                                                         <span className='offer-badge'>
-                                                            {product.offer === "FLAT" ? "Flat 50% Off"
-                                                                : product.offer
-                                                            }
+                                                            {product.offer ===
+                                                            "FLAT"
+                                                                ? "Flat 50% Off"
+                                                                : product.offer}
                                                         </span>
                                                     )}
                                                 </div>

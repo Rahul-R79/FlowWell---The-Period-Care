@@ -1,10 +1,11 @@
-.add-coupon-form-container form{
+/* admin coupon css */
+.add-coupon-form-container form {
     max-width: 820px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
-    border:  1px solid rgb(180, 180, 180);
+    border: 1px solid rgb(180, 180, 180);
 }
 
-.add-coupon-form-container{
+.add-coupon-form-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -19,12 +20,12 @@
     color: rgb(199, 199, 199) !important;
     font-style: italic;
     font-weight: 100;
-    opacity: 1; 
+    opacity: 1;
 }
 
 .coupon-code {
-    background-color: #9beda7; 
-    color: #008767; 
+    background-color: #9beda7;
+    color: #008767;
     padding: 2px 4px;
     border-radius: 5px;
     width: 150px;
