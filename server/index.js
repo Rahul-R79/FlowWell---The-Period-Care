@@ -8,10 +8,18 @@ import adminRoutes from './routes/adminRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import passport from './config/passport.js';
 import notFound from './middlewares/pageNotFound.js';
+import morgan from 'morgan';
+import compression from 'compression';
+import helmet from 'helmet';
 
 dotenv.config();
 const app = express();
+const PORT = process.env.PORT;
 ConnectDB();
+
+app.use(helmet());
+app.use(compression());
+app.use(morgan('dev'));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -33,6 +41,4 @@ app.use('/api/user', userRoutes);
 
 app.use(notFound);
 
-app.listen(3000, ()=>{
-    console.log('http://localhost:3000');
-});
+app.listen(PORT);

@@ -52,7 +52,7 @@ export const SignUp = async (req, res) => {
 
         await sendOTP(email, otp);
         return res.status(200).json({ message: "OTP send to mail" });
-    } catch (err) {                 
+    } catch (err) {
         return res
             .status(500)
             .json({ message: "SignUp failed Please try again" });
@@ -103,7 +103,10 @@ export const verifyOTP = async (req, res) => {
                 await referral.save();
 
                 await Coupon.create({
-                    couponName: `REFERRAL-${user._id.toString().toUpperCase().slice(-4)}`,
+                    couponName: `REFERRAL-${user._id
+                        .toString()
+                        .toUpperCase()
+                        .slice(-4)}`,
                     couponCode: crypto
                         .randomBytes(4)
                         .toString("hex")
@@ -115,11 +118,11 @@ export const verifyOTP = async (req, res) => {
                     expirationDate: new Date(
                         Date.now() + 30 * 24 * 60 * 60 * 1000
                     ),
-                    referral: referral._id
+                    referral: referral._id,
                 });
             }
         }
-        
+
         return res
             .status(201)
             .json({ message: "User created successfully", user });
@@ -193,8 +196,8 @@ export const SignIn = async (req, res) => {
         const { password: hashedPassword, ...rest } = user._doc;
         res.cookie("user-access-token", token, {
             httpOnly: true,
-            secure: false,
-            sameSite: "Strict",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "Lax" : "Strict",
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
         res.status(200).json({
@@ -343,8 +346,8 @@ export const googleAuthCallback = async (req, res) => {
 
         res.cookie("user-access-token", token, {
             httpOnly: true,
-            secure: false,
-            sameSite: "Strict",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "Lax" : "Strict",
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
@@ -354,7 +357,7 @@ export const googleAuthCallback = async (req, res) => {
     }
 };
 
-//get current user 
+//get current user
 export const userauthMe = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -396,8 +399,8 @@ export const adminSignin = async (req, res) => {
 
         res.cookie("admin-access-token", token, {
             httpOnly: true,
-            secure: false,
-            sameSite: "Strict",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "Lax" : "Strict",
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
@@ -427,13 +430,13 @@ export const adminauthMe = async (req, res) => {
     }
 };
 
-//admin logout 
+//admin logout
 export const adminLogout = (req, res) => {
     try {
         res.clearCookie("admin-access-token", {
             httpOnly: true,
-            secure: false,
-            sameSite: "Strict",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "Lax" : "Strict",
         });
         return res
             .status(200)
@@ -448,8 +451,8 @@ export const userLogout = (req, res) => {
     try {
         res.clearCookie("user-access-token", {
             httpOnly: true,
-            secure: false,
-            sameSite: "Strict",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "Lax" : "Strict",
         });
         return res
             .status(200)
@@ -511,18 +514,18 @@ export const changePassword = async (req, res) => {
 };
 
 //delete user account
-export const deleteAccount = async(req, res)=>{
-    const {id} = req.params;
+export const deleteAccount = async (req, res) => {
+    const { id } = req.params;
 
-    try{
+    try {
         const user = await User.findByIdAndDelete(id);
 
-        if(!user){
-            return res.status(404).json({message: 'user not found'});
+        if (!user) {
+            return res.status(404).json({ message: "user not found" });
         }
 
-        res.status(200).json({user});
-    }catch(err){
-        return res.status(500).json({message: 'internal server error'});
+        res.status(200).json({ user });
+    } catch (err) {
+        return res.status(500).json({ message: "internal server error" });
     }
-}
+};
