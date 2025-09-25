@@ -41,7 +41,6 @@ const ViewDetail = () => {
                 await dispatch(getOrderItem({ orderId, productId })).unwrap();
                 navigate(`/cancel/order/${orderId}/${productId}`);
             } catch (err) {
-                alert("canerl order error");
             }
         }
     };
@@ -59,7 +58,6 @@ const ViewDetail = () => {
                 await dispatch(getOrderItem({ orderId, productId })).unwrap();
                 navigate(`/return/order/${orderId}/${productId}`);
             } catch (err) {
-                alert("return order error");
             }
         }
     };

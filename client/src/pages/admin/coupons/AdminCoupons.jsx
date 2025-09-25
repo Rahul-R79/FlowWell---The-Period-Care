@@ -44,7 +44,6 @@ const AdminCoupons = () => {
         try {
             await dispatch(changeCouponStatus(id)).unwrap();
         } catch (err) {
-            alert('change coupon error, please try again');
         }
     };
 

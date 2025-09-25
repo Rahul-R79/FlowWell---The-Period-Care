@@ -113,7 +113,6 @@ export default function Sidebar() {
             await dispatch(adminLogout()).unwrap();
             navigate("/admin/signin");
         } catch (err) {
-            alert("Failed to logout. Please try again.");
         }
     };
 

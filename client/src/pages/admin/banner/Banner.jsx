@@ -43,7 +43,6 @@ const Banner = () => {
         try {
             dispatch(deleteBanner(id));
         } catch (err) {
-            alert('delete banner error, please try again');
         }
     };
 
@@ -64,7 +63,6 @@ const Banner = () => {
         try {
             await dispatch(bannerStatus(id)).unwrap();
         } catch (err) {
-            alert('banner status change error, please try again');
         }
     };
 

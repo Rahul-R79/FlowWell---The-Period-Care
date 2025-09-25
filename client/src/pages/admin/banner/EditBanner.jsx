@@ -48,7 +48,6 @@ const EditBanner = () => {
             await dispatch(editBanner({ id, formData: data })).unwrap();
             navigate("/admin/banner");
         } catch (err) {
-            alert('edit banner error');
         }
     };
 

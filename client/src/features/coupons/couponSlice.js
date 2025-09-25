@@ -40,7 +40,11 @@ const CouponSlice = createSlice({
         loadingByAction: {},
         errorByAction: {},
     },
-    reducers: {},
+    reducers: {
+        clearAppliedCoupon: (state) => {
+            state.appliedCoupon = null;
+        },
+    },
     extraReducers: (builder) => {
         builder
             //get coupons
@@ -74,4 +78,5 @@ const CouponSlice = createSlice({
     },
 });
 
+export const { clearAppliedCoupon } = CouponSlice.actions;
 export default CouponSlice.reducer;

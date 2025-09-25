@@ -59,7 +59,6 @@ function EditAddress() {
             await disptach(editAddress({ id, formData })).unwrap();
             navigate("/address");
         } catch (err) {
-            alert('edit address failed');
         }
     };
 

@@ -52,7 +52,6 @@ const CancelOrders = () => {
             ).unwrap();
             navigate("/view/order", { replace: true });
         } catch (err) {
-            alert('cancel order error');
         }
     };
 

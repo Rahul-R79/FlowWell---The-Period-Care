@@ -177,7 +177,6 @@ const EditProducts = () => {
             await dispatch(updateProduct({ id, formData: data })).unwrap();
             navigate("/admin/products");
         } catch (err) {
-            alert("product update error, please try again");
         }
     };
 

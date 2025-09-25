@@ -32,7 +32,6 @@ const CheckoutAddress = () => {
             await dispatch(deleteAddress(id)).unwrap();
             showSuccessToast("Address deleted successfully!");
         } catch (err) {
-            alert("checkout address");
         }
     };
 

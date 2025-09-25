@@ -33,7 +33,6 @@ const AddCategories = () => {
             await dispatch(addCategory(formData)).unwrap();
             navigate("/admin/categories");
         } catch (err) {
-            alert('add category error, please try again');
         }
     };
 

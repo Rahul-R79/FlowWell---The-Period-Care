@@ -34,7 +34,6 @@ function ChangePassword() {
             await dispatch(changePassword(formData)).unwrap();
             navigate("/", { replace: true });
         } catch (err) {
-            alert('change password error');
         }
     };
 

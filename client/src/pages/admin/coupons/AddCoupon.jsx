@@ -38,7 +38,6 @@ const AddCoupon = () => {
             await dispatch(adminCreateCoupon(formData)).unwrap();
             navigate("/admin/coupons");
         } catch (err) {
-            alert("create coupon error, please try again");
         }
     };
 

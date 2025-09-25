@@ -42,7 +42,6 @@ const CategoriesPage = () => {
         try {
             await dispatch(changeStatus(id)).unwrap();
         } catch (err) {
-            alert('category change status error, please try again');
         }
     };
 

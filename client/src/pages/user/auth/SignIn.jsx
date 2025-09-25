@@ -35,7 +35,6 @@ function SignIn() {
             await dispatch(signinUser(formData)).unwrap();
             navigate("/");
         } catch (err) {
-            alert('signin error');
         }
     };
 

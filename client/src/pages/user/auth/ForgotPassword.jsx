@@ -29,7 +29,6 @@ function ForgotPassword() {
             localStorage.setItem("otpStartTime_forgot-password", Date.now());
             navigate("/otpverification?flow=forgot-password");
         } catch (err) {
-            alert('forgot password error');
         }
     };
 

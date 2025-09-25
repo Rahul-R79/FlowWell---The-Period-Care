@@ -87,7 +87,6 @@ function UserProfile() {
             const currentUser = await dispatch(updateProfile(data)).unwrap();
             dispatch(setCurrentUser(currentUser));
         } catch (err) {
-            alert('profile update error');
         }
     };
 

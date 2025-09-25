@@ -27,7 +27,6 @@ function Address() {
         try {
             await dispatch(deleteAddress(id)).unwrap();
         } catch (err) {
-            alert('address delete failed');
         }
     };
 

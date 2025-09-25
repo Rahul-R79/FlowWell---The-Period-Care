@@ -42,7 +42,6 @@ function SignUp() {
             localStorage.setItem("otpStartTime_signup", Date.now());
             navigate("/otpverification?flow=signup");
         } catch (err) {
-            alert("signup error");
         }
     };
 

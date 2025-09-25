@@ -123,7 +123,6 @@ function ProductDetailPage() {
             }
             await dispatch(getWishlist({ page: 1, limit: 3 })).unwrap();
         } catch (err) {
-            alert("wishlist toggle error");
         }
     };
 
@@ -146,7 +145,6 @@ function ProductDetailPage() {
                 }, 400);
             }
         } catch (err) {
-            alert("add to cart error");
         }
     };
 

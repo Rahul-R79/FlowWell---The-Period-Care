@@ -63,7 +63,6 @@ const EditCheckoutAddress = () => {
             await dispatch(editAddress({ id, formData })).unwrap();
             navigate("/checkout/address");
         } catch (err) {
-            alert("edit address error");
         }
     };
 
