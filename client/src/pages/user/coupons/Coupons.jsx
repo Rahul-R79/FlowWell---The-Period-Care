@@ -34,7 +34,6 @@ const Coupons = () => {
             await dispatch(applyCoupon({ couponCode, cartTotal })).unwrap();
             navigate("/payment");
         } catch (err) {
-            alert('apply coupon error');
         }
     };
 

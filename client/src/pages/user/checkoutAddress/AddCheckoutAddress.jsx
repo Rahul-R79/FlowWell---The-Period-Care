@@ -41,7 +41,6 @@ const AddCheckoutAddress = () => {
             await dispatch(addAddress(formData)).unwrap();
             navigate("/checkout/address");
         } catch (err) {
-            alert('add address error');
         }
     };
 

@@ -36,7 +36,6 @@ function ForgotPassword2() {
             localStorage.removeItem("forgotMail");
             navigate("/signin", { replace: true });
         } catch (err) {
-            alert("change forgot password error");
         }
     };
 

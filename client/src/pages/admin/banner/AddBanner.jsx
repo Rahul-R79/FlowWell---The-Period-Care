@@ -46,7 +46,6 @@ const AddBanner = () => {
             await dispatch(addBanner(data)).unwrap();
             navigate("/admin/banner");
         } catch (err) {
-            alert('add banner error, please try again');
         }
     };
 

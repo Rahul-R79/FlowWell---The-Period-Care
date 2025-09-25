@@ -18,7 +18,6 @@ function DeleteAccount() {
             await dispatch(deleteAccount(id)).unwrap();
             navigate("/");
         } catch (err) {
-            alert('delete account error');
         }
     };
 

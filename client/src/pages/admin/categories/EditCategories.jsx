@@ -45,7 +45,6 @@ const EditCategories = () => {
             await dispatch(editCategory({ id, formData })).unwrap();
             navigate("/admin/categories");
         } catch (err) {
-            alert("admin edit category error, please try again");
         }
     };
 

@@ -42,7 +42,6 @@ function Wishlist() {
             ).unwrap();
             showErrorToast("Removed from wishlist!");
         } catch (err) {
-            alert('remove from the wishlist error');
         }
     };
 
@@ -79,7 +78,6 @@ function Wishlist() {
                 navigate("/cart");
             }, 500);
         } catch (err) {
-            alert('add to cart failed');
         }
     };
 

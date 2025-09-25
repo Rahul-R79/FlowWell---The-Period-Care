@@ -15,8 +15,8 @@ import { payWithWallet } from "../../../features/orders/orderSlice";
 import { getWalletAmount } from "../../../features/walletSlice";
 import ToastNotification, {
     showErrorToast,
-    showSuccessToast,
 } from "../../../components/ToastNotification";
+import { clearAppliedCoupon } from "../../../features/coupons/couponSlice";
 
 const Payment = () => {
     const dispatch = useDispatch();
@@ -92,6 +92,7 @@ const Payment = () => {
                                     spread: 70,
                                     origin: { y: 0.6 },
                                 });
+                                dispatch(clearAppliedCoupon());
                                 navigate("/payment/success", { replace: true });
                             } else {
                                 navigate("/payment/failed", { replace: true });
@@ -111,7 +112,7 @@ const Payment = () => {
                 const razorpay = new window.Razorpay(options);
                 razorpay.open();
             } catch (err) {
-                alert("Payment initialization failed. Please try again.");
+                showErrorToast("Payment initialization failed. Please try again.");
             }
         } else if (paymentMethod === "WALLET") {
             try {
@@ -136,6 +137,7 @@ const Payment = () => {
                     spread: 70,
                     origin: { y: 0.6 },
                 });
+                dispatch(clearAppliedCoupon());
                 navigate("/payment/success", { replace: true });
             } catch (err) {
                 showErrorToast(err.message);
@@ -158,6 +160,7 @@ const Payment = () => {
                     spread: 70,
                     origin: { y: 0.6 },
                 });
+                dispatch(clearAppliedCoupon());
                 navigate("/payment/success", { replace: true });
             } catch (err) {
                 navigate("/payment/failed", { replace: true });

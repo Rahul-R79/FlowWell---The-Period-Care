@@ -17,6 +17,7 @@ import ToastNotification, {
 } from "../../../components/ToastNotification";
 import { confirmAlert } from "../../../utils/confirmAlert";
 import { useNavigate } from "react-router-dom";
+import { clearAppliedCoupon } from "../../../features/coupons/couponSlice";
 
 const Cart = () => {
     const dispatch = useDispatch();
@@ -46,6 +47,7 @@ const Cart = () => {
             await dispatch(
                 addToCart({ productId, selectedSize, quantity: delta })
             ).unwrap();
+            dispatch(clearAppliedCoupon());
         } catch (err) {
             showErrorToast(err?.message);
         }

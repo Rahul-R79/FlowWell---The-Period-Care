@@ -27,7 +27,6 @@ function AdminSignIn() {
             await dispatch(adminSignin(formData)).unwrap();
             navigate("/admin/dashboard", { replace: true });
         } catch (err) {
-            alert("admin login error, please try again");
         }
     };
 

@@ -121,7 +121,6 @@ const AddProducts = () => {
             await dispatch(addProduct(data)).unwrap();
             navigate("/admin/products");
         } catch (err) {
-            alert("product add error, please try again");
         }
     };
 

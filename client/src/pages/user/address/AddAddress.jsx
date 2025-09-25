@@ -41,7 +41,6 @@ function AddAddress() {
             await disptach(addAddress(formData)).unwrap();
             navigate("/address");
         } catch (err) {
-            alert('add address error, please try again');
         }
     };
 

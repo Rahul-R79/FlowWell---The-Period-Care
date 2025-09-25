@@ -133,7 +133,6 @@ function OtpVerification() {
                 clearInterval(intervalRef.current);
             }
         } catch (err) {
-            alert("OTP verification failed. Please try again.");
         }
     };
 
@@ -146,7 +145,6 @@ function OtpVerification() {
             }
             startTimer();
         } catch (err) {
-            alert("Resend OTP failed. Please try again.");
         }
     };
 

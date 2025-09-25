@@ -43,7 +43,6 @@ const ProductsPage = () => {
         try {
             await dispatch(productToggleStatus(id)).unwrap();
         } catch (err) {
-            alert('change status error, please try again');
         }
     };
 

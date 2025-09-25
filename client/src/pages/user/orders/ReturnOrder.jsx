@@ -52,7 +52,6 @@ const ReturnOrders = () => {
             ).unwrap();
             navigate("/view/order", { replace: true });
         } catch (err) {
-            alert("return order error");
         }
     };
 

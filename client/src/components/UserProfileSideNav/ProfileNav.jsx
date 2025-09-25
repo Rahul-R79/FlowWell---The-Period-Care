@@ -25,7 +25,6 @@ function ProfileNav() {
             await dispatch(logoutUser()).unwrap();
             navigate("/", { replace: true });
         } catch (err) {
-            alert("Failed to logout. Please try again.");
         }
     };
 

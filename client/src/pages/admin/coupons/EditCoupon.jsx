@@ -40,7 +40,6 @@ const EditCoupon = () => {
             await dispatch(editCoupon({ id, formData })).unwrap();
             navigate("/admin/coupons");
         } catch (err) {
-            alert("admin edit coupon error, please try again");
         }
     };
 

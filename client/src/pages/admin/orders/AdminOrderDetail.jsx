@@ -44,7 +44,6 @@ const AdminOrdersDetail = () => {
                 ).unwrap();
                 dispatch(adminGetOrderDetail(orderDetail._id));
             } catch (err) {
-                alert("change order status error, please try again");
             }
         }
     };

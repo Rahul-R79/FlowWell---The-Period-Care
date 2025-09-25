@@ -42,7 +42,6 @@ const CustomersPage = () => {
         try {
             await dispatch(deleteUsers(userId)).unwrap();
         } catch (err) {
-            alert("user deletion error, please try again");
         }
     };
 
@@ -67,7 +66,6 @@ const CustomersPage = () => {
                 await dispatch(blockUser(userId)).unwrap();
             }
         } catch (err) {
-            alert("user blocked error, please try again");
         }
     };
 
