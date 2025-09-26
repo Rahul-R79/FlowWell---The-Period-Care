@@ -28,8 +28,10 @@ const adminDashboardSlice = createSlice({
             refundRevenue: 0,
             totalProducts: 0,
             totalCustomers: 0,
+            totalChartGroup: [],
             salesTrend: [],
-            topSelling: [],
+            topSellingProducts: [],
+            topSellingCategories: []
         },
         errorByAction: {},
         loadingByAction: {},

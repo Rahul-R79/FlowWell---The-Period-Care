@@ -9,15 +9,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { getUserProducts } from "../../../features/products/userProductSlice";
-import { getBanners } from "../../../features/banner/adminBannerSlice";
+import { getUserBanner } from "../../../features/banner/userBannerSlice";
 
 function Home() {
     const { user } = useSelector((state) => state.auth);
     const { homepageSections } = useSelector((state) => state.userProducts);
     const { newArrivals, periodKits } = homepageSections;
 
-    const { banner } = useSelector((state) => state.adminBanner);
-    const activeBanner = banner?.find((b) => b.isActive);
+    const { currentBanner } = useSelector((state) => state.userBanner);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -29,7 +28,7 @@ function Home() {
     useEffect(() => {
         dispatch(getUserProducts({ limit: 4, sortBy: "newArrivals" }));
         dispatch(getUserProducts({ limit: 4, categoryName: "Period Kits" }));
-        dispatch(getBanners({ limit: 5 }));
+        dispatch(getUserBanner());
     }, [dispatch]);
 
     return (
@@ -91,21 +90,21 @@ function Home() {
             </section>
 
             {/* Banner */}
-            {activeBanner && (
-                <Container fluid className='text-center mb-4'>
+            {currentBanner.map((banner) => (
+                <Container fluid className='text-center mb-4' key={banner._id}>
                     <Row className='justify-content-center'>
                         <Col xs={12} md={8} lg={6}>
                             <SlideInOnScroll direction='up'>
                                 <img
-                                    src={activeBanner.image}
-                                    alt={activeBanner.title || "Banner"}
+                                    src={banner.image}
+                                    alt={banner.title || "Banner"}
                                     className='img-fluid'
                                 />
                             </SlideInOnScroll>
                         </Col>
                     </Row>
                 </Container>
-            )}
+            ))}
 
             {/* New Arrivals Section */}
             <Container className='mb-5 new-arrivals'>

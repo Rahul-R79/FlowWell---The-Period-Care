@@ -112,7 +112,9 @@ const Payment = () => {
                 const razorpay = new window.Razorpay(options);
                 razorpay.open();
             } catch (err) {
-                showErrorToast("Payment initialization failed. Please try again.");
+                showErrorToast(
+                    "Payment initialization failed. Please try again."
+                );
             }
         } else if (paymentMethod === "WALLET") {
             try {
@@ -259,23 +261,25 @@ const Payment = () => {
                                 </label>
 
                                 {/* Cash on Delivery */}
-                                <label
-                                    className={`payment-option mb-3 p-3 border rounded d-flex align-items-center cursor-pointer ${
-                                        paymentMethod === "COD"
-                                            ? "border-primary"
-                                            : ""
-                                    }`}>
-                                    <Form.Check
-                                        type='radio'
-                                        name='paymentMethod'
-                                        id='cod'
-                                        value='COD'
-                                        checked={paymentMethod === "COD"}
-                                        onChange={handlePaymentChange}
-                                        className='me-2'
-                                    />
-                                    <span>Cash on Delivery</span>
-                                </label>
+                                {calculateTotal.total < 1000 && (
+                                    <label
+                                        className={`payment-option mb-3 p-3 border rounded d-flex align-items-center cursor-pointer ${
+                                            paymentMethod === "COD"
+                                                ? "border-primary"
+                                                : ""
+                                        }`}>
+                                        <Form.Check
+                                            type='radio'
+                                            name='paymentMethod'
+                                            id='cod'
+                                            value='COD'
+                                            checked={paymentMethod === "COD"}
+                                            onChange={handlePaymentChange}
+                                            className='me-2'
+                                        />
+                                        <span>Cash on Delivery</span>
+                                    </label>
+                                )}
                             </Form>
                         </div>
                     </Col>

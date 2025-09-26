@@ -57,6 +57,7 @@ import {
 } from "../controllers/user/reviewController.js";
 import { validateReview } from "../middlewares/validators/reviewValidator.js";
 import { deleteAccount } from "../controllers/authController.js";
+import { getUserBanner } from "../controllers/user/bannerController.js";
 
 const router = express.Router();
 
@@ -64,6 +65,9 @@ const router = express.Router();
 router.get("/products", getAllProducts);
 router.get("/product/search", searchProduct);
 router.get("/product/:id", getProductById);
+
+//user banner route
+router.get("/banner", getUserBanner);
 
 //user profile route
 router.patch(

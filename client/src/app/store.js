@@ -21,6 +21,7 @@ import adminSalesReportReducer from '../features/salesReportSlice';
 import userReviewReducer from '../features/reviewSlice';
 import adminDashboardReducer from '../features/dashboardSlice';
 import adminBannerReducer from '../features/banner/adminBannerSlice';
+import userBannerReducer from '../features/banner/userBannerSlice';
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 
@@ -45,13 +46,15 @@ const rootReducer = combineReducers({
     salesReport: adminSalesReportReducer,
     review: userReviewReducer,
     dashboard: adminDashboardReducer,
-    adminBanner: adminBannerReducer
+    adminBanner: adminBannerReducer,
+    userBanner: userBannerReducer
 })
 
 const persistConfig = {
     key: 'root',
     version: 1,
     storage,
+    blacklist: ['coupon']
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

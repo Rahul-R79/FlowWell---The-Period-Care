@@ -14,7 +14,9 @@ import {
     Title,
     Tooltip,
     Legend,
+    ArcElement,
 } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { getDashboard } from "../../features/dashboardSlice";
@@ -29,6 +31,7 @@ ChartJS.register(
     LinearScale,
     PointElement,
     LineElement,
+    ArcElement,
     Title,
     Tooltip,
     Legend
@@ -167,6 +170,56 @@ const DashBoard = () => {
         doc.save("top_selling_products.pdf");
     };
 
+    const handleExportTopCategoriesPDF = () => {
+        const doc = new jsPDF();
+
+        doc.setFontSize(16);
+        doc.text("Top Selling Categories", 14, 20);
+
+        const filterInfo = `Date Range: ${selectedDate[0].toDateString()} - ${selectedDate[1].toDateString()}`;
+        doc.setFontSize(10);
+        doc.text(filterInfo, 14, 30);
+
+        const tableColumn = ["#", "Category", "Sold"];
+        const tableRows = data.topSellingCategories.map((cat, idx) => [
+            idx + 1,
+            cat._id,
+            cat.totalSold,
+        ]);
+
+        autoTable(doc, {
+            head: [tableColumn],
+            body: tableRows,
+            startY: 40,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [99, 102, 241], textColor: 255 },
+        });
+
+        doc.save("top_selling_categories.pdf");
+    };
+
+    const orderStatusLabels = data.totalChartGroup?.map((item) => item._id);
+    const orderStatusCounts = data.totalChartGroup?.map((item) => item.count);
+
+    const chart = {
+        labels: orderStatusLabels,
+        datasets: [
+            {
+                label: "Orders by Status",
+                data: orderStatusCounts,
+                backgroundColor: [
+                    "#6366F1",
+                    "#3B82F6",
+                    "#22C55E",
+                    "#F59E0B",
+                    "#EF4444",
+                    "#A855F7",
+                    "#14B8A6",
+                ],
+                hoverOffset: 4,
+            },
+        ],
+    };
     return (
         <>
             {loadingByAction.getDashboard && <LoadingSpinner />}
@@ -233,6 +286,7 @@ const DashBoard = () => {
 
                         {/* Sales Graph & Top Products */}
                         <div className='row g-3'>
+                            {/* Sales Graph */}
                             <div className='col-lg-8'>
                                 <Card className='shadow-sm border-0'>
                                     <Card.Body>
@@ -275,6 +329,19 @@ const DashBoard = () => {
                                 </Card>
                             </div>
 
+                            {/* Doughnut Chart */}
+                            <div className='col-lg-4'>
+                                <Card className='shadow-sm border-0 h-100'>
+                                    <Card.Body className='d-flex justify-content-center align-items-center'>
+                                        <Doughnut
+                                            data={chart}
+                                            style={{ marginTop: "20px" }}
+                                        />
+                                    </Card.Body>
+                                </Card>
+                            </div>
+
+                            {/* Top Selling Products */}
                             <div className='col-lg-4'>
                                 <Card className='shadow-sm border-0 h-100'>
                                     <Card.Body>
@@ -286,7 +353,7 @@ const DashBoard = () => {
                                                 Sold
                                             </h5>
                                         </div>
-                                        {data.topSelling.map((top) => (
+                                        {data.topSellingProducts.map((top) => (
                                             <div
                                                 key={top._id}
                                                 className='d-flex justify-content-between align-items-center mb-3'>
@@ -324,6 +391,46 @@ const DashBoard = () => {
                                             variant='primary'
                                             size='lg'
                                             onClick={handleExportTopSellingPDF}>
+                                            Report
+                                        </Button>
+                                    </Card.Body>
+                                </Card>
+                            </div>
+
+                            {/* Top Selling categories */}
+                            <div className='col-lg-4'>
+                                <Card className='shadow-sm border-0 h-100'>
+                                    <Card.Body>
+                                        <div className='d-flex justify-content-between mb-3'>
+                                            <h5 className='fw-bold text-primary'>
+                                                Top Selling Categories
+                                            </h5>
+                                            <h5 className='fw-bold text-primary'>
+                                                Sold
+                                            </h5>
+                                        </div>
+                                        {data.topSellingCategories.map(
+                                            (top) => (
+                                                <div
+                                                    key={top._id}
+                                                    className='d-flex justify-content-between align-items-center mb-3'>
+                                                    <div className='d-flex align-items-center'>
+                                                        <div>
+                                                            <div className='fw-semi-bold'>
+                                                                {top._id}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className='fw-bold text-danger'>
+                                                        {top.totalSold}
+                                                    </div>
+                                                </div>
+                                            )
+                                        )}
+                                        <Button
+                                            variant='primary'
+                                            size='lg'
+                                            onClick={handleExportTopCategoriesPDF}>
                                             Report
                                         </Button>
                                     </Card.Body>

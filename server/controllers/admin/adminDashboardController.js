@@ -74,13 +74,13 @@ export const getDashboard = async (req, res) => {
         }
 
         const salesTrend = await Order.aggregate([
-            { $match: {...filter, paymentStatus: "PAID" } },
+            { $match: { ...filter, paymentStatus: "PAID" } },
             { $group: groupStage },
             { $sort: { "_id.year": 1, "_id.month": 1 } },
             { $project: projectStage },
         ]);
 
-        const topSelling = await Order.aggregate([
+        const topSellingProducts = await Order.aggregate([
             { $match: filter },
             { $unwind: "$cartItems" },
             {
@@ -103,6 +103,54 @@ export const getDashboard = async (req, res) => {
             { $limit: 5 },
         ]);
 
+        const topSellingCategories = await Order.aggregate([
+            { $unwind: "$cartItems" },
+
+            {
+                $lookup: {
+                    from: "products", 
+                    localField: "cartItems.productId",
+                    foreignField: "_id",
+                    as: "productDetails",
+                },
+            },
+
+            { $unwind: "$productDetails" },
+
+            {
+                $lookup: {
+                    from: "categories", 
+                    localField: "productDetails.category",
+                    foreignField: "_id",
+                    as: "categoryDetails",
+                },
+            },
+
+            { $unwind: "$categoryDetails" },
+
+            {
+                $group: {
+                    _id: "$categoryDetails.name", 
+                    totalSold: { $sum: "$cartItems.quantity" },
+                },
+            },
+
+            { $sort: { totalSold: -1 } },
+
+            { $limit: 10 },
+        ]);
+
+        const totalChartGroup = await Order.aggregate([
+            { $match: filter },
+            {
+                $group: {
+                    _id: "$orderStatus",
+                    count: { $sum: 1 },
+                },
+            },
+            { $sort: { count: -1 } },
+        ]);
+
         res.status(200).json({
             totalOrders,
             activeOrders,
@@ -113,10 +161,11 @@ export const getDashboard = async (req, res) => {
             totalProducts,
             totalCustomers,
             salesTrend,
-            topSelling,
+            topSellingProducts,
+            topSellingCategories,
+            totalChartGroup,
         });
     } catch (err) {
         return res.status(500).json({ message: "internal server error" });
     }
 };
-
