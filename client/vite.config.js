@@ -8,8 +8,6 @@ export default defineConfig({
         strictPort: true,
         allowedHosts: [
             "localhost",
-            ".ngrok-free.app",
-            "9c6afcb726fe.ngrok-free.app",
         ],
     },
 });
