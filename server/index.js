@@ -27,8 +27,8 @@ app.use(cookieParser());
 
 app.use(cors({
     origin: [
-        'http://localhost:5173',           
-        'https://18549c3e30f5.ngrok-free.app'
+        'www.flowwell.online',      
+        'flowwell.online'     
     ],
     credentials: true
 }));
