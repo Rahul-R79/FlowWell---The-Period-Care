@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 
 function SignIn() {
-    const { user, loadingByAction, errorByAction } = useSelector(
+    const { loadingByAction, errorByAction } = useSelector(
         (state) => state.auth
     );
     const dispatch = useDispatch();
@@ -187,7 +187,7 @@ function SignIn() {
                                         <button
                                             type='button'
                                             onClick={() =>
-                                                (window.location.href = `${apiUrl}/api/auth/google`)
+                                                (window.location.href = `${apiUrl}/auth/google`)
                                             }
                                             className='btn btn-light d-flex align-items-center justify-content-center gap-2 px-3 py-3 rounded mx-auto google-btn'>
                                             <img

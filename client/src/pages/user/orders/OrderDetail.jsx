@@ -13,6 +13,8 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 const OrderDetail = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const apiUrl = import.meta.env.VITE_API_URL;
+
     const { orderId, productId } = useParams();
     const { orderItem, orders, loadingByAction } = useSelector(
         (state) => state.order
@@ -126,7 +128,7 @@ const OrderDetail = () => {
                                                 className='me-2'
                                                 onClick={() =>
                                                     window.open(
-                                                        `http://localhost:3000/api/user/orders/${orderId}/invoice?download=false`,
+                                                        `${apiUrl}/user/orders/${orderId}/invoice?download=false`,
                                                         "_blank"
                                                     )
                                                 }>
@@ -136,7 +138,7 @@ const OrderDetail = () => {
                                                 variant='primary'
                                                 onClick={() =>
                                                     window.open(
-                                                        `http://localhost:3000/api/user/orders/${orderId}/invoice?download=true`,
+                                                        `${apiUrl}/user/orders/${orderId}/invoice?download=true`,
                                                         "_blank"
                                                     )
                                                 }>

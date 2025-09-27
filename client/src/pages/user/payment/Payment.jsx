@@ -21,6 +21,7 @@ import { clearAppliedCoupon } from "../../../features/coupons/couponSlice";
 const Payment = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const apiUrl = import.meta.env.VITE_API_URL;
 
     const { totals, cart } = useSelector((state) => state.cart);
     const { selectedAddress } = useSelector((state) => state.address);
@@ -48,7 +49,7 @@ const Payment = () => {
         if (paymentMethod === "RAZORPAY") {
             try {
                 const response = await axios.post(
-                    "http://localhost:3000/api/user/order/razorpay",
+                    `${apiUrl}/user/order/razorpay`,
                     { amount: totals.total },
                     { withCredentials: true }
                 );
@@ -65,7 +66,7 @@ const Payment = () => {
                     handler: async function (res) {
                         try {
                             const verifyResponse = await axios.post(
-                                "http://localhost:3000/api/user/order/razorpay/verify",
+                                `${apiUrl}/user/order/razorpay/verify`,
                                 {
                                     razorpay_order_id: res.razorpay_order_id,
                                     razorpay_payment_id:
