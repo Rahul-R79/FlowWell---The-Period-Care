@@ -27,8 +27,8 @@ app.use(cookieParser());
 
 app.use(cors({
     origin: [
-        'www.flowwell.online',      
-        'flowwell.online'     
+        'https://www.flowwell.online',      
+        'https://flowwell.online'     
     ],
     credentials: true
 }));
