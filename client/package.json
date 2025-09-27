@@ -36,6 +36,7 @@
     "react-datepicker": "^8.7.0",
     "react-dom": "^19.1.0",
     "react-easy-crop": "^5.5.0",
+    "react-icons": "^5.5.0",
     "react-inner-image-zoom": "^4.0.1",
     "react-intersection-observer": "^9.16.0",
     "react-modal-image": "^2.6.0",
