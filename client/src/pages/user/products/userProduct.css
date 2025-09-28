@@ -184,13 +184,13 @@
 .quantity-selector {
     border: 1px solid #ddd;
     border-radius: 5px;
-    overflow: hidden;
-    width: 120px;
+    width: 100px;
 }
 
 .qty-btn {
     border: none;
     background-color: #f8f9fa;
+    border-radius: 5px;
     width: 35px;
     height: 35px;
     font-size: 1.2rem;

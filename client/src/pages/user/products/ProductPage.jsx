@@ -29,9 +29,24 @@ function ProductPage() {
     const [selectedOffer, setSelectedOffer] = useState([]);
 
     useEffect(() => {
+        const savedPage = sessionStorage.getItem("userProductsCurrentPage");
+
+        if (savedPage) {
+            dispatch(setCurrentPage(Number(savedPage)));
+        } else {
+            dispatch(setCurrentPage(1));
+        }
+    }, [dispatch]);
+
+    const handlePageChange = (page) => {
+        dispatch(setCurrentPage(page));
+        sessionStorage.setItem("userProductsCurrentPage", page);
+    };
+
+    useEffect(() => {
         dispatch(getUserProducts(filters));
         window.scrollTo(0, 0);
-    }, [dispatch, filters]);
+    }, [dispatch, filters, currentPage]);
 
     const handleApplyFilters = () => {
         dispatch(
@@ -43,6 +58,7 @@ function ProductPage() {
                 offer: selectedOffer.map((o) => o.value),
             })
         );
+        dispatch(setCurrentPage(1));
     };
 
     const handleCategoryClick = (categoryName) => {
@@ -51,6 +67,7 @@ function ProductPage() {
 
     const clearAllfilters = () => {
         dispatch(clearProducts());
+        dispatch(setCurrentPage(1));
         setSelectedSort(null);
         setSelectedSize([]);
         setSelectedCategory(null);
@@ -287,9 +304,7 @@ function ProductPage() {
                             <PaginationButton
                                 currentPage={currentPage}
                                 totalPages={totalPages}
-                                onPageChange={(page) =>
-                                    dispatch(setCurrentPage(page))
-                                }
+                                onPageChange={handlePageChange}
                             />
                         </div>
                     </Col>

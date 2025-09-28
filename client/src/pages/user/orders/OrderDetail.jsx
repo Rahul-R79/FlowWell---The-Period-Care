@@ -122,27 +122,17 @@ const OrderDetail = () => {
                                                 </Button>
                                             )}
                                         </Col>
-                                        <Col md={12} className='text-end'>
+                                        <Col md={12} className='text-end mt-3'>
                                             <Button
                                                 variant='secondary'
                                                 className='me-2'
                                                 onClick={() =>
                                                     window.open(
-                                                        `${apiUrl}/user/orders/${orderId}/invoice?download=false`,
+                                                        `${apiUrl}/user/orders/${orderId}/invoice`,
                                                         "_blank"
                                                     )
                                                 }>
                                                 View Invoice
-                                            </Button>
-                                            <Button
-                                                variant='primary'
-                                                onClick={() =>
-                                                    window.open(
-                                                        `${apiUrl}/user/orders/${orderId}/invoice?download=true`,
-                                                        "_blank"
-                                                    )
-                                                }>
-                                                Download Invoice
                                             </Button>
                                         </Col>
                                     </Row>
