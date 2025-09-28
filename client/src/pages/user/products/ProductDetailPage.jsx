@@ -304,58 +304,75 @@ function ProductDetailPage() {
                                 ))}
                             </div>
 
-                            {/* Quantity & Add to cart */}
-                            <div className='d-flex align-items-center mb-3'>
+                            <div className='row align-items-center g-2 mb-3'>
                                 {productDetail?.sizes.some(
                                     (s) => s.stock > 0
                                 ) ? (
                                     <>
-                                        <div className='quantity-selector d-flex align-items-center me-3'>
+                                        {/* Quantity */}
+                                        <div className='col-auto'>
+                                            <div
+                                                className='input-group input-group-sm'
+                                                style={{ width: "auto" }}>
+                                                <button
+                                                    className='btn btn-outline-secondary'
+                                                    type='button'
+                                                    onClick={() =>
+                                                        handleQuantity("dec")
+                                                    }>
+                                                    -
+                                                </button>
+                                                <input
+                                                    type='text'
+                                                    className='form-control text-center qty-form'
+                                                    value={quantity}
+                                                    readOnly
+                                                    style={{ width: "50px" }}
+                                                />
+                                                <button
+                                                    className='btn btn-outline-secondary'
+                                                    type='button'
+                                                    onClick={() =>
+                                                        handleQuantity("inc")
+                                                    }>
+                                                    +
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Add to Cart */}
+                                        <div className='col-auto'>
                                             <button
-                                                className='qty-btn'
-                                                onClick={() =>
-                                                    handleQuantity("dec")
+                                                className='btn btn-dark btn-sm'
+                                                onClick={handleAddToCart}
+                                                disabled={
+                                                    cartLoading.addToCart
                                                 }>
-                                                -
-                                            </button>
-                                            <input
-                                                type='text'
-                                                value={quantity}
-                                                readOnly
-                                                className='qty-input text-center'
-                                            />
-                                            <button
-                                                className='qty-btn'
-                                                onClick={() =>
-                                                    handleQuantity("inc")
-                                                }>
-                                                +
+                                                Add to Cart
                                             </button>
                                         </div>
 
-                                        <Button
-                                            variant='dark'
-                                            className='me-2'
-                                            onClick={handleAddToCart}
-                                            disabled={cartLoading.addToCart}>
-                                            Add to cart
-                                        </Button>
-                                        <Button
-                                            variant={
-                                                isInWishlist
-                                                    ? "danger"
-                                                    : "outline-secondary"
-                                            }
-                                            onClick={handleWishlistToggle}>
-                                            {isInWishlist
-                                                ? "Remove from wishlist"
-                                                : "♥ Add to wishlist"}
-                                        </Button>
+                                        {/* Wishlist */}
+                                        <div className='col-auto'>
+                                            <button
+                                                className={`btn btn-sm ${
+                                                    isInWishlist
+                                                        ? "btn-danger"
+                                                        : "btn-outline-secondary"
+                                                }`}
+                                                onClick={handleWishlistToggle}>
+                                                {isInWishlist
+                                                    ? "Remove from Wishlist"
+                                                    : "♥ Add to Wishlist"}
+                                            </button>
+                                        </div>
                                     </>
                                 ) : (
-                                    <h5 className='text-danger fw-bold'>
-                                        Out of Stock
-                                    </h5>
+                                    <div className='col'>
+                                        <h5 className='text-danger fw-bold mb-0'>
+                                            Out of Stock
+                                        </h5>
+                                    </div>
                                 )}
                             </div>
 
@@ -591,9 +608,9 @@ function ProductDetailPage() {
                             right: "20px",
                             background: "#fff",
                             zIndex: 1055,
-                            width: "90%", 
-                            maxWidth: "600px", 
-                            maxHeight: "50vh", 
+                            width: "90%",
+                            maxWidth: "600px",
+                            maxHeight: "50vh",
                             overflowY: "auto",
                             border: "1px solid #ffbbbb",
                         }}>

@@ -38,6 +38,7 @@ const Coupons = () => {
     };
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         if (cartTotal > 0) {
             dispatch(getUserCoupons(cartTotal));
         }
