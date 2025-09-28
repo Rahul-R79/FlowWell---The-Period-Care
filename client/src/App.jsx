@@ -76,8 +76,12 @@ function App() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getCurrentAdmin());
-        dispatch(getCurrentUser());
+        if (!window.location.pathname.startsWith("/admin")) {
+            dispatch(getCurrentUser());
+        }
+        if (window.location.pathname.startsWith("/admin")) {
+            dispatch(getCurrentAdmin());
+        }
     }, [dispatch]);
 
     if (getUserLoading || getAdminLoading) {

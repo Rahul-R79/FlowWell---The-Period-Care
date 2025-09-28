@@ -73,21 +73,20 @@ function WalletHistory() {
                                                 </small>
                                             </div>
                                             <div
-                                                className={`fw-bold amount ${
+                                                className={`amount d-flex justify-content-start align-items-center fw-bold ${
                                                     transaction.type === "debit"
                                                         ? "text-danger"
                                                         : "text-success"
                                                 }`}>
-                                                {transaction.type ===
-                                                "debit" ? (
-                                                    <h6>
-                                                        -₹{transaction.amount}
-                                                    </h6>
-                                                ) : (
-                                                    <h6>
-                                                        +₹{transaction.amount}
-                                                    </h6>
-                                                )}
+                                                <span className='me-1'>
+                                                    {transaction.type ===
+                                                    "debit"
+                                                        ? "-"
+                                                        : "+"}
+                                                </span>
+                                                <span>
+                                                    ₹{transaction.amount}
+                                                </span>
                                             </div>
                                         </div>
                                     </Card>

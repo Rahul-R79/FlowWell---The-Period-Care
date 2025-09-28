@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function AddAddress() {
-    const disptach = useDispatch();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const { loadingByAction, errorByAction } = useSelector(
@@ -38,7 +38,7 @@ function AddAddress() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await disptach(addAddress(formData)).unwrap();
+            await dispatch(addAddress(formData)).unwrap();
             navigate("/address");
         } catch (err) {
         }
@@ -50,8 +50,8 @@ function AddAddress() {
     };
 
     useEffect(() => {
-        disptach(clearAddressErrors());
-    }, [disptach]);
+        dispatch(clearAddressErrors());
+    }, [dispatch]);
 
     return (
         <>

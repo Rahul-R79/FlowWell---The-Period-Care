@@ -10,7 +10,7 @@ import Wallet from "../../models/Wallet.js";
 import WalletTransaction from "../../models/WalletTransaction.js";
 import mongoose from "mongoose";
 
-// calculate the totals 
+// calculate the totals
 const calculateTotals = (cart) => {
     let subtotal = 0;
     let discount = 0;
@@ -338,7 +338,6 @@ export const ReturnOrder = async (req, res) => {
     }
 };
 
-//create the order invoice
 export const getInvoice = async (req, res) => {
     try {
         const { id } = req.params;
@@ -352,18 +351,10 @@ export const getInvoice = async (req, res) => {
 
         const doc = new PDFDocument({ margin: 50 });
         res.setHeader("Content-Type", "application/pdf");
-
-        if (req.query.download === "true") {
-            res.setHeader(
-                "Content-Disposition",
-                `attachment; filename=invoice-${order.orderNumber}.pdf`
-            );
-        } else {
-            res.setHeader(
-                "Content-Disposition",
-                `inline; filename=invoice-${order.orderNumber}.pdf`
-            );
-        }
+        res.setHeader(
+            "Content-Disposition",
+            `inline; filename=invoice-${order.orderNumber}.pdf`
+        );
 
         doc.pipe(res);
 

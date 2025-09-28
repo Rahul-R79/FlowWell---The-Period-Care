@@ -122,8 +122,7 @@ function ProductDetailPage() {
                 showErrorToast("Removed from wishlist!");
             }
             await dispatch(getWishlist({ page: 1, limit: 3 })).unwrap();
-        } catch (err) {
-        }
+        } catch (err) {}
     };
 
     const handleAddToCart = async () => {
@@ -144,8 +143,7 @@ function ProductDetailPage() {
                     navigate("/cart");
                 }, 400);
             }
-        } catch (err) {
-        }
+        } catch (err) {}
     };
 
     const handleQuantity = (type) => {
@@ -593,8 +591,9 @@ function ProductDetailPage() {
                             right: "20px",
                             background: "#fff",
                             zIndex: 1055,
-                            width: "600px",
-                            maxHeight: "150px",
+                            width: "90%", 
+                            maxWidth: "600px", 
+                            maxHeight: "50vh", 
                             overflowY: "auto",
                             border: "1px solid #ffbbbb",
                         }}>
@@ -606,7 +605,7 @@ function ProductDetailPage() {
                                 variant='outline-danger'
                                 size='sm'
                                 onClick={() => setShowSummaryPopup(false)}>
-                                <i class='bi bi-x-circle'></i>
+                                <i className='bi bi-x-circle'></i>
                             </Button>
                         </div>
                         {loadingByAction.getReviewSummary ? (
