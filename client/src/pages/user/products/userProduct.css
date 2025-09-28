@@ -181,38 +181,14 @@
     font-weight: bold;
 }
 
-.quantity-selector {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 100px;
-}
-
-.qty-btn {
-    border: none;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-    width: 35px;
-    height: 35px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.qty-btn:hover {
-    background-color: #e2e6ea;
-}
-
-.qty-input {
-    border: none;
-    width: 50px;
-    height: 35px;
-    font-size: 1rem;
-    outline: none;
-}
-
 .product-main-img {
     transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+.qty-form{
+    width: 50px !important;
+    border-top: 1px solid #818080;
+    border-bottom: 1px solid #818080;
 }
 
 .product-main-img:hover {

@@ -79,6 +79,17 @@ function ProductPage() {
         navigate(`/user/productdetail/${id}`);
     };
 
+    useEffect(() => {
+        return () => {
+            dispatch(clearProducts());
+            setSelectedSort(null);
+            setSelectedSize([]);
+            setSelectedCategory(null);
+            setSelectedPrice(null);
+            setSelectedOffer([]);
+        };
+    }, [dispatch]);
+
     const sortOptions = [
         { value: "priceLowToHigh", label: "Price: Low to High" },
         { value: "priceHighToLow", label: "Price: High to Low" },
