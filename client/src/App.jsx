@@ -63,6 +63,7 @@ import AddBanner from "./pages/admin/banner/AddBanner";
 import Banner from "./pages/admin/banner/Banner";
 import EditBanner from "./pages/admin/banner/EditBanner";
 import DeleteAccount from "./pages/user/profile/DeleteAccount";
+import AboutUs from "./pages/user/aboutUs/AboutUs";
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -283,6 +284,9 @@ function App() {
 
                     {/* user delete account */}
                     <Route path='/delete/account' element={<DeleteAccount />} />
+
+                    {/* aboutus  */}
+                    <Route path='/aboutus' element={<AboutUs />} />
                 </Route>
 
                 {/* Public Routes accessible for everyone*/}

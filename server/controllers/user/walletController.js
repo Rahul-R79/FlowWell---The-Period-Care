@@ -53,11 +53,11 @@ export const verifyWalletPayment = async (req, res) => {
                 .json({ message: "wallet payment verification failed" });
         }
 
-        let wallet = await Wallet.findOne({ userId });
+        let wallet = await Wallet.findOne({ userId: req.user.id });
 
         if (!wallet) {
             wallet = await Wallet.create({
-                userId,
+                userId: req.user.id,
                 balance: 0,
             });
         }

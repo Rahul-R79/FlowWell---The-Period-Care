@@ -178,39 +178,41 @@ const Cart = () => {
                     </Col>
 
                     {/* Right side: Order Summary */}
-                    <Col lg={4} md={12} className='mt-4 mt-lg-0'>
-                        <div className='order-summary p-3 border rounded sticky-summary'>
-                            <h5 className='mb-3 fw-bold'>Order Summary</h5>
-                            <div className='d-flex justify-content-between mb-2'>
-                                <span>Subtotal</span>
-                                <span>₹{totals.subtotal}</span>
+                    {cart.products.length > 0 && (
+                        <Col lg={4} md={12} className='mt-4 mt-lg-0'>
+                            <div className='order-summary p-3 border rounded sticky-summary'>
+                                <h5 className='mb-3 fw-bold'>Order Summary</h5>
+                                <div className='d-flex justify-content-between mb-2'>
+                                    <span>Subtotal</span>
+                                    <span>₹{totals?.subtotal}</span>
+                                </div>
+                                <div className='d-flex justify-content-between mb-2 text-danger'>
+                                    <span>Discount</span>
+                                    <span>-₹{totals?.discount}</span>
+                                </div>
+                                <div className='d-flex justify-content-between mb-2'>
+                                    <span>Delivery Fee</span>
+                                    <span>₹{totals?.deliveryFee}</span>
+                                </div>
+                                <hr />
+                                <div className='d-flex justify-content-between fw-bold mb-3'>
+                                    <span>Total</span>
+                                    <span>₹{totals?.total}</span>
+                                </div>
+                                <Button
+                                    variant='dark'
+                                    className='w-100'
+                                    onClick={() =>
+                                        navigate("/checkout/address", {
+                                            replace: true,
+                                        })
+                                    }
+                                    disabled={cart.products?.length === 0}>
+                                    Go to Checkout
+                                </Button>
                             </div>
-                            <div className='d-flex justify-content-between mb-2 text-danger'>
-                                <span>Discount</span>
-                                <span>-₹{totals.discount}</span>
-                            </div>
-                            <div className='d-flex justify-content-between mb-2'>
-                                <span>Delivery Fee</span>
-                                <span>₹{totals.deliveryFee}</span>
-                            </div>
-                            <hr />
-                            <div className='d-flex justify-content-between fw-bold mb-3'>
-                                <span>Total</span>
-                                <span>₹{totals.total}</span>
-                            </div>
-                            <Button
-                                variant='dark'
-                                className='w-100'
-                                onClick={() =>
-                                    navigate("/checkout/address", {
-                                        replace: true,
-                                    })
-                                }
-                                disabled={cart.products?.length === 0}>
-                                Go to Checkout
-                            </Button>
-                        </div>
-                    </Col>
+                        </Col>
+                    )}
                 </Row>
             </section>
             <Footer />

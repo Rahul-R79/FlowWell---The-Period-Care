@@ -27,6 +27,7 @@ const adminSalesReportSlice = createSlice({
             cancelOrders: 0,
             refundedOrders: 0,
             returnedOrders: 0,
+            orders: [],
         },
         errorByAction: {},
         loadingByAction: {},

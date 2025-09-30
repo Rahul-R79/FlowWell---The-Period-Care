@@ -107,7 +107,7 @@ function Home() {
             ))}
 
             {/* New Arrivals Section */}
-            <Container className='mb-5 new-arrivals'>
+            <Container className='mb-5 new-arrivals' id="new-arrivals">
                 <SlideInOnScroll direction='up'>
                     <h2 className='mb-5 text-center'>NEW ARRIVALS</h2>
                 </SlideInOnScroll>

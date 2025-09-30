@@ -20,8 +20,11 @@ import "./header.css";
 import { useEffect, useState } from "react";
 import { getWishlist } from "../../features/wishlistSlice";
 import { getCart } from "../../features/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function UserHeader() {
+    const navigate = useNavigate();
+
     const { user } = useSelector((state) => state.auth);
     const { searchResults } = useSelector((state) => state.userProducts);
     const { totalWishlist } = useSelector((state) => state.wishlist);
@@ -49,6 +52,14 @@ export default function UserHeader() {
         dispatch(getWishlist({ page: 1, limit: 3 }));
         dispatch(getCart());
     }, [dispatch]);
+
+    const scrollToNewArrivals = () => {
+        navigate("/");
+        setTimeout(() => {
+            const section = document.getElementById("new-arrivals");
+            if (section) section.scrollIntoView({ behavior: "smooth" });
+        }, 100); 
+    };
 
     return (
         <header className='container'>
@@ -85,10 +96,10 @@ export default function UserHeader() {
                                             <Nav.Link href='/user/product'>
                                                 Products
                                             </Nav.Link>
-                                            <Nav.Link href='/user/product'>
+                                            <Nav.Link onClick={scrollToNewArrivals}>
                                                 New Arrivals
                                             </Nav.Link>
-                                            <Nav.Link href='#'>About</Nav.Link>
+                                            <Nav.Link href='/aboutus'>About</Nav.Link>
                                         </Nav>
                                     </Col>
 

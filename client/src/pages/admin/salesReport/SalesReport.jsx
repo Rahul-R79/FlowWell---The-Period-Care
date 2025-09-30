@@ -1,4 +1,4 @@
-//admin sales report
+// admin sales report
 import Sidebar from "../../../components/SideNav/AdminSidebar";
 import AdminFooter from "../../../components/Footer/AdminFooter";
 import { Table, Button, Dropdown } from "react-bootstrap";
@@ -29,7 +29,6 @@ const SalesReport = () => {
                 endDate: customRange[1].toISOString(),
             };
         }
-
         const endDate = new Date();
         const startDate = new Date();
         switch (dateRange) {
@@ -53,7 +52,6 @@ const SalesReport = () => {
 
     const handleExportPDF = () => {
         const doc = new jsPDF();
-
         doc.setFontSize(16);
         doc.text("Sales Report", 14, 20);
 
@@ -65,6 +63,7 @@ const SalesReport = () => {
         doc.setFontSize(10);
         doc.text(filterInfo, 14, 30);
 
+        // Summary Table
         const tableColumn = ["Particular", "Value"];
         const tableRows = [
             ["Total Orders", report.totalOrders],
@@ -76,11 +75,40 @@ const SalesReport = () => {
             ["Refunded Orders", report.refundedOrders],
         ];
 
-        autoTable(doc, {
-            head: [tableColumn],
-            body: tableRows,
-            startY: 40,
-        });
+        autoTable(doc, { head: [tableColumn], body: tableRows, startY: 40 });
+
+        // Orders Table
+        if (report.orders && report.orders.length > 0) {
+            const orderColumns = [
+                "Order ID",
+                "Customer",
+                "Date",
+                "Status",
+                "Total Amount",
+            ];
+            const orderRows = report.orders.map((order) => [
+                order.orderNumber,
+                order.user?.name || "-",
+                new Date(order.createdAt).toDateString(),
+                order.orderStatus.charAt(0).toUpperCase() +
+                    order.orderStatus.slice(1).toLowerCase(),
+                order.total,
+            ]);
+
+            autoTable(doc, {
+                head: [orderColumns],
+                body: orderRows,
+                startY: doc.lastAutoTable.finalY + 10,
+                styles: { fontSize: 8 },
+                headStyles: { fillColor: [41, 128, 185] },
+            });
+        } else {
+            doc.text(
+                "No orders found for this report.",
+                14,
+                doc.lastAutoTable.finalY + 15
+            );
+        }
 
         doc.save("sales_report.pdf");
     };
@@ -101,8 +129,9 @@ const SalesReport = () => {
                             Sales Report
                         </h2>
 
-                        {/* date filters */}
+                        {/* Filters */}
                         <div className='row g-2 mb-4 mt-5 align-items-center'>
+                            {/* Date Range */}
                             <div className='col-12 col-md-auto'>
                                 <Dropdown
                                     onSelect={(e) => {
@@ -128,6 +157,7 @@ const SalesReport = () => {
                                 </Dropdown>
                             </div>
 
+                            {/* Custom Calendar */}
                             <div
                                 className='col-12 col-sm-auto'
                                 style={{ position: "relative" }}>
@@ -163,8 +193,8 @@ const SalesReport = () => {
                                 )}
                             </div>
 
+                            {/* Status Filter */}
                             <div className='col-12 col-sm-auto'>
-                                {/* Status Filter */}
                                 <div className='dropdown'>
                                     <button
                                         className='btn btn-outline-secondary dropdown-toggle w-100'
@@ -177,71 +207,39 @@ const SalesReport = () => {
                                     <ul
                                         className='dropdown-menu'
                                         aria-labelledby='statusDropdown'>
-                                        <li>
-                                            <button
-                                                className='dropdown-item'
-                                                onClick={() => setStatus("")}>
-                                                All Status
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button
-                                                className='dropdown-item'
-                                                onClick={() =>
-                                                    setStatus("PLACED")
-                                                }>
-                                                Placed
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button
-                                                className='dropdown-item'
-                                                onClick={() =>
-                                                    setStatus("DELIVERED")
-                                                }>
-                                                Delivered
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button
-                                                className='dropdown-item'
-                                                onClick={() =>
-                                                    setStatus("CANCELLED")
-                                                }>
-                                                Cancelled
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button
-                                                className='dropdown-item'
-                                                onClick={() =>
-                                                    setStatus("REFUNDED")
-                                                }>
-                                                Refunded
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button
-                                                className='dropdown-item'
-                                                onClick={() =>
-                                                    setStatus("RETURNED")
-                                                }>
-                                                Returned
-                                            </button>
-                                        </li>
+                                        {[
+                                            "",
+                                            "PLACED",
+                                            "DELIVERED",
+                                            "CANCELLED",
+                                            "REFUNDED",
+                                            "RETURNED",
+                                        ].map((st) => (
+                                            <li key={st || "ALL"}>
+                                                <button
+                                                    className='dropdown-item'
+                                                    onClick={() =>
+                                                        setStatus(st)
+                                                    }>
+                                                    {st || "All Status"}
+                                                </button>
+                                            </li>
+                                        ))}
                                     </ul>
                                 </div>
                             </div>
 
-                            {/* export pdf */}
-                            <div
-                                className='col-12 col-sm-auto'
-                                onClick={handleExportPDF}>
-                                <Button variant='dark'>Export PDF</Button>
+                            {/* Export PDF */}
+                            <div className='col-12 col-sm-auto'>
+                                <Button
+                                    variant='dark'
+                                    onClick={handleExportPDF}>
+                                    Export PDF
+                                </Button>
                             </div>
                         </div>
 
-                        {/* Report Table */}
+                        {/* Summary Table */}
                         <Table bordered hover responsive>
                             <thead>
                                 <tr>
@@ -280,6 +278,58 @@ const SalesReport = () => {
                                 </tr>
                             </tbody>
                         </Table>
+
+                        {/* Detailed Orders Table */}
+                        <h4 className='mt-3'>Order Details</h4>
+                        <div style={{ maxHeight: "400px", overflowY: "auto" }}>
+                            <Table striped bordered hover responsive>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Order No</th>
+                                        <th>Customer</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {report.orders?.length > 0 ? (
+                                        report.orders.map((order, idx) => (
+                                            <tr key={order._id}>
+                                                <td>{idx + 1}</td>
+                                                <td>{order.orderNumber}</td>
+                                                <td>
+                                                    {order.user?.name || "N/A"}
+                                                </td>
+                                                <td>₹{order.total}</td>
+                                                <td>
+                                                    {order.orderStatus
+                                                        .charAt(0)
+                                                        .toUpperCase() +
+                                                        order.orderStatus
+                                                            .slice(1)
+                                                            .toLowerCase()}
+                                                </td>
+                                                <td>
+                                                    {new Date(
+                                                        order.createdAt
+                                                    ).toDateString()}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td
+                                                colSpan={6}
+                                                className='text-center'>
+                                                No orders found
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </Table>
+                        </div>
                     </div>
                     <AdminFooter />
                 </div>
