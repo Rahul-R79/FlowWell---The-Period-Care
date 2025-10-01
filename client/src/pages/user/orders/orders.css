@@ -53,13 +53,17 @@
     color: red;
 }
 
-.viewOrder, .cancel-order, .order-detail {
+.viewOrder,
+.cancel-order,
+.order-detail {
     margin-bottom: 100px;
     margin-top: 60px;
 }
 
 @media (max-width: 1000px) {
-    .viewOrder, .cancel-order, .order-detail {
+    .viewOrder,
+    .cancel-order,
+    .order-detail {
         margin-bottom: 30px;
         margin-top: 30px;
     }
@@ -82,13 +86,13 @@
     z-index: 2;
 }
 
-/* Pulse animation for active orders only (not delivered) */
+/* pulse for active orders */
 .timeline-dot.active {
     background: green;
     animation: pulse 1.5s infinite;
 }
 
-/* Delivered orders (static green) */
+/* Delivered orders green*/
 .timeline-dot.delivered {
     background: green;
     animation: none;
@@ -179,9 +183,14 @@
 
 .order-card {
     cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* Reason list */
+.order-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
 .reason-list .list-group-item {
     border: 1px solid #e5e5e5;
     margin-bottom: 10px;
@@ -217,8 +226,8 @@ button.btn-outline-dark {
 }
 
 textarea::placeholder {
-    color: #6c757d !important; 
-    font-size: 14px !important; 
+    color: #6c757d !important;
+    font-size: 14px !important;
     font-style: italic !important;
-    opacity: 1 !important; 
+    opacity: 1 !important;
 }

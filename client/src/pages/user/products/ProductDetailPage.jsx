@@ -514,7 +514,7 @@ function ProductDetailPage() {
                             <Row className='g-3'>
                                 {similarProducts.map((product, i) => (
                                     <Col xs={6} lg={3} key={i}>
-                                        <div
+                                        <div className="similarProduct-card"
                                             onClick={() =>
                                                 navigate(
                                                     `/user/productdetail/${product._id}`

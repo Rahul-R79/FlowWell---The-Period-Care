@@ -82,11 +82,6 @@ function ProductPage() {
     useEffect(() => {
         return () => {
             dispatch(clearProducts());
-            setSelectedSort(null);
-            setSelectedSize([]);
-            setSelectedCategory(null);
-            setSelectedPrice(null);
-            setSelectedOffer([]);
         };
     }, [dispatch]);
 
@@ -126,7 +121,6 @@ function ProductPage() {
 
     return (
         <>
-            {loadingByAction.getUserProducts && <LoadingSpinner />}
             <UserHeader />
             <section className='product-page container my-5'>
                 <Row>
@@ -311,13 +305,16 @@ function ProductPage() {
                             )}
                         </Row>
 
-                        <div className='mt-5'>
-                            <PaginationButton
-                                currentPage={currentPage}
-                                totalPages={totalPages}
-                                onPageChange={handlePageChange}
-                            />
-                        </div>
+                        {!loadingByAction.getUserProducts &&
+                            products.length > 0 && (
+                                <div className='mt-5'>
+                                    <PaginationButton
+                                        currentPage={currentPage}
+                                        totalPages={totalPages}
+                                        onPageChange={handlePageChange}
+                                    />
+                                </div>
+                            )}
                     </Col>
                 </Row>
             </section>

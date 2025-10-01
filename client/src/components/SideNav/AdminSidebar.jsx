@@ -112,8 +112,7 @@ export default function Sidebar() {
         try {
             await dispatch(adminLogout()).unwrap();
             navigate("/admin/signin");
-        } catch (err) {
-        }
+        } catch (err) {}
     };
 
     const handleLogoutClick = async () => {

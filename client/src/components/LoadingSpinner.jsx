@@ -9,13 +9,15 @@ const LoadingSpinner = () => (
             left: 0,
             width: "100vw",
             height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 1)",
+            backgroundColor: "rgba(255, 255, 255, 0.3)",
+            backdropFilter: "blur(5px)",
+            WebkitBackdropFilter: "blur(5px)",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             zIndex: 9999,
         }}>
-        <CircularProgress color='primary' size={80} />
+        <CircularProgress color='dark' size={50} />
     </div>
 );
 

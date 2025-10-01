@@ -41,8 +41,7 @@ function Wishlist() {
                 })
             ).unwrap();
             showErrorToast("Removed from wishlist!");
-        } catch (err) {
-        }
+        } catch (err) {}
     };
 
     const handleDeleteClick = async (id) => {
@@ -77,8 +76,7 @@ function Wishlist() {
             setTimeout(() => {
                 navigate("/cart");
             }, 500);
-        } catch (err) {
-        }
+        } catch (err) {}
     };
 
     useEffect(() => {
@@ -91,11 +89,8 @@ function Wishlist() {
                 loadingByAction.removeFromWishlist) && <LoadingSpinner />}
             <UserHeader />
             <ToastNotification />
-            <section className='wishlist container my-5'>
+            <section className='wishlist container'>
                 <h3 className='mb-4 fw-bold'>My Wishlist</h3>
-
-                {loadingByAction.getWishlist && <p>Loading...</p>}
-
                 {wishlist.products?.length > 0 ? (
                     wishlist.products.map((item) => (
                         <Row
@@ -180,11 +175,13 @@ function Wishlist() {
                     <p>No items in wishlist.</p>
                 )}
 
-                <PaginationButton
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                />
+                {wishlist.products?.length > 0 && (
+                    <PaginationButton
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
+                )}
             </section>
             <Footer />
         </>
