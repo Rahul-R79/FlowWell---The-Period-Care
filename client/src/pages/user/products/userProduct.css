@@ -32,6 +32,10 @@
     transform: scale(1.05);
 }
 
+.similarProduct-card:hover {
+    transform: scale(1.05);
+}
+
 .product-img {
     width: 100%;
     max-width: 300px;

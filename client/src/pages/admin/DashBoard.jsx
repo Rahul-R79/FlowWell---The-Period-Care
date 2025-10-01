@@ -152,7 +152,7 @@ const DashBoard = () => {
         doc.setFontSize(10);
         doc.text(filterInfo, 14, 30);
         const tableColumn = ["#", "Product", "Revenue", "Sold"];
-        const tableRows = data.topSelling.map((top, idx) => [
+        const tableRows = data.topSellingProducts?.map((top, idx) => [
             idx + 1,
             top.name,
             top.totalSales,
@@ -181,7 +181,7 @@ const DashBoard = () => {
         doc.text(filterInfo, 14, 30);
 
         const tableColumn = ["#", "Category", "Sold"];
-        const tableRows = data.topSellingCategories.map((cat, idx) => [
+        const tableRows = data.topSellingCategories?.map((cat, idx) => [
             idx + 1,
             cat._id,
             cat.totalSold,
