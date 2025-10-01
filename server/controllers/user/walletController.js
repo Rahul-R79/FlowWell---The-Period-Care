@@ -32,7 +32,6 @@ export const addMoneyToWallet = async (req, res) => {
 //verify the wallet payment
 export const verifyWalletPayment = async (req, res) => {
     const {
-        userId,
         razorpay_order_id,
         razorpay_payment_id,
         razorpay_signature,
@@ -71,7 +70,7 @@ export const verifyWalletPayment = async (req, res) => {
             type: "credit",
             amount: parsedAmount,
             paymentMethod: "razorpay",
-            transactionFor: "Wallet_topuped"
+            transactionFor: "Wallet_topuped",
         });
 
         res.status(200).json({
@@ -83,47 +82,51 @@ export const verifyWalletPayment = async (req, res) => {
 };
 
 //get the total wallet amount
-export const getWalletAmount = async(req, res)=>{
-    try{
-        const wallet = await Wallet.findOne({userId: req.user.id});
+export const getWalletAmount = async (req, res) => {
+    try {
+        const wallet = await Wallet.findOne({ userId: req.user.id });
 
-        if(!wallet){
-            return res.status(404).json({message: 'wallet not found'});
+        if (!wallet) {
+            return res.status(404).json({ message: "wallet not found" });
         }
 
-        res.status(200).json({balance: wallet.balance});
-    }catch(err){
-        return res.status(500).json({message: 'internal server error'});
+        res.status(200).json({ balance: wallet.balance });
+    } catch (err) {
+        return res.status(500).json({ message: "internal server error" });
     }
-}
+};
 
 //get wallet transactions
-export const getWalletTransactions = async(req, res)=>{
-    let { page = 1, limit = 5} = req.query;
-    try{
-        const wallet = await Wallet.findOne({userId: req.user.id});
-        if(!wallet){
-            return res.status(404).json({message: 'wallet not found'});
+export const getWalletTransactions = async (req, res) => {
+    let { page = 1, limit = 5 } = req.query;
+    try {
+        const wallet = await Wallet.findOne({ userId: req.user.id });
+        if (!wallet) {
+            return res.status(404).json({ message: "wallet not found" });
         }
 
         page = parseInt(page);
         limit = parseInt(limit);
 
-        const totalTransaction = await WalletTransaction.countDocuments({walletId: wallet._id});
+        const totalTransaction = await WalletTransaction.countDocuments({
+            walletId: wallet._id,
+        });
         const totalPages = Math.ceil(totalTransaction / limit);
 
-        const walletTransaction = await WalletTransaction.find({walletId: wallet._id})
-            .sort({createdAt: -1})
+        const walletTransaction = await WalletTransaction.find({
+            walletId: wallet._id,
+        })
+            .sort({ createdAt: -1 })
             .skip((page - 1) * limit)
-            .limit(limit)
+            .limit(limit);
 
         res.status(200).json({
-            walletTransaction, 
+            walletTransaction,
             totalTransaction,
             totalPages,
-            currentPage: page
-        })
-    }catch(err){
-        return res.status(500).json({message: 'internal server error'});
+            currentPage: page,
+        });
+    } catch (err) {
+        return res.status(500).json({ message: "internal server error" });
     }
-}
+};
