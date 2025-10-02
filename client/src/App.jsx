@@ -64,6 +64,7 @@ import Banner from "./pages/admin/banner/Banner";
 import EditBanner from "./pages/admin/banner/EditBanner";
 import DeleteAccount from "./pages/user/profile/DeleteAccount";
 import AboutUs from "./pages/user/aboutUs/AboutUs";
+import MyCycle from "./pages/user/profile/MyCycle";
 
 function App() {
     const { user, forgotPasswordEmaiVerify, loadingByAction } = useSelector(
@@ -284,6 +285,9 @@ function App() {
 
                     {/* user delete account */}
                     <Route path='/delete/account' element={<DeleteAccount />} />
+
+                    {/* user myCycle  */}
+                    <Route path='/mycycle' element={<MyCycle />} />
 
                     {/* aboutus  */}
                     <Route path='/aboutus' element={<AboutUs />} />

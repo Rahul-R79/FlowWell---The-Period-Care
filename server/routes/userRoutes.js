@@ -58,6 +58,8 @@ import {
 import { validateReview } from "../middlewares/validators/reviewValidator.js";
 import { deleteAccount } from "../controllers/authController.js";
 import { getUserBanner } from "../controllers/user/bannerController.js";
+import { getCycleInfo, saveCycleInfo } from "../controllers/user/cycleController.js";
+import { validateCycle } from "../middlewares/validators/periodCycleValidator.js";
 
 const router = express.Router();
 
@@ -161,6 +163,16 @@ router.post(
     addReview
 );
 router.get("/reviews/:productId/summary", userProtectedRoute, getReviewSummary);
+
+//user period cycle route
+router.post(
+    "/create-cycle",
+    userProtectedRoute,
+    validateCycle,
+    handleValidation,
+    saveCycleInfo
+);
+router.get('cycle', userProtectedRoute, getCycleInfo);
 
 //user delete route
 router.delete("/delete/:id", userProtectedRoute, deleteAccount);
