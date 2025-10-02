@@ -9,6 +9,7 @@ import userRoutes from "./routes/userRoutes.js";
 import passport from "./config/passport.js";
 import notFound from "./middlewares/pageNotFound.js";
 import errorHandler from "./middlewares/errorHandling.js";
+import { scheduleReminder } from "./config/periodReminder.js";
 import morgan from "morgan";
 import compression from "compression";
 import helmet from "helmet";
@@ -17,6 +18,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 ConnectDB();
+scheduleReminder();
 
 app.use(helmet());
 app.use(compression());

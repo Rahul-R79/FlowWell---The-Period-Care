@@ -52,3 +52,38 @@
 .avatar-preview {
     cursor: pointer;
 }
+
+.cycle-card {
+    border-radius: 20px;
+    background: #fff9fc;
+    border: none;
+}
+
+.cycle-card h3 {
+    color: #d63384;
+    font-weight: 700;
+}
+
+.prediction-box {
+    background: #ffe6f0;
+    border-left: 6px solid #d63384;
+}
+
+.next-date {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #b30059;
+}
+
+.save-btn {
+    background-color: #d63384 !important;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+.save-btn:hover {
+    background-color: #b30059 !important;
+}

@@ -84,6 +84,12 @@ function ProfileNav() {
                     <Nav.Link
                         className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'
                         as={Link}
+                        to='/mycycle'>
+                        <FaUserTimes className='me-3 icon' /> My Cycle
+                    </Nav.Link>
+                    <Nav.Link
+                        className='profile-cell d-flex align-items-center mb-3 p-3 rounded shadow-sm'
+                        as={Link}
                         to='/referAndEarn'>
                         <FaGift className='me-3 icon' /> Refer & Earn
                     </Nav.Link>

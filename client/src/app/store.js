@@ -22,6 +22,7 @@ import userReviewReducer from '../features/reviewSlice';
 import adminDashboardReducer from '../features/dashboardSlice';
 import adminBannerReducer from '../features/banner/adminBannerSlice';
 import userBannerReducer from '../features/banner/userBannerSlice';
+import periodCycleReducer from '../features/periodCycleSlice';
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 
@@ -47,7 +48,8 @@ const rootReducer = combineReducers({
     review: userReviewReducer,
     dashboard: adminDashboardReducer,
     adminBanner: adminBannerReducer,
-    userBanner: userBannerReducer
+    userBanner: userBannerReducer,
+    cycle: periodCycleReducer
 })
 
 const persistConfig = {
