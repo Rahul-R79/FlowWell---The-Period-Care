@@ -1,4 +1,4 @@
-//nodemailer configuration
+//nodemailer configuration for otpverification
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv'
 dotenv.config();

@@ -90,7 +90,7 @@ const addressSlice = createSlice({
     extraReducers: (builder) => {
         builder
             //add address
-            .addCase(addAddress.pending, (state)=>{
+            .addCase(addAddress.pending, (state) => {
                 state.loadingByAction.addAddress = true;
                 state.errorByAction.addAddress = null;
             })
@@ -98,14 +98,11 @@ const addressSlice = createSlice({
                 state.addresses.push(action.payload);
                 state.loadingByAction.addAddress = false;
                 state.errorByAction.addAddress = null;
-
-                if (!state.selectedAddress) {
-                    state.selectedAddress = action.payload._id;
-                }
+                state.selectedAddress = action.payload._id;
             })
-            .addCase(addAddress.rejected, (state, action)=>{
+            .addCase(addAddress.rejected, (state, action) => {
                 state.errorByAction.addAddress = action.payload;
-                state.loadingByAction.addAddress = false
+                state.loadingByAction.addAddress = false;
             })
 
             //get all address
@@ -117,9 +114,8 @@ const addressSlice = createSlice({
                 state.addresses = action.payload;
                 state.loadingByAction.getAllAddresses = false;
                 state.errorByAction.getAllAddresses = null;
-                if (!state.selectedAddress && action.payload.length > 0) {
-                    state.selectedAddress = action.payload[0]._id;
-                }
+                state.selectedAddress =
+                    action.payload.length > 0 ? action.payload[0]._id : null;
             })
             .addCase(getAllAddresses.rejected, (state, action) => {
                 state.loadingByAction.getAllAddresses = false;

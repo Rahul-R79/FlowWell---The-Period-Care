@@ -13,7 +13,8 @@ function ReferAndEarn() {
     const { referral, loadingByAction } = useSelector(
         (state) => state.userReferral
     );
-    const shareMessage = `Join using my referral code: ${referral?.couponCode}`;
+    const WEBSITE_URL = "https://www.flowwell.online";
+    const shareMessage = `Join using my referral code: ${referral?.couponCode}\nSign up here: ${WEBSITE_URL}`;
 
     useEffect(() => {
         dispatch(getReferralCode());

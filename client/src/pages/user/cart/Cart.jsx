@@ -78,7 +78,6 @@ const Cart = () => {
     return (
         <>
             {(loadingByAction.getCart ||
-                loadingByAction.addToCart ||
                 loadingByAction.removeFromCart) && <LoadingSpinner />}
             <UserHeader />
             <ToastNotification />

@@ -16,6 +16,7 @@ export const getDashboard = async (req, res) => {
             };
         }
 
+        //order cards data
         const totalOrders = await Order.countDocuments(filter);
         const activeOrders = await Order.countDocuments({
             ...filter,
@@ -44,6 +45,7 @@ export const getDashboard = async (req, res) => {
         const totalProducts = await Product.countDocuments();
         const totalCustomers = await User.countDocuments();
 
+        //sales line graph
         let groupStage = {};
         let projectStage = {};
 
@@ -80,6 +82,48 @@ export const getDashboard = async (req, res) => {
             { $project: projectStage },
         ]);
 
+        //pie chart
+        let pieChartFilter = {};
+
+        if (range === "monthly") {
+            const now = new Date();
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            const endOfMonth = new Date(
+                now.getFullYear(),
+                now.getMonth() + 1,
+                0,
+                23,
+                59,
+                59
+            );
+
+            pieChartFilter.createdAt = {
+                $gte: startOfMonth,
+                $lte: endOfMonth,
+            };
+        } else if (range === "yearly") {
+            const now = new Date();
+            const startOfYear = new Date(now.getFullYear(), 0, 1);
+            const endOfYear = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
+
+            pieChartFilter.createdAt = {
+                $gte: startOfYear,
+                $lte: endOfYear,
+            };
+        }
+
+        const totalChartGroup = await Order.aggregate([
+            { $match: pieChartFilter },
+            {
+                $group: {
+                    _id: "$orderStatus",
+                    count: { $sum: 1 },
+                },
+            },
+            { $sort: { count: -1 } },
+        ]);
+
+        //top selling products
         const topSellingProducts = await Order.aggregate([
             { $match: filter },
             { $unwind: "$cartItems" },
@@ -103,12 +147,13 @@ export const getDashboard = async (req, res) => {
             { $limit: 5 },
         ]);
 
+        //top selling categories
         const topSellingCategories = await Order.aggregate([
             { $unwind: "$cartItems" },
 
             {
                 $lookup: {
-                    from: "products", 
+                    from: "products",
                     localField: "cartItems.productId",
                     foreignField: "_id",
                     as: "productDetails",
@@ -119,7 +164,7 @@ export const getDashboard = async (req, res) => {
 
             {
                 $lookup: {
-                    from: "categories", 
+                    from: "categories",
                     localField: "productDetails.category",
                     foreignField: "_id",
                     as: "categoryDetails",
@@ -130,7 +175,7 @@ export const getDashboard = async (req, res) => {
 
             {
                 $group: {
-                    _id: "$categoryDetails.name", 
+                    _id: "$categoryDetails.name",
                     totalSold: { $sum: "$cartItems.quantity" },
                 },
             },
@@ -138,17 +183,6 @@ export const getDashboard = async (req, res) => {
             { $sort: { totalSold: -1 } },
 
             { $limit: 10 },
-        ]);
-
-        const totalChartGroup = await Order.aggregate([
-            { $match: filter },
-            {
-                $group: {
-                    _id: "$orderStatus",
-                    count: { $sum: 1 },
-                },
-            },
-            { $sort: { count: -1 } },
         ]);
 
         res.status(200).json({

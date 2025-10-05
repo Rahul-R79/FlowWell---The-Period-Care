@@ -1,3 +1,4 @@
+//user cycle calender page
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../../../components/Footer/UserFooter";
@@ -27,7 +28,6 @@ function MyCycle() {
         try {
             dispatch(saveCycleInfo({ lastPeriodDate, cycleLength })).unwrap();
         } catch (err) {
-            console.log(err);
         }
     };
 
