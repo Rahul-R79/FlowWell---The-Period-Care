@@ -1,3 +1,4 @@
+//mail for period reminder
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import logger from "../config/logger.js";

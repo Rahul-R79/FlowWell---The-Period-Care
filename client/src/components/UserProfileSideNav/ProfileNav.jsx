@@ -14,6 +14,7 @@ import { logoutUser } from "../../features/auth/authUserSlice";
 import { Link, useNavigate } from "react-router-dom";
 import "./profileNav.css";
 import { confirmAlert } from "../../utils/confirmAlert";
+import { resetWalletState } from "../../features/walletSlice";
 
 function ProfileNav() {
     const { user } = useSelector((state) => state.auth);
@@ -23,9 +24,9 @@ function ProfileNav() {
     const handleLogout = async () => {
         try {
             await dispatch(logoutUser()).unwrap();
+            await dispatch(resetWalletState()).unwrap();
             navigate("/", { replace: true });
-        } catch (err) {
-        }
+        } catch (err) {}
     };
 
     const handleLogoutClick = async () => {

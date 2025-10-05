@@ -55,6 +55,10 @@ const SalesReport = () => {
         doc.setFontSize(16);
         doc.text("Sales Report", 14, 20);
 
+        const generatedDate = new Date().toDateString();
+        doc.setFontSize(10);
+        doc.text(`Generated on: ${generatedDate}`, 14, 26);
+
         const filterInfo = `Date Range: ${
             customRange[0] && customRange[1]
                 ? `${customRange[0].toDateString()} - ${customRange[1].toDateString()}`

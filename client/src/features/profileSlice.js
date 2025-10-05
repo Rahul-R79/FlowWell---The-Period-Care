@@ -28,6 +28,8 @@ const profileSlice = createSlice({
     },
     reducers: {
         resetProfileState: (state) => {
+            state.user = null;
+            state.loadingByAction = {};
             state.errorByAction = {};
         },
     },

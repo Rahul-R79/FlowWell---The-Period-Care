@@ -57,7 +57,7 @@ const CancelOrders = () => {
 
     return (
         <>
-            {loadingByAction.getOrderItem && <LoadingSpinner />}
+            {(loadingByAction.getOrderItem || loadingByAction.cancelOrder) && <LoadingSpinner />}
             <UserHeader />
             <section className='cancel-order container'>
                 <div className='cancel-order-card p-4 rounded'>

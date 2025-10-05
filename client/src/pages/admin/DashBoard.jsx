@@ -332,10 +332,40 @@ const DashBoard = () => {
                             {/* Doughnut Chart */}
                             <div className='col-lg-4'>
                                 <Card className='shadow-sm border-0 h-100'>
-                                    <Card.Body className='d-flex justify-content-center align-items-center'>
+                                    <Card.Body className='d-flex flex-column justify-content-center align-items-center'>
+                                        <div className='d-flex gap-2 mb-3'>
+                                            <Button
+                                                size='sm'
+                                                variant={
+                                                    range === "monthly"
+                                                        ? "primary"
+                                                        : "outline-secondary"
+                                                }
+                                                onClick={() =>
+                                                    setRange("monthly")
+                                                }>
+                                                Monthly
+                                            </Button>
+                                            <Button
+                                                size='sm'
+                                                variant={
+                                                    range === "yearly"
+                                                        ? "primary"
+                                                        : "outline-secondary"
+                                                }
+                                                onClick={() =>
+                                                    setRange("yearly")
+                                                }>
+                                                Yearly
+                                            </Button>
+                                        </div>
                                         <Doughnut
                                             data={chart}
-                                            style={{ marginTop: "20px" }}
+                                            style={{
+                                                marginTop: "20px",
+                                                width: "100%",
+                                                height: "100%",
+                                            }}
                                         />
                                     </Card.Body>
                                 </Card>
@@ -430,7 +460,9 @@ const DashBoard = () => {
                                         <Button
                                             variant='primary'
                                             size='lg'
-                                            onClick={handleExportTopCategoriesPDF}>
+                                            onClick={
+                                                handleExportTopCategoriesPDF
+                                            }>
                                             Report
                                         </Button>
                                     </Card.Body>
