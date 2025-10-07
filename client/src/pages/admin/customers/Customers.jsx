@@ -41,8 +41,7 @@ const CustomersPage = () => {
     const handleDelete = async (userId) => {
         try {
             await dispatch(deleteUsers(userId)).unwrap();
-        } catch (err) {
-        }
+        } catch (err) {}
     };
 
     const handleDeleteClick = async (userId) => {
@@ -65,8 +64,7 @@ const CustomersPage = () => {
             } else {
                 await dispatch(blockUser(userId)).unwrap();
             }
-        } catch (err) {
-        }
+        } catch (err) {}
     };
 
     const handleBlockToggleClick = async (userId, isBlocked) => {
@@ -143,6 +141,12 @@ const CustomersPage = () => {
                                                             avatar ||
                                                             "/images/hero/default-avatar.webp"
                                                         }
+                                                        onError={(e) => {
+                                                            e.target.onerror =
+                                                                null;
+                                                            e.target.src =
+                                                                "/images/hero/default-avatar.webp";
+                                                        }}
                                                         roundedCircle
                                                         width={36}
                                                         height={36}

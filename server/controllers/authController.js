@@ -1,3 +1,4 @@
+//admin and user authController
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import generateToken from "../utils/jwt.js";
@@ -8,7 +9,12 @@ import Admin from "../models/Admin.js";
 import Referral from "../models/Referral.js";
 import Coupon from "../models/Coupon.js";
 
-//user signup
+/**
+ * @function SignUp
+ * @description Handles user registration and sends OTP for email verification.
+ * @expectedInput { name: String, email: String, password: String, referralCode?: String }
+ * @expectedOutput { message: "OTP send to mail" } or { errors: [{ field, message }] }
+ */
 export const SignUp = async (req, res) => {
     const { name, email, password, referralCode } = req.body;
     try {
@@ -59,7 +65,12 @@ export const SignUp = async (req, res) => {
     }
 };
 
-//verify the email
+/**
+ * @function verifyOTP
+ * @description Verifies OTP and creates a new user account.
+ * @expectedInput { email: String, otp: String }
+ * @expectedOutput { message: "User created successfully", user } or { errors: [{ field, message }] }
+ */
 export const verifyOTP = async (req, res) => {
     const { email, otp } = req.body;
 
@@ -131,7 +142,12 @@ export const verifyOTP = async (req, res) => {
     }
 };
 
-//resend the otp
+/**
+ * @function resendOTP
+ * @description Resends the signup OTP if it's not expired.
+ * @expectedInput { email: String }
+ * @expectedOutput { message: "OTP resended successfully" } or { errors: [{ field, message }] }
+ */
 export const resendOTP = async (req, res) => {
     const { email } = req.body;
 
@@ -165,7 +181,12 @@ export const resendOTP = async (req, res) => {
     }
 };
 
-//user signin
+/**
+ * @function SignIn
+ * @description Authenticates user and issues JWT token.
+ * @expectedInput { email: String, password: String }
+ * @expectedOutput { success: true, message: "login successful", user } or { errors: [{ field, message }] }
+ */
 export const SignIn = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -210,7 +231,12 @@ export const SignIn = async (req, res) => {
     }
 };
 
-//forgot user password
+/**
+ * @function forgotPassword
+ * @description Sends OTP to user email for password reset.
+ * @expectedInput { email: String }
+ * @expectedOutput { message: "OTP send to your email for password reset" } or { errors: [{ field, message }] }
+ */
 export const forgotPassword = async (req, res) => {
     const { email } = req.body;
 
@@ -241,7 +267,12 @@ export const forgotPassword = async (req, res) => {
     }
 };
 
-//verify forgot password
+/**
+ * @function verifyForgotOTP
+ * @description Verifies OTP sent for password reset.
+ * @expectedInput { email: String, otp: String }
+ * @expectedOutput { message: "OTP verified" } or { errors: [{ field, message }] }
+ */
 export const verifyForgotOTP = async (req, res) => {
     const { email, otp } = req.body;
 
@@ -270,7 +301,12 @@ export const verifyForgotOTP = async (req, res) => {
     }
 };
 
-//resend forgot otp
+/**
+ * @function resendForgotOTP
+ * @description Resends OTP for password reset.
+ * @expectedInput { email: String }
+ * @expectedOutput { message: "OTP send" } or { errors: [{ field, message }] }
+ */
 export const resendForgotOTP = async (req, res) => {
     const { email } = req.body;
 
@@ -305,7 +341,12 @@ export const resendForgotOTP = async (req, res) => {
     }
 };
 
-//reset password
+/**
+ * @function forgotResetPassword
+ * @description Resets user password after verifying OTP.
+ * @expectedInput { email: String, newPassword: String }
+ * @expectedOutput { message: "password reset successfully" } or { errors: [{ field, message }] }
+ */
 export const forgotResetPassword = async (req, res) => {
     const { email, newPassword } = req.body;
 
@@ -326,7 +367,12 @@ export const forgotResetPassword = async (req, res) => {
     }
 };
 
-//google auth callback
+/**
+ * @function googleAuthCallback
+ * @description Handles Google OAuth login and sets JWT cookie.
+ * @expectedInput req.user (from Google Passport)
+ * @expectedOutput Redirects to CLIENT_URL or returns error message.
+ */
 export const googleAuthCallback = async (req, res) => {
     try {
         if (!req.user) {
@@ -357,7 +403,12 @@ export const googleAuthCallback = async (req, res) => {
     }
 };
 
-//get current user
+/**
+ * @function userauthMe
+ * @description Returns the authenticated user's data.
+ * @expectedInput req.user.id (from JWT)
+ * @expectedOutput { user } or { message: "user not found" }
+ */
 export const userauthMe = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -374,7 +425,12 @@ export const userauthMe = async (req, res) => {
     }
 };
 
-//admin signin
+/**
+ * @function adminSignin
+ * @description Authenticates admin and issues JWT token.
+ * @expectedInput { email: String, password: String }
+ * @expectedOutput { message: "admin signed in successfully", admin } or { errors: [{ field, message }] }
+ */
 export const adminSignin = async (req, res) => {
     const { email, password } = req.body;
 
@@ -413,7 +469,12 @@ export const adminSignin = async (req, res) => {
     }
 };
 
-//get the current admin
+/**
+ * @function adminauthMe
+ * @description Returns the authenticated admin's data.
+ * @expectedInput req.admin.id (from JWT)
+ * @expectedOutput { admin } or { message: "admin not found" }
+ */
 export const adminauthMe = async (req, res) => {
     try {
         const adminId = req.admin.id;
@@ -430,7 +491,12 @@ export const adminauthMe = async (req, res) => {
     }
 };
 
-//admin logout
+/**
+ * @function adminLogout
+ * @description Logs out admin by clearing cookie.
+ * @expectedInput none
+ * @expectedOutput { message: "admin logged out successfully" }
+ */
 export const adminLogout = (req, res) => {
     try {
         res.clearCookie("admin-access-token", {
@@ -446,7 +512,12 @@ export const adminLogout = (req, res) => {
     }
 };
 
-//user logout
+/**
+ * @function userLogout
+ * @description Logs out user by clearing cookie.
+ * @expectedInput none
+ * @expectedOutput { message: "user logged out successfully" }
+ */
 export const userLogout = (req, res) => {
     try {
         res.clearCookie("user-access-token", {
@@ -462,7 +533,12 @@ export const userLogout = (req, res) => {
     }
 };
 
-//user change password
+/**
+ * @function changePassword
+ * @description Changes user password after verifying old one.
+ * @expectedInput { oldPassword: String, newPassword: String }
+ * @expectedOutput { message: "password changed successfully" } or { errors: [{ field, message }] }
+ */
 export const changePassword = async (req, res) => {
     const userId = req.user.id;
     const { oldPassword, newPassword } = req.body;
@@ -513,7 +589,12 @@ export const changePassword = async (req, res) => {
     }
 };
 
-//delete user account
+/**
+ * @function deleteAccount
+ * @description Deletes a user account by ID.
+ * @expectedInput req.params.id (User ID)
+ * @expectedOutput { user } or { message: "user not found" }
+ */
 export const deleteAccount = async (req, res) => {
     const { id } = req.params;
 

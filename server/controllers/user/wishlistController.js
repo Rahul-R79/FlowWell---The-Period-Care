@@ -1,6 +1,12 @@
+//userWishlistController
 import Wishlist from "../../models/Wishlist.js";
 
-//add a product to wishlist
+/**
+ * @function addToWishlist
+ * @description Adds a product to the user's wishlist. If the wishlist doesn't exist, it creates one.
+ * @expectedInput req.body: { productId, selectedSize }
+ * @expectedOutput { wishlist } or { message: "internal server error" }
+ */
 export const addToWishlist = async (req, res) => {
     const { productId, selectedSize } = req.body;
     try {
@@ -28,7 +34,14 @@ export const addToWishlist = async (req, res) => {
     }
 };
 
-//get the product from the wishlist
+/**
+ * @function getWishlist
+ * @description Retrieves the user's wishlist with pagination and filters out inactive products.
+ * @expectedInput req.user.id, req.query: { page?, limit? }
+ * @expectedOutput { wishlist: { _id, user, products }, totalWishlist, totalPages, currentPage }
+ *                  or { wishlist: { products: [] } } if empty
+ *                  or { message: "internal server error" }
+ */
 export const getWishlist = async (req, res) => {
     try {
         let { page = 1, limit = 3 } = req.query;
@@ -71,7 +84,14 @@ export const getWishlist = async (req, res) => {
     }
 };
 
-//remove from the wishlist
+/**
+ * @function removeFromWishlist
+ * @description Removes a product from the user's wishlist and returns the updated paginated wishlist.
+ * @expectedInput req.params: { productId }, req.query: { page?, limit? }, req.user.id
+ * @expectedOutput { wishlist: { _id, user, products }, totalWishlist, totalPages, currentPage }
+ *                  or { message: "Wishlist not found" }
+ *                  or { message: "internal server error" }
+ */
 export const removeFromWishlist = async (req, res) => {
     const { productId } = req.params;
     let { page = 1, limit = 3 } = req.query;

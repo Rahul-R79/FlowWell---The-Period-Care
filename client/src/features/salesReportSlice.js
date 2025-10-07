@@ -28,6 +28,8 @@ const adminSalesReportSlice = createSlice({
             refundedOrders: 0,
             returnedOrders: 0,
             orders: [],
+            currentPage: 1,
+            totalPages: 1
         },
         errorByAction: {},
         loadingByAction: {},

@@ -249,7 +249,7 @@ function SignUp() {
                                     <label
                                         htmlFor='referralCode'
                                         className='form-label small text-light'>
-                                        Refferal Code
+                                        Referral Code
                                     </label>
                                     <div className='input-group'>
                                         <span className='input-group-text bg-transparent border-0 text-white'>

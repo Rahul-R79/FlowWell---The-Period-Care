@@ -1,8 +1,27 @@
+//adminDashboardController
 import Product from "../../models/Product.js";
 import Order from "../../models/Order.js";
 import User from "../../models/User.js";
 
-//get admin dashboard
+/**
+ * @function getDashboard
+ * @description Fetches all admin dashboard statistics including orders, revenue, products, users, charts, and top-selling items.
+ * @expectedInput req.query: { startDate?: string (ISO), endDate?: string (ISO), range?: "monthly" | "yearly" }
+ * @expectedOutput {
+ *   totalOrders: Number,
+ *   activeOrders: Number,
+ *   completedOrders: Number,
+ *   returnedOrders: Number,
+ *   totalRevenue: Number,
+ *   refundRevenue: Number,
+ *   totalProducts: Number,
+ *   totalCustomers: Number,
+ *   salesTrend: Array<{ year: Number, month?: Number, totalSales: Number }>,
+ *   topSellingProducts: Array<{ _id, name, image, totalQuantity, totalSales }>,
+ *   topSellingCategories: Array<{ _id: String, totalSold: Number }>,
+ *   totalChartGroup: Array<{ _id: String, count: Number }>
+ * }
+ */
 export const getDashboard = async (req, res) => {
     const { startDate, endDate, range } = req.query;
 

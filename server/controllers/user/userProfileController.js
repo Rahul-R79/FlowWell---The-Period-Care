@@ -1,7 +1,13 @@
+//userProfileController
 import User from "../../models/User.js";
 import cloudinary from "../../utils/cloudinary.js";
 
-//update user profile
+/**
+ * @function updateProfile
+ * @description Updates the user's profile details including name, phone, and optionally avatar image.
+ * @expectedInput req.body: { name, phone }, req.file?: avatar image file
+ * @expectedOutput { user } or { message: "internal server error" }
+ */
 export const updateProfile = async (req, res) => {
     const { name, phone } = req.body;
     const userId = req.user.id;
@@ -29,7 +35,7 @@ export const updateProfile = async (req, res) => {
             {
                 name,
                 phone,
-                ...(avatarUrl && {avatar: avatarUrl})
+                ...(avatarUrl && { avatar: avatarUrl }),
             },
             { new: true }
         );
@@ -38,4 +44,3 @@ export const updateProfile = async (req, res) => {
         return res.status(500).json({ message: "internal server error" });
     }
 };
-

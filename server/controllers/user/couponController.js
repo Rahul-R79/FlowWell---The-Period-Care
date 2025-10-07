@@ -1,8 +1,14 @@
+//userCouponController
 import Coupon from "../../models/Coupon.js";
 import Order from "../../models/Order.js";
 import Referral from "../../models/Referral.js";
 
-//get coupons
+/**
+ * @function getUserCoupon
+ * @description Retrieves all active coupons available for the user based on cart total and first order eligibility.
+ * @expectedInput req.query: { cartTotal?: number }, req.user.id
+ * @expectedOutput { coupons: [...] } or { message: "internal server error" }
+ */
 export const getUserCoupon = async (req, res) => {
     const cartTotal = req.query.cartTotal ? parseFloat(req.query.cartTotal) : 0;
 
@@ -38,7 +44,12 @@ export const getUserCoupon = async (req, res) => {
     }
 };
 
-//apply a coupon
+/**
+ * @function applyCoupon
+ * @description Applies a coupon code to the user's cart and calculates the discount amount. Handles referral claim if applicable.
+ * @expectedInput req.body: { couponCode, cartTotal }, req.user.id
+ * @expectedOutput { _id, couponCode, discountAmount } or { message: "coupon not found" } or { message: "internal server error" }
+ */
 export const applyCoupon = async (req, res) => {
     const { couponCode, cartTotal } = req.body;
 

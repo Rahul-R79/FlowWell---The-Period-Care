@@ -1,10 +1,16 @@
+//userReviewController
 import Review from "../../models/Review.js";
 import fetch from "node-fetch";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-//add reviews
+/**
+ * @function addReview
+ * @description Adds a new review for a product if the user hasn't already reviewed it.
+ * @expectedInput req.body: { rating, heading, description, productId, orderId, userId }
+ * @expectedOutput { review } or { errors: [{ field, message }] } or { message: "internal server error" }
+ */
 export const addReview = async (req, res) => {
     const { rating, heading, description, productId, orderId, userId } =
         req.body;
@@ -42,7 +48,12 @@ export const addReview = async (req, res) => {
     }
 };
 
-//get product reviews
+/**
+ * @function getReviewsByProduct
+ * @description Retrieves all reviews for a specific product.
+ * @expectedInput req.params: { productId }
+ * @expectedOutput { reviews: [...] } or { message: "internal server error" }
+ */
 export const getReviewsByProduct = async (req, res) => {
     const { productId } = req.params;
 
@@ -57,7 +68,12 @@ export const getReviewsByProduct = async (req, res) => {
     }
 };
 
-//get all reviews in home page
+/**
+ * @function getAllReviews
+ * @description Retrieves all reviews across all products (for home page or admin view).
+ * @expectedInput none
+ * @expectedOutput { reviews: [...] } or { message: "internal server error" }
+ */
 export const getAllReviews = async (req, res) => {
     try {
         const reviews = await Review.find()
@@ -70,7 +86,12 @@ export const getAllReviews = async (req, res) => {
     }
 };
 
-//create a review summary
+/**
+ * @function getReviewSummary
+ * @description Generates a summarized text of the latest 5 reviews for a specific product using HuggingFace API.
+ * @expectedInput req.params: { productId }
+ * @expectedOutput { summary } or { message: "Internal server error" }
+ */
 export const getReviewSummary = async (req, res) => {
     const { productId } = req.params;
 
