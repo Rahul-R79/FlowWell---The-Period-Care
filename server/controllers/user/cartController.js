@@ -1,3 +1,4 @@
+//userCartController
 import Cart from "../../models/Cart.js";
 import Product from "../../models/Product.js";
 
@@ -20,7 +21,12 @@ const calculateTotals = (cart) => {
     return { subtotal, discount, deliveryFee, total };
 };
 
-//add a product to the cart
+/**
+ * @function addToCart
+ * @description Adds a product to the user's cart or updates quantity if already present. Respects stock and max quantity 5.
+ * @expectedInput req.body: { productId, quantity, selectedSize }
+ * @expectedOutput { cart, totals } or { message: "Product not found" | "Selected size not available" | "Only X items available" } or { message: "internal server error" }
+ */
 export const addToCart = async (req, res) => {
     const { productId, quantity, selectedSize } = req.body;
 
@@ -102,7 +108,12 @@ export const addToCart = async (req, res) => {
     }
 };
 
-//get the card products
+/**
+ * @function getCartItems
+ * @description Retrieves the products in the user's cart with subtotal, discount, delivery fee, and total.
+ * @expectedInput req.user.id
+ * @expectedOutput { cart, totals } or { cart: { products: [], subtotal: 0, discount: 0, deliveryFee: 0, total: 0 } } or { message: "internal server error" }
+ */
 export const getCartItems = async (req, res) => {
     try {
         const cart = await Cart.findOne({ user: req.user.id }).populate(
@@ -110,7 +121,15 @@ export const getCartItems = async (req, res) => {
         );
 
         if (!cart) {
-            return res.status(200).json({ cart: { products: [], subtotal: 0, discount: 0, deliveryFee: 0, total: 0 } });
+            return res.status(200).json({
+                cart: {
+                    products: [],
+                    subtotal: 0,
+                    discount: 0,
+                    deliveryFee: 0,
+                    total: 0,
+                },
+            });
         }
         const totals = calculateTotals(cart);
 
@@ -120,7 +139,12 @@ export const getCartItems = async (req, res) => {
     }
 };
 
-//remove a product from the cart
+/**
+ * @function removeFromCart
+ * @description Removes a product of a specific size from the user's cart and recalculates totals.
+ * @expectedInput req.params: { productId, selectedSize }
+ * @expectedOutput { cart, totals } or { message: "cart not found" } or { message: "internal server error" }
+ */
 export const removeFromCart = async (req, res) => {
     const { productId, selectedSize } = req.params;
     try {
@@ -140,7 +164,7 @@ export const removeFromCart = async (req, res) => {
 
         await cart.save();
         await cart.populate("products.product");
-        const totals = calculateTotals(cart)
+        const totals = calculateTotals(cart);
         return res.status(200).json({ cart, totals });
     } catch (err) {
         return res.status(500).json({ message: "internal server error" });

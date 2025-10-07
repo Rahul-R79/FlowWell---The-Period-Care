@@ -1,14 +1,20 @@
+//adminRefferalController
 import Referral from "../../models/Referral.js";
 
-//get all the user referrals
-export const getReferrals = async(req, res)=>{
-    try{
+/**
+ * @function getReferrals
+ * @description Retrieves all referrals along with populated user information.
+ * @expectedInput req: Express request object (no specific query/body parameters required)
+ * @expectedOutput res: JSON object containing all referrals with populated generatedUser and usages.usedUser names
+ */
+export const getReferrals = async (req, res) => {
+    try {
         const referrals = await Referral.find()
-        .populate("generatedUser", "name")
-        .populate("usages.usedUser", "name")
+            .populate("generatedUser", "name")
+            .populate("usages.usedUser", "name");
 
-        res.status(200).json({referrals});
-    }catch(err){
-        return res.status(500).json({message: 'internal server error'});
+        res.status(200).json({ referrals });
+    } catch (err) {
+        return res.status(500).json({ message: "internal server error" });
     }
-}
+};

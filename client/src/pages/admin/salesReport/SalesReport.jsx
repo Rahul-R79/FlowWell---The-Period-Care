@@ -10,6 +10,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import PaginationButton from "../../../components/Pagination";
 
 const SalesReport = () => {
     const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const SalesReport = () => {
     const [status, setStatus] = useState("");
     const [customRange, setCustomRange] = useState([null, null]);
     const [calendarOpen, setCalendarOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
 
     const getDates = () => {
         if (customRange[0] && customRange[1]) {
@@ -50,7 +52,8 @@ const SalesReport = () => {
         };
     };
 
-    const handleExportPDF = () => {
+    //export sales report
+    const handleExportPDF = async() => {
         const doc = new jsPDF();
         doc.setFontSize(16);
         doc.text("Sales Report", 14, 20);
@@ -82,7 +85,15 @@ const SalesReport = () => {
         autoTable(doc, { head: [tableColumn], body: tableRows, startY: 40 });
 
         // Orders Table
-        if (report.orders && report.orders.length > 0) {
+        const{startDate, endDate} = getDates();
+        const fullReport = await dispatch(getSalesReport({
+            startDate,
+            endDate, 
+            status,
+            all: true,
+        })).unwrap();
+
+        if (fullReport.orders && fullReport.orders.length > 0) {
             const orderColumns = [
                 "Order ID",
                 "Customer",
@@ -90,7 +101,7 @@ const SalesReport = () => {
                 "Status",
                 "Total Amount",
             ];
-            const orderRows = report.orders.map((order) => [
+            const orderRows = fullReport.orders.map((order) => [
                 order.orderNumber,
                 order.user?.name || "-",
                 new Date(order.createdAt).toDateString(),
@@ -119,8 +130,15 @@ const SalesReport = () => {
 
     useEffect(() => {
         const { startDate, endDate } = getDates();
-        dispatch(getSalesReport({ startDate, endDate, status }));
-    }, [dateRange, status, customRange]);
+        dispatch(
+            getSalesReport({
+                startDate,
+                endDate,
+                status,
+                page: currentPage,
+            })
+        );
+    }, [dateRange, status, customRange, currentPage]);
 
     return (
         <>
@@ -141,6 +159,7 @@ const SalesReport = () => {
                                     onSelect={(e) => {
                                         setDateRange(e);
                                         setCustomRange([null, null]);
+                                        setCurrentPage(1);
                                     }}>
                                     <Dropdown.Toggle
                                         variant='outline-dark'
@@ -222,9 +241,10 @@ const SalesReport = () => {
                                             <li key={st || "ALL"}>
                                                 <button
                                                     className='dropdown-item'
-                                                    onClick={() =>
-                                                        setStatus(st)
-                                                    }>
+                                                    onClick={() => {
+                                                        setStatus(st);
+                                                        setCurrentPage(1);
+                                                    }}>
                                                     {st || "All Status"}
                                                 </button>
                                             </li>
@@ -283,57 +303,66 @@ const SalesReport = () => {
                             </tbody>
                         </Table>
 
-                        {/* Detailed Orders Table */}
+                        {/* Detailed Orders Table with Pagination */}
                         <h4 className='mt-3'>Order Details</h4>
-                        <div style={{ maxHeight: "400px", overflowY: "auto" }}>
-                            <Table striped bordered hover responsive>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Order No</th>
-                                        <th>Customer</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {report.orders?.length > 0 ? (
-                                        report.orders.map((order, idx) => (
-                                            <tr key={order._id}>
-                                                <td>{idx + 1}</td>
-                                                <td>{order.orderNumber}</td>
-                                                <td>
-                                                    {order.user?.name || "N/A"}
-                                                </td>
-                                                <td>₹{order.total}</td>
-                                                <td>
-                                                    {order.orderStatus
-                                                        .charAt(0)
-                                                        .toUpperCase() +
-                                                        order.orderStatus
-                                                            .slice(1)
-                                                            .toLowerCase()}
-                                                </td>
-                                                <td>
-                                                    {new Date(
-                                                        order.createdAt
-                                                    ).toDateString()}
-                                                </td>
-                                            </tr>
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td
-                                                colSpan={6}
-                                                className='text-center'>
-                                                No orders found
+                        <Table striped bordered hover responsive>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Order No</th>
+                                    <th>Customer</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {report.orders?.length > 0 ? (
+                                    report.orders.map((order, idx) => (
+                                        <tr key={order._id}>
+                                            <td>
+                                                {(currentPage - 1) * 10 +
+                                                    idx +
+                                                    1}
+                                            </td>
+                                            <td>{order.orderNumber}</td>
+                                            <td>{order.user?.name || "N/A"}</td>
+                                            <td>₹{order.total}</td>
+                                            <td>
+                                                {order.orderStatus
+                                                    .charAt(0)
+                                                    .toUpperCase() +
+                                                    order.orderStatus
+                                                        .slice(1)
+                                                        .toLowerCase()}
+                                            </td>
+                                            <td>
+                                                {new Date(
+                                                    order.createdAt
+                                                ).toDateString()}
                                             </td>
                                         </tr>
-                                    )}
-                                </tbody>
-                            </Table>
-                        </div>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan={6} className='text-center'>
+                                            No orders found
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </Table>
+
+                        {/* Pagination */}
+                        {report.totalPages > 1 && (
+                            <div className='d-flex justify-content-center mt-3'>
+                                <PaginationButton
+                                    currentPage={currentPage}
+                                    totalPages={report.totalPages}
+                                    onPageChange={setCurrentPage}
+                                />
+                            </div>
+                        )}
                     </div>
                     <AdminFooter />
                 </div>

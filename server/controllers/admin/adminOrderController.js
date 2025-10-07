@@ -1,8 +1,19 @@
+//adminOrderController
 import Order from "../../models/Order.js";
 import Wallet from "../../models/Wallet.js";
 import WalletTransaction from "../../models/WalletTransaction.js";
 
-//get the user orders
+/**
+ * @function adminGetOrders
+ * @description Retrieves a paginated list of orders with optional filters for search, status, and date.
+ * @expectedInput req.query: { page?: number, limit?: number, search?: string, filterStatus?: string, date?: string (YYYY-MM-DD) }
+ * @expectedOutput {
+ *   orders: Array,
+ *   totalOrder: Number,
+ *   totalPages: Number,
+ *   currentPage: Number
+ * }
+ */
 export const adminGetOrders = async (req, res) => {
     let {
         page = 1,
@@ -57,7 +68,12 @@ export const adminGetOrders = async (req, res) => {
     }
 };
 
-//get the order detail
+/**
+ * @function adminGetOrderDetail
+ * @description Retrieves detailed information for a specific order.
+ * @expectedInput req.params: { orderId: string }
+ * @expectedOutput { order: Object } or { message: "order not found" }
+ */
 export const adminGetOrderDetail = async (req, res) => {
     const { orderId } = req.params;
 
@@ -74,7 +90,12 @@ export const adminGetOrderDetail = async (req, res) => {
     }
 };
 
-//change order status
+/**
+ * @function adminUpdateOrderStatus
+ * @description Updates the status of a specific product within an order and handles related wallet transactions.
+ * @expectedInput req.params: { orderId: string }, req.body: { productId: string, newStatus: string ("DELIVERED" | "CANCELLED" | "RETURNED" | "REFUNDED") }
+ * @expectedOutput { order: Object } or { message: "order not found" | "product not found" | "Cannot cancel delivered products" }
+ */
 export const adminUpdateOrderStatus = async (req, res) => {
     const { orderId } = req.params;
     const { productId, newStatus } = req.body;

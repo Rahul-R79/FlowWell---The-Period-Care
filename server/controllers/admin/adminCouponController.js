@@ -1,6 +1,12 @@
+//adminCouponController
 import Coupon from "../../models/Coupon.js";
 
-//add coupons
+/**
+ * @function addCoupon
+ * @description Creates a new coupon with validation for duplicates.
+ * @expectedInput req.body: { couponName, couponCode, couponType, discountValue, expirationDate, minPurchaseAmount, maxDiscountAmount, usageLimit, firstOrderOnly }
+ * @expectedOutput { coupon } or { errors: [{ field: "general", message: "Coupon already exist" }] }
+ */
 export const addCoupon = async (req, res) => {
     const {
         couponName,
@@ -43,7 +49,12 @@ export const addCoupon = async (req, res) => {
     }
 };
 
-//get coupons
+/**
+ * @function getCoupons
+ * @description Retrieves paginated list of coupons with optional search filter.
+ * @expectedInput req.query: { page, limit, search }
+ * @expectedOutput { coupons, currentPage, totalPages, totalCoupons }
+ */
 export const getCoupons = async (req, res) => {
     try {
         let { page = 1, limit = 10, search = "" } = req.query;
@@ -78,7 +89,12 @@ export const getCoupons = async (req, res) => {
     }
 };
 
-//get a single coupon
+/**
+ * @function getSingleCoupon
+ * @description Retrieves a single coupon by ID.
+ * @expectedInput req.params: { id }
+ * @expectedOutput { coupon } or { message: "coupon not found" }
+ */
 export const getSingleCoupon = async (req, res) => {
     try {
         const { id } = req.params;
@@ -94,7 +110,12 @@ export const getSingleCoupon = async (req, res) => {
     }
 };
 
-//edit a coupon
+/**
+ * @function editCoupon
+ * @description Updates an existing coupon by ID.
+ * @expectedInput req.params: { id }, req.body: { couponName, couponCode, couponType, discountValue, expirationDate, minPurchaseAmount, maxDiscountAmount, usageLimit, firstOrderOnly }
+ * @expectedOutput { coupon } or { errors: [{ field: "general", message: "Coupon already exists" }] }
+ */
 export const editCoupon = async (req, res) => {
     const { id } = req.params;
     const {
@@ -120,13 +141,11 @@ export const editCoupon = async (req, res) => {
         });
 
         if (existingCoupon) {
-            return res
-                .status(400)
-                .json({
-                    errors: [
-                        { field: "general", message: "Coupon already exists" },
-                    ],
-                });
+            return res.status(400).json({
+                errors: [
+                    { field: "general", message: "Coupon already exists" },
+                ],
+            });
         }
 
         coupon.couponName = couponName;
@@ -147,7 +166,12 @@ export const editCoupon = async (req, res) => {
     }
 };
 
-//change coupon status
+/**
+ * @function couponStatus
+ * @description Toggles the active status of a coupon.
+ * @expectedInput req.params: { id }
+ * @expectedOutput { message: "status updated", coupon } or { message: "coupon not found" }
+ */
 export const couponStatus = async (req, res) => {
     const { id } = req.params;
 

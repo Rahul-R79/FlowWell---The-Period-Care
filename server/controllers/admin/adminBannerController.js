@@ -1,7 +1,13 @@
+//adminBannerController
 import Banner from "../../models/Banner.js";
 import cloudinary from "../../utils/cloudinary.js";
 
-//create banner
+/**
+ * @function createBanner
+ * @description Creates a new banner with title, subtitle, dates, and optional image upload.
+ * @expectedInput req.body: { title, subTitle, startingDate, endingDate }, req.file (optional image)
+ * @expectedOutput { banner } or { errors: [{ field: "general", message: "Banner already exist" }] }
+ */
 export const createBanner = async (req, res) => {
     const { title, subTitle, startingDate, endingDate } = req.body;
 
@@ -46,7 +52,12 @@ export const createBanner = async (req, res) => {
     }
 };
 
-//get banner
+/**
+ * @function getBanners
+ * @description Retrieves a paginated list of banners with optional search filter.
+ * @expectedInput req.query: { page, limit, search }
+ * @expectedOutput { banner, currentPage, totalPages, totalBanners }
+ */
 export const getBanners = async (req, res) => {
     try {
         let { page = 1, limit = 4, search = "" } = req.query;
@@ -80,7 +91,12 @@ export const getBanners = async (req, res) => {
     }
 };
 
-//get a single banner
+/**
+ * @function getSingleBanner
+ * @description Retrieves a single banner by ID.
+ * @expectedInput req.params: { id }
+ * @expectedOutput { banner } or { message: "banner not found" }
+ */
 export const getSingleBanner = async (req, res) => {
     try {
         const { id } = req.params;
@@ -96,7 +112,12 @@ export const getSingleBanner = async (req, res) => {
     }
 };
 
-//edit a banner
+/**
+ * @function editBanner
+ * @description Edits an existing banner by ID, with optional image update.
+ * @expectedInput req.params: { id }, req.body: { title, subTitle, startingDate, endingDate }, req.file (optional image)
+ * @expectedOutput { banner } or { errors: [{ field: "general", message: "Banner already exists" }] }
+ */
 export const editBanner = async (req, res) => {
     const { id } = req.params;
     const { title, subTitle, startingDate, endingDate } = req.body;
@@ -151,7 +172,12 @@ export const editBanner = async (req, res) => {
     }
 };
 
-//delete a banner
+/**
+ * @function deleteBanner
+ * @description Deletes a banner by ID.
+ * @expectedInput req.params: { id }
+ * @expectedOutput { banner } or { message: "banner not found" }
+ */
 export const deleteBanner = async (req, res) => {
     const { id } = req.params;
 
@@ -168,7 +194,12 @@ export const deleteBanner = async (req, res) => {
     }
 };
 
-//change banner status
+/**
+ * @function bannerStatus
+ * @description Toggles banner active status. Activating one will deactivate all others.
+ * @expectedInput req.params: { id }
+ * @expectedOutput { banner } or { message: "banner not found" }
+ */
 export const bannerStatus = async (req, res) => {
     const { id } = req.params;
 

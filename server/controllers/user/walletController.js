@@ -1,9 +1,15 @@
+//userWalletController
 import { razorpayInstance } from "../../config/razorpay.js";
 import WalletTransaction from "../../models/WalletTransaction.js";
 import Wallet from "../../models/Wallet.js";
 import crypto from "crypto";
 
-//add money to wallet
+/**
+ * @function addMoneyToWallet
+ * @description Creates a Razorpay order to add money to the user's wallet.
+ * @expectedInput req.body: { addAmount }
+ * @expectedOutput { success, orderId, Orderamount, currency, key } or { message: "internal server error" }
+ */
 export const addMoneyToWallet = async (req, res) => {
     const { addAmount } = req.body;
 
@@ -29,7 +35,12 @@ export const addMoneyToWallet = async (req, res) => {
     }
 };
 
-//verify the wallet payment
+/**
+ * @function verifyWalletPayment
+ * @description Verifies a wallet payment using Razorpay signature and updates wallet balance.
+ * @expectedInput req.body: { razorpay_order_id, razorpay_payment_id, razorpay_signature, addedAmount }
+ * @expectedOutput { balance } or { message: "wallet payment verification failed" }
+ */
 export const verifyWalletPayment = async (req, res) => {
     const {
         razorpay_order_id,
@@ -81,7 +92,12 @@ export const verifyWalletPayment = async (req, res) => {
     }
 };
 
-//get the total wallet amount
+/**
+ * @function getWalletAmount
+ * @description Returns the total wallet balance of the user.
+ * @expectedInput req.user.id
+ * @expectedOutput { balance } or { message: "wallet not found" }
+ */
 export const getWalletAmount = async (req, res) => {
     try {
         const wallet = await Wallet.findOne({ userId: req.user.id });
@@ -96,7 +112,12 @@ export const getWalletAmount = async (req, res) => {
     }
 };
 
-//get wallet transactions
+/**
+ * @function getWalletTransactions
+ * @description Returns paginated wallet transaction history.
+ * @expectedInput req.query: { page?, limit? }, req.user.id
+ * @expectedOutput { walletTransaction, totalTransaction, totalPages, currentPage } or { message: "wallet not found" }
+ */
 export const getWalletTransactions = async (req, res) => {
     let { page = 1, limit = 5 } = req.query;
     try {

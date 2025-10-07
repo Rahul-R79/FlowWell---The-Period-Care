@@ -1,5 +1,12 @@
+//userCycleController
 import Cycle from "../../models/Cycle.js";
 
+/**
+ * @function saveCycleInfo
+ * @description Saves or updates the user's menstrual cycle information and calculates the next period date.
+ * @expectedInput req.body: { lastPeriodDate, cycleLength }, req.user.id
+ * @expectedOutput { cycle } or { message: "internal server error" }
+ */
 export const saveCycleInfo = async (req, res) => {
     const { lastPeriodDate, cycleLength } = req.body;
 
@@ -12,7 +19,7 @@ export const saveCycleInfo = async (req, res) => {
         );
 
         const today = new Date();
-        if(today >= nextPeriodDate){
+        if (today >= nextPeriodDate) {
             start = new Date(nextPeriodDate);
             nextPeriodDate = new Date(start);
             nextPeriodDate.setDate(start.getDate() + parseInt(cycleLength));
@@ -30,13 +37,19 @@ export const saveCycleInfo = async (req, res) => {
     }
 };
 
+/**
+ * @function getCycleInfo
+ * @description Retrieves the user's menstrual cycle information.
+ * @expectedInput req.user.id
+ * @expectedOutput { cycle } or { message: "No cycle data found" } or { message: "Server error" }
+ */
 export const getCycleInfo = async (req, res) => {
     try {
         const cycle = await Cycle.findOne({ userId: req.user.id });
         if (!cycle) {
             return res.status(404).json({ message: "No cycle data found" });
         }
-        res.json({cycle});
+        res.json({ cycle });
     } catch (err) {
         res.status(500).json({ message: "Server error" });
     }

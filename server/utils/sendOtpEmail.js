@@ -30,7 +30,7 @@ const sendOTP = async(email, otp)=>{
                 <span style="display: inline-block; font-size: 28px; letter-spacing: 8px; font-weight: bold; color: #007bff;">${otp}</span>
                 </div>
                 <p style="font-size: 14px; color: #999; text-align: center;">
-                If you didnot request this, please ignore this email.
+                If you did not request this, please ignore this email.
                 </p>
                 <p style="font-size: 14px; color: #ccc; text-align: center; margin-top: 30px;">- FlowWell Team</p>
                 <p>Developed by <a href="https://www.linkedin.com/in/rahulqwe/" target="_blank" style="color: #0077b5; text-decoration: none;">Rahul</a></p>

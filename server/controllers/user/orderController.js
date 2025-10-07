@@ -1,3 +1,4 @@
+//userOrderController
 import Address from "../../models/Address.js";
 import Cart from "../../models/Cart.js";
 import Order from "../../models/Order.js";
@@ -29,7 +30,12 @@ const calculateTotals = (cart) => {
     return { subtotal, discount, deliveryFee, total };
 };
 
-//create a cod order
+/**
+ * @function createOrder
+ * @description Creates a COD order, calculates totals, applies coupon, updates stock, and clears cart.
+ * @expectedInput req.body: { paymentMethod, shippingAddressId, appliedCouponId? }, req.user.id
+ * @expectedOutput { message: "Order placed successfully", order } or { message: "Cart is empty" | "Invalid shipping address" | "Invalid coupon code" } or { message: "Internal server error" }
+ */
 export const createOrder = async (req, res) => {
     const { paymentMethod, shippingAddressId, appliedCouponId } = req.body;
 
@@ -147,7 +153,12 @@ export const createOrder = async (req, res) => {
     }
 };
 
-//get the placed orders
+/**
+ * @function getOrders
+ * @description Retrieves paginated orders for the user.
+ * @expectedInput req.user.id, req.query: { page?, limit? }
+ * @expectedOutput { orders: [...], totalOrder, totalPages, currentPage } or { message: "internal server error" }
+ */
 export const getOrders = async (req, res) => {
     try {
         let { page = 1, limit = 3 } = req.query;
@@ -173,7 +184,12 @@ export const getOrders = async (req, res) => {
     }
 };
 
-//get the order details
+/**
+ * @function getOrderItem
+ * @description Retrieves a single product item from a specific order.
+ * @expectedInput req.params: { orderId, productId }
+ * @expectedOutput { cartItem } or { message: "order not found" } or { message: "internal server error" }
+ */
 export const getOrderItem = async (req, res) => {
     const { orderId, productId } = req.params;
 
@@ -193,7 +209,12 @@ export const getOrderItem = async (req, res) => {
     }
 };
 
-//cancel a order
+/**
+ * @function cancelOrder
+ * @description Cancels a product from an order, updates stock, handles refunds if needed.
+ * @expectedInput req.params: { orderId, productId }, req.body: { reason }, req.user.id
+ * @expectedOutput { message: "Product cancelled successfully", order } or { message: "Order not found" | "Product not found in order" | "Internal server error" }
+ */
 export const cancelOrder = async (req, res) => {
     const { orderId, productId } = req.params;
     const { reason } = req.body;
@@ -286,7 +307,12 @@ export const cancelOrder = async (req, res) => {
     }
 };
 
-//return a order
+/**
+ * @function ReturnOrder
+ * @description Marks a product in an order as returned and updates order status if all products are returned.
+ * @expectedInput req.params: { orderId, productId }, req.body: { reason }, req.user.id
+ * @expectedOutput { message: "Product returned successfully", order } or { message: "Order not found" | "Product not found in order" | "Internal server error" }
+ */
 export const ReturnOrder = async (req, res) => {
     const { orderId, productId } = req.params;
     const { reason } = req.body;
@@ -338,6 +364,12 @@ export const ReturnOrder = async (req, res) => {
     }
 };
 
+/**
+ * @function getInvoice
+ * @description Generates a PDF invoice for a specific order.
+ * @expectedInput req.params: { id }
+ * @expectedOutput PDF stream or { message: "Order not found" | "error on generating invoice" }
+ */
 export const getInvoice = async (req, res) => {
     try {
         const { id } = req.params;
@@ -393,7 +425,12 @@ export const getInvoice = async (req, res) => {
     }
 };
 
-//create a razorpay order
+/**
+ * @function createRazorpayOrder
+ * @description Creates a Razorpay order for online payment.
+ * @expectedInput req.body: { amount }
+ * @expectedOutput { success: true, orderId, amount, currency, key } or { success: false, message: "Internal server error" }
+ */
 export const createRazorpayOrder = async (req, res) => {
     const { amount } = req.body;
 
@@ -421,7 +458,12 @@ export const createRazorpayOrder = async (req, res) => {
     }
 };
 
-//verify the razorpay order
+/**
+ * @function verifyPayment
+ * @description Verifies Razorpay payment and creates an order in database.
+ * @expectedInput req.body: { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderData }, req.user.id
+ * @expectedOutput { order } or { success: false, message: "Payment verification failed" | "Internal server error" }
+ */
 export const verifyPayment = async (req, res) => {
     try {
         const {
@@ -528,7 +570,12 @@ export const verifyPayment = async (req, res) => {
     }
 };
 
-//create a wallet order
+/**
+ * @function processWalletPayment
+ * @description Processes payment using user's wallet, updates balance, creates order, and clears cart.
+ * @expectedInput req.body: { walletAmount, shippingAddressId, orderData }, req.user.id
+ * @expectedOutput { order } or { message: "Insufficient wallet balance" | "Invalid shipping address" | "Internal server error" }
+ */
 export const processWalletPayment = async (req, res) => {
     const { walletAmount, shippingAddressId, orderData } = req.body;
 
